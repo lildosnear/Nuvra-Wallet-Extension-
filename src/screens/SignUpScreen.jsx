@@ -11,11 +11,11 @@ const S = {
     height: 48,
     background: 'rgba(255,255,255,0.06)',
     border: '1px solid rgba(255,255,255,0.09)',
-    borderRadius: 10,
+    borderRadius: 14,
     color: '#fff',
     fontFamily: 'DM Sans, sans-serif',
     fontSize: 13,
-    paddingLeft: 42,
+    paddingLeft: 48,
     paddingRight: 14,
     outline: 'none',
     boxSizing: 'border-box',
@@ -30,6 +30,16 @@ const S = {
     height: 16,
     objectFit: 'contain',
     opacity: 0.45,
+    pointerEvents: 'none',
+  },
+  divider: {
+    position: 'absolute',
+    left: 36,
+    top: '50%',
+    transform: 'translateY(-50%)',
+    width: 1,
+    height: 20,
+    background: 'rgba(255,255,255,0.14)',
     pointerEvents: 'none',
   },
   label: {
@@ -127,6 +137,7 @@ function StepCreateAccount({ onNext, onAlreadyHave }) {
         <label style={S.label}>Email Address</label>
         <div style={S.wrap}>
           <MailIcon />
+          <span style={S.divider}/>
           <input
             style={fStyle('email')}
             type="email"
@@ -142,6 +153,7 @@ function StepCreateAccount({ onNext, onAlreadyHave }) {
         <label style={S.label}>Password</label>
         <div style={S.wrap}>
           <LockIcon />
+          <span style={S.divider}/>
           <input
             style={fStyle('pw')}
             type="password"
@@ -157,6 +169,7 @@ function StepCreateAccount({ onNext, onAlreadyHave }) {
         <label style={S.label}>Confirm Password</label>
         <div style={S.wrap}>
           <LockIcon />
+          <span style={S.divider}/>
           <input
             style={fStyle('cf')}
             type="password"
