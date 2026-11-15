@@ -218,7 +218,7 @@ export default function HomeScreen({ onNav }) {
                 onMouseEnter={e => { if(a.action) e.currentTarget.style.background='#2A2A2A' }}
                 onMouseLeave={e => e.currentTarget.style.background='#1F1F1F'}
               >
-                <img src={a.img} alt={a.label} style={{ width:24, height:24, objectFit:'contain' }}/>
+                <img src={a.img} alt={a.label} style={{ width:24, height:24, objectFit:'contain', transform:'scale(2.1)' }}/>
               </div>
               <span style={{ fontSize:11, color:'#959595', fontFamily:'DM Sans,sans-serif', fontWeight:500 }}>
                 {a.label}

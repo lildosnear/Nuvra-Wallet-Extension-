@@ -198,7 +198,10 @@ export default function BridgeScreen({ onSuccessView }) {
         <div onClick={swap} style={{ width:40, height:40, borderRadius:'50%', background:'linear-gradient(135deg,#F0834A,#EC641D)', border:'3px solid #101010', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', boxShadow:'0 4px 14px rgba(236,100,29,0.45)', transition:'transform 0.2s', flexShrink:0 }}
           onMouseEnter={e => e.currentTarget.style.transform='rotate(180deg)'}
           onMouseLeave={e => e.currentTarget.style.transform='rotate(0deg)'}>
-          <img src="/icon_arrow_horizontal.png" alt="flip" style={{ width:16, height:16, objectFit:'contain' }}/>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-label="flip">
+            <path d="M4 8h15M19 8l-3-3M19 8l-3 3" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M20 16H5M5 16l3-3M5 16l3 3" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
         </div>
         <div onClick={() => setShowTo(true)} style={{ display:'flex', alignItems:'center', gap:8, background:'#000', border:'1px solid rgba(255,255,255,0.1)', borderRadius:24, padding:'8px 14px 8px 10px', cursor:'pointer' }}>
           <TokIcon t={toTok} size={26}/>

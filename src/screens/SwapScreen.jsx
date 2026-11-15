@@ -327,7 +327,10 @@ export default function SwapScreen({ onBack, onSuccessView }) {
               transition: 'transform 0.2s' }}
             onMouseEnter={e => e.currentTarget.style.transform = 'rotate(180deg)'}
             onMouseLeave={e => e.currentTarget.style.transform = 'rotate(0deg)'}>
-            <img src="/icon_arrow_updown.png" alt="flip" style={{ width:18, height:18, objectFit:'contain' }}/>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-label="flip">
+              <path d="M7 19V5M7 5L4 8M7 5l3 3" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M17 5v14M17 19l-3-3M17 19l3-3" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
           </div>
         </div>
 
