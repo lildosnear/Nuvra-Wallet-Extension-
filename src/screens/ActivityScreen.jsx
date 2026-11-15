@@ -91,11 +91,12 @@ export default function ActivityScreen() {
           cursor:'pointer', flexShrink:0,
           boxShadow:'0 4px 14px rgba(236,100,29,0.4)',
         }}>
-          <img
-            src="/icon_filter.png"
-            alt="Filter"
-            style={{ width:22, height:22, objectFit:'contain' }}
-          />
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-label="Filter">
+            <path d="M4 7h16M4 12h16M4 17h16" stroke="#fff" strokeWidth="2" strokeLinecap="round"/>
+            <circle cx="9" cy="7" r="2.4" fill="#EE7434" stroke="#fff" strokeWidth="1.6"/>
+            <circle cx="15" cy="12" r="2.4" fill="#EC641D" stroke="#fff" strokeWidth="1.6"/>
+            <circle cx="8" cy="17" r="2.4" fill="#EC641D" stroke="#fff" strokeWidth="1.6"/>
+          </svg>
         </div>
       </div>
 
