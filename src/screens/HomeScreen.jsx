@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import SettingsScreen from './SettingsScreen'
+import PromoBanner from '../components/PromoBanner'
 import { useWallet } from '../wallet/WalletContext'
 import { ASSETS } from '../data/constants'
 import { CHAINS, getChain, MOCK_ADDRESSES } from '../chains/registry'
@@ -68,34 +69,38 @@ function ReceiveModal({ onClose }) {
   }
   return (
     <div style={{ position:'absolute', inset:0, background:'#101010', zIndex:60, display:'flex', flexDirection:'column', animation:'slideUp 0.32s cubic-bezier(0.4,0,0.2,1)' }}>
-      <div onClick={onClose} style={{ position:'absolute', top:16, right:16, zIndex:2, width:34, height:34, borderRadius:'50%', background:'rgba(255,255,255,0.1)', border:'1px solid rgba(255,255,255,0.12)', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer' }}>
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2L12 12M12 2L2 12" stroke="rgba(255,255,255,0.8)" strokeWidth="1.8" strokeLinecap="round"/></svg>
+      <div onClick={onClose} style={{ position:'absolute', top:16, right:16, zIndex:2, width:36, height:36, borderRadius:'50%', background:'#fff', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer' }}>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2L12 12M12 2L2 12" stroke="#000" strokeWidth="2" strokeLinecap="round"/></svg>
       </div>
       <div style={{ flex:1, overflowY:'auto', scrollbarWidth:'none', display:'flex', flexDirection:'column', alignItems:'center', padding:'52px 24px 24px' }}>
-        <div style={{ fontFamily:'Syne,sans-serif', fontSize:20, fontWeight:700, color:'#fff', textAlign:'center', marginBottom:24 }}>Top-up Wallet</div>
-        <div style={{ background:'#111118', borderRadius:22, padding:16, marginBottom:16, boxShadow:'0 12px 40px rgba(0,0,0,0.6)', border:'1px solid rgba(255,255,255,0.06)' }}>
-          <QRCode size={170}/>
+        <div style={{ fontFamily:'DM Sans,sans-serif', fontSize:18, fontWeight:700, color:'#fff', textAlign:'center', marginBottom:24 }}>Top-up Wallet</div>
+        <div style={{ background:'#1A1A1A', borderRadius:32, padding:14, marginBottom:16, boxShadow:'0 12px 40px rgba(0,0,0,0.6)', border:'1px solid rgba(255,255,255,0.06)' }}>
+          <QRCode size={188}/>
         </div>
-        <div style={{ background:'rgba(255,255,255,0.07)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:20, padding:'5px 22px', fontSize:12, color:'rgba(255,255,255,0.55)', fontFamily:'DM Sans,sans-serif', marginBottom:28 }}>Scan code</div>
-        <div style={{ fontFamily:'Syne,sans-serif', fontSize:18, fontWeight:700, color:'#fff', textAlign:'center', marginBottom:6 }}>Your Wallet Address</div>
-        <div style={{ fontSize:12, color:'rgba(255,255,255,0.4)', textAlign:'center', lineHeight:1.6, marginBottom:18, fontFamily:'DM Sans,sans-serif' }}>Use {chain.name} to receive tokens to your wallet</div>
-        <div style={{ width:'100%', display:'flex', alignItems:'center', gap:8, background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:12, padding:'10px 14px', marginBottom:12 }}>
+        <div style={{ width:90, height:28, background:'#000', border:'1px solid rgba(255,255,255,0.12)', borderRadius:20, display:'flex', alignItems:'center', justifyContent:'center', fontSize:11, color:'#fff', fontFamily:'DM Sans,sans-serif', marginBottom:28 }}>Scan code</div>
+        <div style={{ fontFamily:'DM Sans,sans-serif', fontSize:18, fontWeight:700, color:'#fff', textAlign:'center', marginBottom:6 }}>Your Wallet Address</div>
+        <div style={{ fontSize:12, color:'#959595', textAlign:'center', lineHeight:1.6, marginBottom:18, fontFamily:'DM Sans,sans-serif' }}>Use {chain.name} to receive tokens to your wallet</div>
+        <div style={{ width:'100%', display:'flex', alignItems:'center', gap:8, background:'#1A1A1A', border:'1px solid rgba(255,255,255,0.06)', borderRadius:30, padding:'10px 14px', marginBottom:22 }}>
           <img src="/logo_nv_orange.png" alt="" style={{ width:22, height:22, borderRadius:'50%', flexShrink:0 }}/>
           <span style={{ flex:1, fontSize:13, color:'rgba(255,255,255,0.65)', fontFamily:'monospace', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{address}</span>
-          <img src="/icon_wallet.png" alt="wallet" style={{ width:18, height:18, objectFit:'contain', opacity:0.55, flexShrink:0, cursor:'pointer' }}/>
+          <img src="/icon_copy.png" alt="Copy" onClick={copyAddress} style={{ width:17, height:17, objectFit:'contain', filter:'invert(1) opacity(0.75)', flexShrink:0, cursor:'pointer' }}/>
         </div>
-        <div style={{ fontSize:11, color:'rgba(255,255,255,0.3)', fontFamily:'DM Sans,sans-serif', marginBottom:14 }}>{chain.addressFormatLabel} · {chain.confirmationLabel}</div>
-        <div style={{ width:'100%', display:'flex', gap:10, marginBottom:24 }}>
-          <button style={{ width:46, height:46, borderRadius:12, background:'rgba(255,255,255,0.07)', border:'1px solid rgba(255,255,255,0.1)', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', flexShrink:0 }}>
-            <img src="/icon_share.png" alt="Share" style={{ width:18, height:18, objectFit:'contain' }}/>
-          </button>
-          <button onClick={copyAddress}
-            style={{ flex:1, height:46, borderRadius:12, background: copied ? 'rgba(31,208,144,0.12)' : 'rgba(255,255,255,0.07)', border:`1px solid ${copied ? 'rgba(31,208,144,0.3)' : 'rgba(255,255,255,0.1)'}`, color: copied ? '#1fd090' : 'rgba(255,255,255,0.75)', fontFamily:'DM Sans,sans-serif', fontSize:14, fontWeight:600, cursor:'pointer', transition:'all 0.2s', display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}>
-            <img src="/icon_copy.png" alt="Copy" style={{ width:16, height:16, objectFit:'contain', filter: copied ? 'invert(70%) sepia(60%) saturate(400%) hue-rotate(110deg)' : 'invert(1) opacity(0.75)' }}/>
-            {copied ? 'Copied!' : 'Copy address'}
-          </button>
+        <div style={{ display:'flex', gap:36, marginBottom:26 }}>
+          <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:8 }}>
+            <button style={{ width:48, height:48, borderRadius:'50%', background:'#1F1F1F', border:'1px solid rgba(255,255,255,0.08)', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer' }}>
+              <img src="/icon_share.png" alt="Share" style={{ width:18, height:18, objectFit:'contain' }}/>
+            </button>
+            <span style={{ fontSize:13, color:'#fff', fontFamily:'DM Sans,sans-serif' }}>Share</span>
+          </div>
+          <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:8 }}>
+            <button onClick={copyAddress}
+              style={{ width:48, height:48, borderRadius:'50%', background: copied ? 'rgba(31,208,144,0.14)' : '#1F1F1F', border:`1px solid ${copied ? 'rgba(31,208,144,0.35)' : 'rgba(255,255,255,0.08)'}`, display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', transition:'all 0.2s' }}>
+              <img src="/icon_copy.png" alt="Copy" style={{ width:17, height:17, objectFit:'contain', filter: copied ? 'invert(70%) sepia(60%) saturate(400%) hue-rotate(110deg)' : 'invert(1) opacity(0.85)' }}/>
+            </button>
+            <span style={{ fontSize:13, color: copied ? '#1fd090' : '#fff', fontFamily:'DM Sans,sans-serif', transition:'color 0.2s' }}>{copied ? 'Copied!' : 'Copy address'}</span>
+          </div>
         </div>
-        <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:6, fontSize:11, color:'rgba(255,255,255,0.25)', fontFamily:'DM Sans,sans-serif' }}>
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:6, fontSize:11, color:'#959595', fontFamily:'DM Sans,sans-serif' }}>
           Powered by
           <img src="/logo_powered_by.png" alt="NV" style={{ width:18, height:18, objectFit:'contain', opacity:0.7 }}/>
         </div>
@@ -107,7 +112,6 @@ function ReceiveModal({ onClose }) {
 // ── Main HomeScreen ───────────────────────────────────────────────────────────
 export default function HomeScreen({ onNav }) {
   const [showReceive,  setShowReceive]  = useState(false)
-  const [showBanner,   setShowBanner]   = useState(true)
   const [showSettings, setShowSettings] = useState(false)
   const { selectedChainId, setSelectedChain } = useWallet()
 
@@ -162,41 +166,41 @@ export default function HomeScreen({ onNav }) {
         </div>
       </div>
 
+      {/* ── CHAIN SELECTOR — small dark pills under the header ── */}
+      <div style={{ display:'flex', justifyContent:'center', gap:8, padding:'14px 20px 0', flexShrink:0, flexWrap:'wrap' }}>
+        {selectorChains.map(c => {
+          const soon = c.status === 'coming-soon'
+          const active = selectedChainId === c.id
+          return (
+            <div key={c.id}
+              onClick={() => { if (!soon) setSelectedChain(c.id) }}
+              style={{ display:'flex', alignItems:'center', gap:5, padding:'6px 12px', borderRadius:20,
+                background: '#1A1A1A',
+                border:`1px solid ${active ? 'rgba(236,100,29,0.55)' : 'rgba(255,255,255,0.07)'}`,
+                color: active ? '#EC641D' : '#959595',
+                fontSize:12, fontWeight:600, fontFamily:'DM Sans,sans-serif',
+                cursor: soon ? 'default' : 'pointer', opacity: soon ? 0.5 : 1 }}>
+              {c.shortName}
+              {soon && <span style={{ fontSize:9, fontWeight:700, letterSpacing:0.5, background:'rgba(255,255,255,0.14)', borderRadius:6, padding:'1px 5px' }}>SOON</span>}
+            </div>
+          )
+        })}
+      </div>
+
       {/* ── SCROLLABLE BODY ── */}
       <div className="scroll-body">
 
         {/* ── BALANCE SECTION — no card, floats on bg ── */}
-        <div style={{ textAlign:'center', padding:'28px 20px 10px', position:'relative' }}>
+        <div style={{ textAlign:'center', padding:'24px 20px 10px', position:'relative' }}>
           {/* NV watermark behind balance */}
           <img src="/home/card_watermark_nv.png" alt="" style={{ position:'absolute', left:'50%', top:'50%', transform:'translate(-50%,-50%)', width:'110%', height:'auto', objectFit:'contain', pointerEvents:'none', opacity:0.55 }}/>
 
-          <div style={{ fontSize:13, color:'rgba(255,255,255,0.5)', fontFamily:'DM Sans,sans-serif', marginBottom:8, letterSpacing:0.3, position:'relative', zIndex:1 }}>
+          <div style={{ fontSize:12, color:'#959595', fontFamily:'DM Sans,sans-serif', marginBottom:8, letterSpacing:0.3, position:'relative', zIndex:1 }}>
             Total Balance{' '}
             <span style={{ fontSize:9, fontWeight:700, letterSpacing:0.6, color:'#EC641D', background:'rgba(236,100,29,0.12)', border:'1px solid rgba(236,100,29,0.3)', borderRadius:8, padding:'2px 6px', verticalAlign:'middle' }}>DEMO DATA</span>
           </div>
-          <div style={{ fontFamily:'Geist, Syne, sans-serif', fontSize:48, fontWeight:400, color:'#fff', letterSpacing:-0.5, lineHeight:1, position:'relative', zIndex:1 }}>
+          <div style={{ fontFamily:'DM Sans,sans-serif', fontSize:38, fontWeight:700, color:'#fff', letterSpacing:-0.5, lineHeight:1, position:'relative', zIndex:1 }}>
             {totalStr}
-          </div>
-
-          {/* ── CHAIN SELECTOR ── */}
-          <div style={{ display:'flex', justifyContent:'center', gap:8, marginTop:16, position:'relative', zIndex:1, flexWrap:'wrap' }}>
-            {selectorChains.map(c => {
-              const soon = c.status === 'coming-soon'
-              const active = selectedChainId === c.id
-              return (
-                <div key={c.id}
-                  onClick={() => { if (!soon) setSelectedChain(c.id) }}
-                  style={{ display:'flex', alignItems:'center', gap:5, padding:'6px 12px', borderRadius:20,
-                    background: active ? '#EC641D' : 'rgba(255,255,255,0.06)',
-                    border:`1px solid ${active ? '#EC641D' : 'rgba(255,255,255,0.1)'}`,
-                    color: active ? '#fff' : 'rgba(255,255,255,0.55)',
-                    fontSize:12, fontWeight:600, fontFamily:'DM Sans,sans-serif',
-                    cursor: soon ? 'default' : 'pointer', opacity: soon ? 0.5 : 1 }}>
-                  {c.shortName}
-                  {soon && <span style={{ fontSize:9, fontWeight:700, letterSpacing:0.5, background:'rgba(255,255,255,0.14)', borderRadius:6, padding:'1px 5px' }}>SOON</span>}
-                </div>
-              )
-            })}
           </div>
         </div>
 
@@ -206,17 +210,17 @@ export default function HomeScreen({ onNav }) {
             <div key={i} onClick={a.action}
               style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:10, cursor: a.action ? 'pointer' : 'default' }}>
               <div style={{
-                width:58, height:58, borderRadius:'50%',
-                background:'#1a1a22',
+                width:56, height:56, borderRadius:'50%',
+                background:'#1F1F1F',
                 display:'flex', alignItems:'center', justifyContent:'center',
                 transition:'background 0.15s',
               }}
-                onMouseEnter={e => { if(a.action) e.currentTarget.style.background='#242432' }}
-                onMouseLeave={e => e.currentTarget.style.background='#1a1a22'}
+                onMouseEnter={e => { if(a.action) e.currentTarget.style.background='#2A2A2A' }}
+                onMouseLeave={e => e.currentTarget.style.background='#1F1F1F'}
               >
                 <img src={a.img} alt={a.label} style={{ width:24, height:24, objectFit:'contain' }}/>
               </div>
-              <span style={{ fontSize:12, color:'rgba(255,255,255,0.6)', fontFamily:'DM Sans,sans-serif', fontWeight:500 }}>
+              <span style={{ fontSize:11, color:'#959595', fontFamily:'DM Sans,sans-serif', fontWeight:500 }}>
                 {a.label}
               </span>
             </div>
@@ -224,50 +228,43 @@ export default function HomeScreen({ onNav }) {
         </div>
 
         {/* ── BANNER ── */}
-        {showBanner && (
-          <div style={{ margin:'0 16px 28px', position:'relative', cursor:'pointer' }}>
-            <img src="/home/banner_ad.png" alt="Banner" style={{ width:'100%', borderRadius:16, display:'block', objectFit:'cover' }}/>
-            <div onClick={() => setShowBanner(false)}
-              style={{ position:'absolute', top:10, right:10, width:26, height:26, borderRadius:'50%', background:'rgba(0,0,0,0.5)', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer' }}>
-              <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 1.5L8.5 8.5M8.5 1.5L1.5 8.5" stroke="rgba(255,255,255,0.85)" strokeWidth="1.6" strokeLinecap="round"/></svg>
-            </div>
-          </div>
-        )}
+        <PromoBanner style={{ margin:'0 16px 28px' }}/>
 
         {/* ── YOUR ASSETS ── */}
-        <div style={{ padding:'0 20px' }}>
-          <div style={{ fontFamily:'Syne,sans-serif', fontSize:18, fontWeight:800, color:'#fff', marginBottom:18 }}>
+        <div style={{ padding:'0 16px' }}>
+          <div style={{ fontFamily:'DM Sans,sans-serif', fontSize:18, fontWeight:700, color:'#fff', marginBottom:14, padding:'0 4px' }}>
             Your Assets
           </div>
 
           {assets.length === 0 && (
-            <div style={{ textAlign:'center', padding:'24px 0', fontSize:13, color:'rgba(255,255,255,0.35)', fontFamily:'DM Sans,sans-serif' }}>
+            <div style={{ textAlign:'center', padding:'24px 0', fontSize:13, color:'#959595', fontFamily:'DM Sans,sans-serif' }}>
               No assets on this chain yet.
             </div>
           )}
           {assets.map((a, i) => (
             <div key={i} style={{
               display:'flex', alignItems:'center', gap:14,
-              paddingTop: 14, paddingBottom: 14,
-              borderBottom: i < assets.length - 1 ? '1px solid rgba(255,255,255,0.07)' : 'none',
+              background:'#1A1A1A', borderRadius:16,
+              padding:'16px', minHeight:72, boxSizing:'border-box',
+              marginBottom:10,
               cursor:'pointer',
             }}>
               {/* Token icon */}
-              <div style={{ width:46, height:46, borderRadius:'50%', overflow:'hidden', flexShrink:0, background:'rgba(236,100,29,0.1)' }}>
+              <div style={{ width:40, height:40, borderRadius:'50%', overflow:'hidden', flexShrink:0, background:'rgba(236,100,29,0.1)' }}>
                 {TOKEN_IMG[a.symbol]
                   ? <img src={TOKEN_IMG[a.symbol]} alt={a.symbol} style={{ width:'100%', height:'100%', objectFit:'contain' }}/>
-                  : <div style={{ width:'100%', height:'100%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:18, color:'#EC641D', fontWeight:700 }}>{a.symbol[0]}</div>
+                  : <div style={{ width:'100%', height:'100%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:16, color:'#EC641D', fontWeight:700 }}>{a.symbol[0]}</div>
                 }
               </div>
 
               <div style={{ flex:1 }}>
-                <div style={{ fontSize:15, fontWeight:700, color:'#fff', fontFamily:'DM Sans,sans-serif', marginBottom:3 }}>{a.name}</div>
-                <div style={{ fontSize:12, color:'rgba(255,255,255,0.4)', fontFamily:'DM Sans,sans-serif' }}>{a.sub}</div>
+                <div style={{ fontSize:14, fontWeight:700, color:'#fff', fontFamily:'DM Sans,sans-serif', marginBottom:3 }}>{a.name}</div>
+                <div style={{ fontSize:11, color:'#959595', fontFamily:'DM Sans,sans-serif' }}>{a.sub}</div>
               </div>
 
               <div style={{ textAlign:'right' }}>
-                <div style={{ fontSize:15, fontWeight:700, color:'#fff', fontFamily:'DM Sans,sans-serif', marginBottom:3 }}>{a.balance}</div>
-                <div style={{ fontSize:12, color:'rgba(255,255,255,0.4)', fontFamily:'DM Sans,sans-serif' }}>{a.fiat}</div>
+                <div style={{ fontSize:14, fontWeight:700, color:'#fff', fontFamily:'DM Sans,sans-serif', marginBottom:3 }}>{a.balance}</div>
+                <div style={{ fontSize:11, color:'#959595', fontFamily:'DM Sans,sans-serif' }}>{a.fiat}</div>
               </div>
             </div>
           ))}

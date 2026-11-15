@@ -118,7 +118,7 @@ function StepCreateAccount({ onNext, onAlreadyHave }) {
         padding:'0 22px' }}>
 
         {/* Title */}
-        <div style={{ fontFamily:'Syne,sans-serif', fontSize:20, fontWeight:800,
+        <div style={{ fontFamily:'DM Sans,sans-serif', fontSize:20, fontWeight:700,
           color:'#fff', marginBottom:20 }}>
           Create an account
         </div>
@@ -130,7 +130,7 @@ function StepCreateAccount({ onNext, onAlreadyHave }) {
           <input
             style={fStyle('email')}
             type="email"
-            placeholder="e.g. firstname.lastname@gmail.com"
+            placeholder="e.g danieljames@gmail.com"
             value={email}
             onChange={e => setEmail(e.target.value)}
             onFocus={() => setFocusF('email')}
@@ -145,7 +145,7 @@ function StepCreateAccount({ onNext, onAlreadyHave }) {
           <input
             style={fStyle('pw')}
             type="password"
-            placeholder="2-8 Characters"
+            placeholder="8-16 Character"
             value={pw}
             onChange={e => setPw(e.target.value)}
             onFocus={() => setFocusF('pw')}
@@ -160,7 +160,7 @@ function StepCreateAccount({ onNext, onAlreadyHave }) {
           <input
             style={fStyle('cf')}
             type="password"
-            placeholder="2-8 Characters"
+            placeholder="8-16 Character"
             value={cf}
             onChange={e => setCf(e.target.value)}
             onFocus={() => setFocusF('cf')}
@@ -176,27 +176,40 @@ function StepCreateAccount({ onNext, onAlreadyHave }) {
           onClick={onNext}
           disabled={!valid}
           style={{
-            width:'100%', height:52, borderRadius:12,
+            width:'100%', height:54, borderRadius:30,
             background: valid
-              ? 'linear-gradient(135deg,#EC641D,#BD5017)'
-              : 'rgba(120,50,10,0.55)',
-            border:'none', color: valid ? '#fff' : 'rgba(255,255,255,0.4)',
+              ? 'linear-gradient(135deg,#F0834A,#EC641D)'
+              : '#5E280C',
+            border:'none', color: valid ? '#fff' : 'rgba(0,0,0,0.55)',
             fontFamily:'DM Sans,sans-serif', fontSize:15, fontWeight:700,
-            cursor: valid ? 'pointer' : 'default', marginBottom:16,
+            cursor: valid ? 'pointer' : 'default', marginBottom:12,
             transition:'all 0.2s',
-            boxShadow: valid ? '0 6px 20px rgba(236,100,29,0.35)' : 'none',
+            boxShadow: valid ? '0 8px 24px rgba(236,100,29,0.35)' : 'none',
           }}
         >
           Create Account
         </button>
 
-        <div style={{ textAlign:'center', fontSize:13,
-          color:'rgba(255,255,255,0.4)', cursor:'pointer',
-          fontFamily:'DM Sans,sans-serif', transition:'color 0.2s' }}
+        <button
           onClick={onAlreadyHave}
-          onMouseEnter={e => e.currentTarget.style.color='rgba(255,255,255,0.75)'}
-          onMouseLeave={e => e.currentTarget.style.color='rgba(255,255,255,0.4)'}>
+          style={{
+            width:'100%', height:54, borderRadius:30,
+            background:'#000',
+            border:'1px solid rgba(255,255,255,0.12)',
+            color:'#fff',
+            fontFamily:'DM Sans,sans-serif', fontSize:15, fontWeight:600,
+            cursor:'pointer', marginBottom:14,
+            transition:'background 0.2s',
+          }}
+          onMouseEnter={e => e.currentTarget.style.background='#1F1F1F'}
+          onMouseLeave={e => e.currentTarget.style.background='#000'}>
           I already have a wallet
+        </button>
+
+        <div style={{ textAlign:'center', fontSize:11,
+          color:'rgba(255,255,255,0.3)',
+          fontFamily:'DM Sans,sans-serif' }}>
+          Do not sell or share my personal info
         </div>
       </div>
     </div>
@@ -220,7 +233,7 @@ function StepReferral({ onNext, onSkip }) {
         padding:'0 22px', display:'flex', flexDirection:'column' }}>
 
         {/* Title */}
-        <div style={{ fontFamily:'Syne,sans-serif', fontSize:20, fontWeight:800,
+        <div style={{ fontFamily:'DM Sans,sans-serif', fontSize:20, fontWeight:700,
           color:'#fff', marginBottom:20 }}>
           Referral Code
         </div>
@@ -252,7 +265,7 @@ function StepReferral({ onNext, onSkip }) {
             alt="Referral"
             style={{
               width: 200,
-              height: 200,
+              height: 180,
               objectFit: 'contain',
               filter: 'drop-shadow(0 16px 32px rgba(236,100,29,0.25))',
               animation: 'ob_float 3.5s ease-in-out infinite',
@@ -267,12 +280,12 @@ function StepReferral({ onNext, onSkip }) {
         <button
           onClick={onNext}
           style={{
-            width:'100%', height:52, borderRadius:12,
-            background:'linear-gradient(135deg,#EC641D,#BD5017)',
+            width:'100%', height:54, borderRadius:30,
+            background:'linear-gradient(135deg,#F0834A,#EC641D)',
             border:'none', color:'#fff',
             fontFamily:'DM Sans,sans-serif', fontSize:15, fontWeight:700,
-            cursor:'pointer', marginBottom:16,
-            boxShadow:'0 6px 20px rgba(236,100,29,0.35)',
+            cursor:'pointer', marginBottom:12,
+            boxShadow:'0 8px 24px rgba(236,100,29,0.35)',
             transition:'all 0.2s',
           }}
           onMouseEnter={e => e.currentTarget.style.transform='translateY(-1px)'}
@@ -281,14 +294,21 @@ function StepReferral({ onNext, onSkip }) {
           Enter Referral Code
         </button>
 
-        <div style={{ textAlign:'center', fontSize:13,
-          color:'rgba(255,255,255,0.4)', cursor:'pointer',
-          fontFamily:'DM Sans,sans-serif', transition:'color 0.2s' }}
+        <button
           onClick={onSkip}
-          onMouseEnter={e => e.currentTarget.style.color='rgba(255,255,255,0.75)'}
-          onMouseLeave={e => e.currentTarget.style.color='rgba(255,255,255,0.4)'}>
+          style={{
+            width:'100%', height:48, borderRadius:30,
+            background:'#1F1F1F',
+            border:'1px solid rgba(255,255,255,0.08)',
+            color:'#fff',
+            fontFamily:'DM Sans,sans-serif', fontSize:14, fontWeight:600,
+            cursor:'pointer',
+            transition:'background 0.2s',
+          }}
+          onMouseEnter={e => e.currentTarget.style.background='#2A2A2A'}
+          onMouseLeave={e => e.currentTarget.style.background='#1F1F1F'}>
           Skip
-        </div>
+        </button>
       </div>
     </div>
   )

@@ -59,7 +59,7 @@ export default function PinScreen({ onDone }) {
       if (state === 'success') return '#1fd090'
       return '#EC641D'
     }
-    return 'rgba(255,255,255,0.25)'
+    return '#ffffff'
   }
 
   return (
@@ -104,19 +104,22 @@ export default function PinScreen({ onDone }) {
           <div
             onClick={() => { setPin(''); setState('idle'); setPhase('set'); setFirst('') }}
             style={{
-              background: 'rgba(255,255,255,0.08)',
-              border: '1px solid rgba(255,255,255,0.1)',
+              width: 64,
+              height: 32,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: '#1F1F1F',
               borderRadius: 20,
-              padding: '5px 16px',
               fontSize: 13,
-              color: 'rgba(255,255,255,0.6)',
+              color: '#959595',
               fontFamily: 'DM Sans, sans-serif',
               cursor: 'pointer',
               userSelect: 'none',
               transition: 'background 0.2s',
             }}
-            onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.14)'}
-            onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'}
+            onMouseEnter={e => e.currentTarget.style.background = '#2A2A2A'}
+            onMouseLeave={e => e.currentTarget.style.background = '#1F1F1F'}
           >
             Back
           </div>
@@ -151,8 +154,8 @@ export default function PinScreen({ onDone }) {
         {/* ── "Enter Pin code" label ── */}
         <div style={{
           textAlign: 'center',
-          fontSize: 18,
-          fontWeight: 600,
+          fontSize: 20,
+          fontWeight: 700,
           color: '#fff',
           fontFamily: 'DM Sans, sans-serif',
           marginTop: 24,
@@ -258,7 +261,7 @@ export default function PinScreen({ onDone }) {
                   ) : (
                     /* Number */
                     <span style={{
-                      fontSize: 30,
+                      fontSize: 28,
                       fontWeight: 300,
                       color: 'rgba(255,255,255,0.85)',
                       fontFamily: 'DM Sans, sans-serif',

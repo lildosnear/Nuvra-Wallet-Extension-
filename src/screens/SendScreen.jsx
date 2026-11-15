@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import SlideButton from '../components/SlideButton'
 import PinModal from '../components/PinModal'
 import { useWallet } from '../wallet/WalletContext'
@@ -29,44 +29,43 @@ function TokIcon({ t, size=32 }) {
 function ConfirmModal({ token, amount, addr, onClose, onConfirm }) {
   return (
     <div style={{ position:'absolute', inset:0, background:'rgba(0,0,0,0.82)', zIndex:80, display:'flex', alignItems:'flex-end', backdropFilter:'blur(8px)' }} onClick={onClose}>
-      <div style={{ width:'100%', background:'#13131f', borderRadius:'24px 24px 0 0', border:'1px solid rgba(255,255,255,0.1)', borderBottom:'none', padding:'0 0 40px', animation:'slideUp 0.3s cubic-bezier(0.4,0,0.2,1)' }} onClick={e => e.stopPropagation()}>
-        <div style={{ width:40, height:4, background:'rgba(255,255,255,0.15)', borderRadius:2, margin:'12px auto 0' }}/>
-        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'18px 20px 16px' }}>
-          <div style={{ fontFamily:'Syne,sans-serif', fontSize:18, fontWeight:700, color:'#fff' }}>Send Token</div>
-          <div onClick={onClose} style={{ width:32, height:32, borderRadius:'50%', background:'rgba(255,255,255,0.1)', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer' }}>
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2L12 12M12 2L2 12" stroke="rgba(255,255,255,0.7)" strokeWidth="1.8" strokeLinecap="round"/></svg>
+      <div style={{ width:'100%', background:'#101010', borderRadius:'24px 24px 0 0', border:'1px solid rgba(255,255,255,0.1)', borderBottom:'none', padding:'0 0 40px', animation:'slideUp 0.3s cubic-bezier(0.4,0,0.2,1)' }} onClick={e => e.stopPropagation()}>
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'20px 20px 16px' }}>
+          <div style={{ fontFamily:'DM Sans,sans-serif', fontSize:18, fontWeight:700, color:'#fff' }}>Send Token</div>
+          <div onClick={onClose} style={{ width:36, height:36, borderRadius:'50%', background:'#fff', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer' }}>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2L12 12M12 2L2 12" stroke="#000" strokeWidth="2" strokeLinecap="round"/></svg>
           </div>
         </div>
 
         {/* Token icon */}
         <div style={{ display:'flex', justifyContent:'center', marginBottom:10 }}>
-          <div style={{ width:72, height:72, borderRadius:24, background:'rgba(236,100,29,0.15)', display:'flex', alignItems:'center', justifyContent:'center' }}>
-            <TokIcon t={token} size={56}/>
-          </div>
+          <TokIcon t={token} size={56}/>
         </div>
-        <div style={{ textAlign:'center', fontFamily:'Syne,sans-serif', fontSize:20, fontWeight:700, color:'#fff', marginBottom:4 }}>{token.symbol}</div>
-        <div style={{ textAlign:'center', fontSize:13, color:'rgba(255,255,255,0.4)', fontFamily:'DM Sans,sans-serif', marginBottom:14 }}>{amount} {token.symbol} ~ 120 USDC</div>
+        <div style={{ textAlign:'center', fontFamily:'DM Sans,sans-serif', fontSize:20, fontWeight:700, color:'#fff', marginBottom:4 }}>{token.symbol}</div>
+        <div style={{ textAlign:'center', fontSize:13, color:'#959595', fontFamily:'DM Sans,sans-serif', marginBottom:14 }}>{amount} {token.symbol} ~ 120 USDC</div>
 
         {/* Address */}
-        <div style={{ margin:'0 20px 18px', background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:10, padding:'10px 14px', display:'flex', alignItems:'center', gap:8 }}>
+        <div style={{ margin:'0 20px 18px', background:'#1A1A1A', border:'1px solid rgba(255,255,255,0.06)', borderRadius:24, padding:'10px 14px', display:'flex', alignItems:'center', gap:8 }}>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1" stroke="rgba(255,255,255,0.4)" strokeWidth="1.2"/><rect x="9" y="2" width="5" height="5" rx="1" stroke="rgba(255,255,255,0.4)" strokeWidth="1.2"/><rect x="2" y="9" width="5" height="5" rx="1" stroke="rgba(255,255,255,0.4)" strokeWidth="1.2"/><rect x="10" y="10" width="2" height="2" fill="rgba(255,255,255,0.4)"/><path d="M13 9V13H9" stroke="rgba(255,255,255,0.4)" strokeWidth="1.2" strokeLinecap="round"/></svg>
           <span style={{ flex:1, fontSize:12, color:'rgba(255,255,255,0.5)', fontFamily:'monospace', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{addr || '—'}</span>
         </div>
 
         {/* Details */}
-        <div style={{ margin:'0 20px', background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:14, marginBottom:22 }}>
-          {[
-            [`Send ${token.symbol}`, <TokIcon t={token} size={18}/>, `= ${amount}`],
-            ['Est. Fee', null, '$1.20'],
-          ].map(([label, icon, val], i) => (
-            <div key={i} style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'12px 16px', borderBottom: i===0 ? '1px solid rgba(255,255,255,0.06)' : 'none' }}>
-              <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-                {icon || <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="rgba(255,255,255,0.2)" strokeWidth="1.2"/></svg>}
-                <span style={{ fontSize:14, color:'rgba(255,255,255,0.55)', fontFamily:'DM Sans,sans-serif' }}>{label}</span>
-              </div>
-              <span style={{ fontSize:14, fontWeight:600, color:'#fff', fontFamily:'DM Sans,sans-serif' }}>{val}</span>
+        <div style={{ margin:'0 20px', background:'#1A1A1A', border:'1px solid rgba(255,255,255,0.06)', borderRadius:16, marginBottom:22 }}>
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'13px 16px', borderBottom:'1px solid rgba(255,255,255,0.06)' }}>
+            <span style={{ fontSize:14, color:'#fff', fontFamily:'DM Sans,sans-serif' }}>Send {token.symbol}</span>
+            <div style={{ display:'flex', alignItems:'center', gap:7 }}>
+              <TokIcon t={token} size={18}/>
+              <span style={{ fontSize:14, fontWeight:600, color:'#fff', fontFamily:'DM Sans,sans-serif' }}>= {amount}</span>
             </div>
-          ))}
+          </div>
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'13px 16px' }}>
+            <div style={{ display:'flex', alignItems:'center', gap:6 }}>
+              <span style={{ fontSize:14, color:'#959595', fontFamily:'DM Sans,sans-serif' }}>Est. Fee:</span>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#959595" strokeWidth="1.1"/><path d="M7 6.2V9.5M7 4.2V4.6" stroke="#959595" strokeWidth="1.2" strokeLinecap="round"/></svg>
+            </div>
+            <span style={{ fontSize:14, fontWeight:600, color:'#fff', fontFamily:'DM Sans,sans-serif' }}>$1.20</span>
+          </div>
         </div>
 
         <div style={{ display:'flex', justifyContent:'center', paddingBottom:4 }}>
@@ -118,41 +117,38 @@ function SendSuccess({ token, amount, addr, onDone }) {
         justifyContent:'center', padding:'60px 28px 20px', position:'relative', zIndex:1 }}>
 
         {/* Title */}
-        <div style={{ fontFamily:'Syne,sans-serif', fontSize:20, fontWeight:800,
+        <div style={{ fontFamily:'DM Sans,sans-serif', fontSize:20, fontWeight:700,
           color:'#fff', marginBottom:28, textAlign:'center', letterSpacing:0.2 }}>
-          Transaction Successful
+          Successful Send Token
         </div>
 
         {/* Token icon */}
-        <div style={{ width:80, height:80, borderRadius:'50%',
-          background:'rgba(236,100,29,0.12)', border:'1px solid rgba(236,100,29,0.25)',
-          display:'flex', alignItems:'center', justifyContent:'center',
-          marginBottom:16, boxShadow:'0 8px 32px rgba(236,100,29,0.25)' }}>
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'center', marginBottom:16 }}>
           <TokIcon t={token} size={56}/>
         </div>
 
         {/* Token symbol */}
-        <div style={{ fontFamily:'Syne,sans-serif', fontSize:24, fontWeight:800,
+        <div style={{ fontFamily:'DM Sans,sans-serif', fontSize:18, fontWeight:700,
           color:'#fff', marginBottom:6 }}>
           {token.symbol}
         </div>
 
         {/* Amount line */}
-        <div style={{ fontSize:14, color:'rgba(255,255,255,0.5)',
+        <div style={{ fontSize:13, color:'#959595',
           fontFamily:'DM Sans,sans-serif', marginBottom:4 }}>
           {amount} {token.symbol} ~ 120 USDC
         </div>
 
         {/* "to" label */}
-        <div style={{ fontSize:12, color:'rgba(255,255,255,0.3)',
+        <div style={{ fontSize:12, color:'#959595',
           fontFamily:'DM Sans,sans-serif', marginBottom:10, letterSpacing:0.5 }}>
           to
         </div>
 
         {/* Recipient address pill */}
         <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:44,
-          background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.1)',
-          borderRadius:10, padding:'9px 14px' }}>
+          background:'#1A1A1A', border:'1px solid rgba(255,255,255,0.06)',
+          borderRadius:24, padding:'9px 14px' }}>
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
             <rect x="1.5" y="1.5" width="4" height="4" rx="0.5" stroke="rgba(255,255,255,0.35)" strokeWidth="1.1"/>
             <rect x="8.5" y="1.5" width="4" height="4" rx="0.5" stroke="rgba(255,255,255,0.35)" strokeWidth="1.1"/>
@@ -167,11 +163,11 @@ function SendSuccess({ token, amount, addr, onDone }) {
         {/* Done button */}
         <button onClick={onDone} style={{
           width:'100%', maxWidth:320, height:54, borderRadius:30,
-          background:'linear-gradient(135deg,#EC641D,#BD5017)',
+          background:'linear-gradient(135deg,#F0834A,#EC641D)',
           border:'none', color:'#fff',
-          fontFamily:'DM Sans,sans-serif', fontSize:16, fontWeight:700,
+          fontFamily:'DM Sans,sans-serif', fontSize:15, fontWeight:700,
           cursor:'pointer', marginBottom:28,
-          boxShadow:'0 8px 32px rgba(236,100,29,0.45)',
+          boxShadow:'0 8px 24px rgba(236,100,29,0.35)',
           position:'relative', zIndex:1,
         }}>Done</button>
 
@@ -197,12 +193,12 @@ function SendSuccess({ token, amount, addr, onDone }) {
             )},
           ].map(({ label, icon }) => (
             <div key={label} style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:8, cursor:'pointer' }}>
-              <div style={{ width:44, height:44, borderRadius:14,
-                background:'rgba(255,255,255,0.07)', border:'1px solid rgba(255,255,255,0.09)',
+              <div style={{ width:48, height:48, borderRadius:'50%',
+                background:'#000', border:'1px solid rgba(255,255,255,0.1)',
                 display:'flex', alignItems:'center', justifyContent:'center' }}>
                 {icon}
               </div>
-              <span style={{ fontSize:11, color:'rgba(255,255,255,0.4)',
+              <span style={{ fontSize:11, color:'#959595',
                 fontFamily:'DM Sans,sans-serif', textAlign:'center', lineHeight:1.3 }}>{label}</span>
             </div>
           ))}
@@ -212,7 +208,7 @@ function SendSuccess({ token, amount, addr, onDone }) {
   )
 }
 
-export default function SendScreen({ onBack }) {
+export default function SendScreen({ onBack, onSuccessView }) {
   const { selectedChainId } = useWallet()
   const TOKENS = tokensForChain(selectedChainId)
   const [tokenSymbol, setTokenSymbol] = useState(null)
@@ -223,6 +219,9 @@ export default function SendScreen({ onBack }) {
   const [showTok, setShowTok] = useState(false)
   const [phase,   setPhase]   = useState('form') // form | confirm | pin | processing | success
   const [showPin, setShowPin] = useState(false)
+
+  // Success screen shows no bottom nav (Figma).
+  useEffect(() => { onSuccessView && onSuccessView(phase === 'success') }, [phase])
 
   // Validate the recipient against the token's chain (which follows the
   // selected chain). A wrong-chain paste gets a specific explanation.
@@ -248,32 +247,28 @@ export default function SendScreen({ onBack }) {
 
       {/* TOP NAV */}
       <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'12px 16px 0', flexShrink:0 }}>
-        <img src="/logo_nv_orange.png" alt="NV" style={{ width:40, height:26, objectFit:'contain' }}/>
-        <div style={{ fontFamily:'Syne,sans-serif', fontSize:17, fontWeight:700, color:'#fff' }}>Send Tokens</div>
+        <img src="/logo_nv_orange.png" alt="NV" style={{ width:36, height:24, objectFit:'contain' }}/>
+        <div style={{ fontFamily:'DM Sans,sans-serif', fontSize:15, fontWeight:700, color:'#fff' }}>Send Tokens</div>
         <div style={{ display:'flex', alignItems:'center', gap:10 }}>
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ opacity:0.6 }}>
             <path d="M17 5C17 2.8 13.9 1 10 1C6.1 1 3 2.8 3 5C3 9 1 11 1 11H19C19 11 17 9 17 5Z" stroke="rgba(255,255,255,0.7)" strokeWidth="1.4" fill="none"/>
             <path d="M11.7 15C11.4 15.6 10.8 16 10 16C9.2 16 8.6 15.6 8.3 15" stroke="rgba(255,255,255,0.7)" strokeWidth="1.4" strokeLinecap="round"/>
           </svg>
-          <img src="/home/avatar.png" alt="" style={{ width:32, height:32, borderRadius:'50%', objectFit:'cover', border:'2px solid rgba(236,100,29,0.4)' }}/>
+          <img src="/home/avatar.png" alt="" style={{ width:36, height:36, borderRadius:'50%', objectFit:'cover', border:'2px solid rgba(236,100,29,0.4)' }}/>
         </div>
       </div>
 
       {/* Back pill — row below nav */}
-      <div style={{ padding:'8px 16px 0', flexShrink:0 }}>
+      <div style={{ padding:'10px 16px 0', flexShrink:0 }}>
         <div onClick={onBack} style={{
-          display:'inline-flex', alignItems:'center', gap:5,
-          padding:'4px 12px', background:'rgba(255,255,255,0.07)',
-          border:'1px solid rgba(255,255,255,0.1)', borderRadius:20,
-          cursor:'pointer', fontSize:12, color:'rgba(255,255,255,0.6)',
+          width:64, height:32, display:'flex', alignItems:'center', justifyContent:'center',
+          background:'#1F1F1F', borderRadius:20,
+          cursor:'pointer', fontSize:13, color:'#959595',
           fontFamily:'DM Sans,sans-serif', transition:'background 0.2s',
         }}
-          onMouseEnter={e => e.currentTarget.style.background='rgba(255,255,255,0.12)'}
-          onMouseLeave={e => e.currentTarget.style.background='rgba(255,255,255,0.07)'}
+          onMouseEnter={e => e.currentTarget.style.background='#2A2A2A'}
+          onMouseLeave={e => e.currentTarget.style.background='#1F1F1F'}
         >
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-            <path d="M8 10L4 6L8 2" stroke="rgba(255,255,255,0.6)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
           Back
         </div>
       </div>
@@ -281,7 +276,7 @@ export default function SendScreen({ onBack }) {
       <div style={{ flex:1, overflowY:'auto', scrollbarWidth:'none', padding:'20px 20px 0' }}>
 
         {/* ADDRESS input */}
-        <div style={{ display:'flex', alignItems:'center', gap:12, background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:14, padding:'14px 16px', marginBottom:18 }}>
+        <div style={{ display:'flex', alignItems:'center', gap:12, background:'#1F1F1F', borderRadius:16, padding:'0 16px', height:56, boxSizing:'border-box', marginBottom:18 }}>
           <input value={addr} onChange={e => setAddr(e.target.value)} placeholder="Paste address or scan QR"
             style={{ flex:1, background:'transparent', border:'none', outline:'none', color:'#fff', fontFamily:'DM Sans,sans-serif', fontSize:14 }}/>
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ opacity:0.5, cursor:'pointer', flexShrink:0 }}>
@@ -300,15 +295,17 @@ export default function SendScreen({ onBack }) {
         )}
 
         {/* AMOUNT + TOKEN */}
-        <div style={{ background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:14, padding:'16px', marginBottom:24 }}>
+        <div style={{ background:'#1F1F1F', borderRadius:16, padding:'16px', minHeight:110, boxSizing:'border-box', marginBottom:24, display:'flex', flexDirection:'column' }}>
           <div style={{ display:'flex', justifyContent:'space-between', marginBottom:10 }}>
-            <span style={{ fontSize:12, color:'rgba(255,255,255,0.4)', fontFamily:'DM Sans,sans-serif' }}>Enter Amount</span>
-            <span style={{ fontSize:12, color:'rgba(255,255,255,0.4)', fontFamily:'DM Sans,sans-serif' }}>Balance: {token.balance}</span>
+            <span style={{ fontSize:12, color:'#959595', fontFamily:'DM Sans,sans-serif' }}>Enter Amount</span>
+            <span style={{ fontSize:12, color:'#959595', fontFamily:'DM Sans,sans-serif' }}>Balance: {token.balance}</span>
           </div>
-          <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+          <div style={{ flex:1 }}>
             <input value={amount} onChange={e => setAmount(e.target.value.replace(/[^0-9.]/g,''))} placeholder="0.00"
-              style={{ flex:1, background:'transparent', border:'none', outline:'none', fontFamily:'Syne,sans-serif', fontSize:32, fontWeight:700, color:'#fff' }}/>
-            <div onClick={() => setShowTok(true)} style={{ display:'flex', alignItems:'center', gap:7, background:'rgba(255,255,255,0.1)', border:'1px solid rgba(255,255,255,0.12)', borderRadius:24, padding:'7px 11px 7px 7px', cursor:'pointer', flexShrink:0 }}>
+              style={{ width:'100%', background:'transparent', border:'none', outline:'none', fontFamily:'DM Sans,sans-serif', fontSize:32, fontWeight:700, color:'#fff' }}/>
+          </div>
+          <div style={{ display:'flex', justifyContent:'flex-end' }}>
+            <div onClick={() => setShowTok(true)} style={{ display:'flex', alignItems:'center', gap:7, background:'#000', border:'1px solid rgba(255,255,255,0.1)', borderRadius:24, padding:'7px 11px 7px 7px', cursor:'pointer', flexShrink:0 }}>
               <TokIcon t={token} size={24}/>
               <span style={{ fontSize:14, fontWeight:700, color:'#fff', fontFamily:'DM Sans,sans-serif' }}>{token.symbol}</span>
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4L6 8L10 4" stroke="rgba(255,255,255,0.6)" strokeWidth="1.5" strokeLinecap="round"/></svg>
@@ -320,7 +317,7 @@ export default function SendScreen({ onBack }) {
       {/* SEND BUTTON */}
       <div style={{ padding:'0 20px 20px', flexShrink:0 }}>
         <button onClick={() => setPhase('confirm')} disabled={!valid}
-          style={{ width:'100%', height:54, borderRadius:16, background: valid ? 'linear-gradient(135deg,#EC641D,#BD5017)' : 'rgba(120,50,10,0.5)', border:'none', color: valid ? '#fff' : 'rgba(255,255,255,0.35)', fontFamily:'DM Sans,sans-serif', fontSize:16, fontWeight:700, cursor: valid ? 'pointer' : 'default', transition:'all 0.2s', boxShadow: valid ? '0 4px 20px rgba(236,100,29,0.35)' : 'none' }}>
+          style={{ width:'100%', height:54, borderRadius:30, background: valid ? 'linear-gradient(135deg,#F0834A,#EC641D)' : '#5E280C', border:'none', color: valid ? '#fff' : 'rgba(0,0,0,0.55)', fontFamily:'DM Sans,sans-serif', fontSize:15, fontWeight:700, cursor: valid ? 'pointer' : 'default', transition:'all 0.2s', boxShadow: valid ? '0 8px 24px rgba(236,100,29,0.35)' : 'none' }}>
           Send
         </button>
       </div>
@@ -328,25 +325,24 @@ export default function SendScreen({ onBack }) {
       {/* Token selector modal */}
       {showTok && (
         <div style={{ position:'absolute', inset:0, background:'rgba(0,0,0,0.82)', zIndex:80, display:'flex', alignItems:'flex-end', backdropFilter:'blur(8px)' }} onClick={() => setShowTok(false)}>
-          <div style={{ width:'100%', background:'#13131f', borderRadius:'24px 24px 0 0', border:'1px solid rgba(255,255,255,0.1)', borderBottom:'none', padding:'0 0 44px', animation:'slideUp 0.3s cubic-bezier(0.4,0,0.2,1)' }} onClick={e => e.stopPropagation()}>
-            <div style={{ width:40, height:4, background:'rgba(255,255,255,0.15)', borderRadius:2, margin:'12px auto 0' }}/>
-            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'18px 20px 14px' }}>
-              <div style={{ fontFamily:'Syne,sans-serif', fontSize:18, fontWeight:700, color:'#fff' }}>Select Token</div>
-              <div onClick={() => setShowTok(false)} style={{ width:32, height:32, borderRadius:'50%', background:'rgba(255,255,255,0.1)', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer' }}>
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2L12 12M12 2L2 12" stroke="rgba(255,255,255,0.7)" strokeWidth="1.8" strokeLinecap="round"/></svg>
+          <div style={{ width:'100%', background:'#101010', borderRadius:'24px 24px 0 0', border:'1px solid rgba(255,255,255,0.1)', borderBottom:'none', padding:'0 0 44px', animation:'slideUp 0.3s cubic-bezier(0.4,0,0.2,1)' }} onClick={e => e.stopPropagation()}>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'20px 20px 14px' }}>
+              <div style={{ fontFamily:'DM Sans,sans-serif', fontSize:18, fontWeight:700, color:'#fff' }}>Select Token</div>
+              <div onClick={() => setShowTok(false)} style={{ width:36, height:36, borderRadius:'50%', background:'#fff', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer' }}>
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2L12 12M12 2L2 12" stroke="#000" strokeWidth="2" strokeLinecap="round"/></svg>
               </div>
             </div>
             {TOKENS.map((t, i) => (
               <div key={i} onClick={() => { setToken(t); setShowTok(false) }}
-                style={{ display:'flex', alignItems:'center', gap:14, padding:'14px 20px', cursor:'pointer', borderBottom:'1px solid rgba(255,255,255,0.05)' }}
+                style={{ display:'flex', alignItems:'center', gap:14, padding:'12px 20px', cursor:'pointer', borderBottom:'1px solid rgba(255,255,255,0.05)' }}
                 onMouseEnter={e => e.currentTarget.style.background='rgba(255,255,255,0.04)'}
                 onMouseLeave={e => e.currentTarget.style.background='transparent'}>
-                <TokIcon t={t} size={44}/>
+                <TokIcon t={t} size={40}/>
                 <div style={{ flex:1 }}>
-                  <div style={{ fontSize:16, fontWeight:600, color:'#fff', fontFamily:'DM Sans,sans-serif' }}>{t.symbol}</div>
-                  <div style={{ fontSize:12, color:'rgba(255,255,255,0.4)', fontFamily:'DM Sans,sans-serif' }}>{t.name}</div>
+                  <div style={{ fontSize:14, fontWeight:700, color:'#fff', fontFamily:'DM Sans,sans-serif' }}>{t.symbol}</div>
+                  <div style={{ fontSize:11, color:'#959595', fontFamily:'DM Sans,sans-serif' }}>{t.name}</div>
                 </div>
-                <div style={{ fontSize:14, fontWeight:600, color:'#fff', fontFamily:'DM Sans,sans-serif' }}>{t.balance}</div>
+                <div style={{ fontSize:14, fontWeight:700, color:'#fff', fontFamily:'DM Sans,sans-serif' }}>{t.balance}</div>
               </div>
             ))}
           </div>

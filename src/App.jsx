@@ -21,10 +21,14 @@ export default function App() {
   const [navTab, setNavTab] = useState('home')
   // Track previous page for back navigation on sub-flows
   const [prevPage, setPrevPage] = useState(null)
+  // Full-screen success views (Send/Swap/Bridge) hide the bottom nav,
+  // per the Figma design. Screens report via onSuccessView.
+  const [navHidden, setNavHidden] = useState(false)
 
   const navigate = (dest) => {
     setPrevPage(page)
     setPage(dest)
+    setNavHidden(false)
     if (MAIN_PAGES.includes(dest)) setNavTab(dest)
   }
 
@@ -33,7 +37,7 @@ export default function App() {
     else navigate('home')
   }
 
-  const showBottomNav = MAIN_PAGES.includes(page) || page === 'send'
+  const showBottomNav = (MAIN_PAGES.includes(page) || page === 'send') && !navHidden
 
   return (
     <WalletProvider>
@@ -76,21 +80,21 @@ export default function App() {
         {/* Send */}
         {page === 'send' && (
           <div className="screen active" style={{ background: '#101010' }}>
-            <SendScreen onBack={() => navigate('home')}/>
+            <SendScreen onBack={() => navigate('home')} onSuccessView={setNavHidden}/>
           </div>
         )}
 
         {/* Swap */}
         {page === 'swap' && (
           <div className="screen active" style={{ background: '#101010' }}>
-            <SwapScreen onBack={() => navigate('home')}/>
+            <SwapScreen onBack={() => navigate('home')} onSuccessView={setNavHidden}/>
           </div>
         )}
 
         {/* Bridge */}
         {page === 'bridge' && (
           <div className="screen active" style={{ background: '#101010' }}>
-            <BridgeScreen/>
+            <BridgeScreen onSuccessView={setNavHidden}/>
           </div>
         )}
 

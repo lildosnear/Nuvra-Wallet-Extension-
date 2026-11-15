@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import SlideButton from '../components/SlideButton'
 import PinModal from '../components/PinModal'
 
@@ -33,13 +33,13 @@ function TokenPill({ t, onClick }) {
   return (
     <div onClick={onClick} style={{
       display: 'flex', alignItems: 'center', gap: 7,
-      background: '#1e1e2c', border: '1px solid rgba(255,255,255,0.12)',
+      background: '#000', border: '1px solid rgba(255,255,255,0.12)',
       borderRadius: 30, padding: '7px 12px 7px 7px',
       cursor: 'pointer', flexShrink: 0,
       transition: 'background 0.15s',
     }}
-      onMouseEnter={e => e.currentTarget.style.background = '#2a2a3a'}
-      onMouseLeave={e => e.currentTarget.style.background = '#1e1e2c'}>
+      onMouseEnter={e => e.currentTarget.style.background = '#1F1F1F'}
+      onMouseLeave={e => e.currentTarget.style.background = '#000'}>
       <TokIcon t={t} size={26}/>
       <span style={{ fontSize: 15, fontWeight: 700, color: '#fff', fontFamily: 'DM Sans,sans-serif' }}>{t.symbol}</span>
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
@@ -54,18 +54,18 @@ function TokenModal({ onSelect, onClose, exclude }) {
   return (
     <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 90,
       display: 'flex', alignItems: 'flex-end', backdropFilter: 'blur(8px)' }} onClick={onClose}>
-      <div style={{ width: '100%', background: '#13131f', borderRadius: '24px 24px 0 0',
+      <div style={{ width: '100%', background: '#101010', borderRadius: '24px 24px 0 0',
         border: '1px solid rgba(255,255,255,0.1)', borderBottom: 'none',
         paddingBottom: 44, animation: 'slideUp 0.3s cubic-bezier(0.4,0,0.2,1)' }}
         onClick={e => e.stopPropagation()}>
 
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 20px 16px' }}>
-          <div style={{ fontFamily: 'Syne,sans-serif', fontSize: 18, fontWeight: 700, color: '#fff' }}>Select Token</div>
-          <div onClick={onClose} style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.1)',
+          <div style={{ fontFamily: 'DM Sans,sans-serif', fontSize: 18, fontWeight: 700, color: '#fff' }}>Select Token</div>
+          <div onClick={onClose} style={{ width: 36, height: 36, borderRadius: '50%', background: '#fff',
             display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M2 2L12 12M12 2L2 12" stroke="rgba(255,255,255,0.7)" strokeWidth="1.8" strokeLinecap="round"/>
+              <path d="M2 2L12 12M12 2L2 12" stroke="#000" strokeWidth="2" strokeLinecap="round"/>
             </svg>
           </div>
         </div>
@@ -73,19 +73,19 @@ function TokenModal({ onSelect, onClose, exclude }) {
         {/* Token list */}
         {TOKENS.filter(t => t.symbol !== exclude?.symbol).map((t, i, arr) => (
           <div key={i} onClick={() => { onSelect(t); onClose() }}
-            style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 20px',
+            style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 20px',
               cursor: 'pointer', transition: 'background 0.15s',
               borderBottom: i < arr.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none' }}
             onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.04)'}
             onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-            <TokIcon t={t} size={46}/>
+            <TokIcon t={t} size={40}/>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 15, fontWeight: 600, color: '#fff', fontFamily: 'DM Sans,sans-serif', marginBottom: 2 }}>{t.symbol}</div>
-              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.38)', fontFamily: 'DM Sans,sans-serif' }}>{t.name}</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: '#fff', fontFamily: 'DM Sans,sans-serif', marginBottom: 2 }}>{t.symbol}</div>
+              <div style={{ fontSize: 11, color: '#959595', fontFamily: 'DM Sans,sans-serif' }}>{t.name}</div>
             </div>
             <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: 14, fontWeight: 600, color: '#fff', fontFamily: 'DM Sans,sans-serif', marginBottom: 2 }}>{t.balance}</div>
-              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.38)', fontFamily: 'DM Sans,sans-serif' }}>{t.fiat}</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: '#fff', fontFamily: 'DM Sans,sans-serif', marginBottom: 2 }}>{t.balance}</div>
+              <div style={{ fontSize: 11, color: '#959595', fontFamily: 'DM Sans,sans-serif' }}>{t.fiat}</div>
             </div>
           </div>
         ))}
@@ -100,18 +100,18 @@ function SwapModal({ from, to, fromAmt, toAmt, onClose, onConfirm }) {
   return (
     <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 90,
       display: 'flex', alignItems: 'flex-end', backdropFilter: 'blur(8px)' }} onClick={onClose}>
-      <div style={{ width: '100%', background: '#13131f', borderRadius: '24px 24px 0 0',
+      <div style={{ width: '100%', background: '#101010', borderRadius: '24px 24px 0 0',
         border: '1px solid rgba(255,255,255,0.1)', borderBottom: 'none',
         paddingBottom: 40, animation: 'slideUp 0.3s cubic-bezier(0.4,0,0.2,1)' }}
         onClick={e => e.stopPropagation()}>
 
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 20px 20px' }}>
-          <div style={{ fontFamily: 'Syne,sans-serif', fontSize: 18, fontWeight: 700, color: '#fff' }}>Swap Token</div>
-          <div onClick={onClose} style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.1)',
+          <div style={{ fontFamily: 'DM Sans,sans-serif', fontSize: 18, fontWeight: 700, color: '#fff' }}>Swap Token</div>
+          <div onClick={onClose} style={{ width: 36, height: 36, borderRadius: '50%', background: '#fff',
             display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M2 2L12 12M12 2L2 12" stroke="rgba(255,255,255,0.7)" strokeWidth="1.8" strokeLinecap="round"/>
+              <path d="M2 2L12 12M12 2L2 12" stroke="#000" strokeWidth="2" strokeLinecap="round"/>
             </svg>
           </div>
         </div>
@@ -123,8 +123,8 @@ function SwapModal({ from, to, fromAmt, toAmt, onClose, onConfirm }) {
           </div>
           {/* Arrow overlap badge */}
           <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-12px)', zIndex: 3,
-            width: 24, height: 24, borderRadius: '50%', background: '#1e1e2c',
-            border: '2px solid #13131f', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            width: 24, height: 24, borderRadius: '50%', background: '#000',
+            border: '2px solid #101010', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
               <path d="M2 6H10M7 3L10 6L7 9" stroke="rgba(255,255,255,0.6)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
@@ -135,28 +135,33 @@ function SwapModal({ from, to, fromAmt, toAmt, onClose, onConfirm }) {
         </div>
 
         {/* Pair name */}
-        <div style={{ textAlign: 'center', fontFamily: 'Syne,sans-serif', fontSize: 22, fontWeight: 800, color: '#fff', marginBottom: 6 }}>
+        <div style={{ textAlign: 'center', fontFamily: 'DM Sans,sans-serif', fontSize: 20, fontWeight: 700, color: '#fff', marginBottom: 6 }}>
           {from.symbol}&nbsp; to &nbsp;{to.symbol}
         </div>
-        <div style={{ textAlign: 'center', fontSize: 13, color: 'rgba(255,255,255,0.35)', fontFamily: 'DM Sans,sans-serif', marginBottom: 24 }}>
-          1 {from.symbol} ~ {(RATES[from.symbol] / RATES[to.symbol]).toFixed(3)} {to.symbol}
+        <div style={{ textAlign: 'center', fontSize: 13, color: '#959595', fontFamily: 'DM Sans,sans-serif', marginBottom: 24 }}>
+          1 {from.symbol} = {(RATES[from.symbol] / RATES[to.symbol]).toFixed(3)} {to.symbol}
         </div>
 
         {/* Detail rows */}
-        <div style={{ margin: '0 20px 28px', background: 'rgba(255,255,255,0.04)',
-          border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16 }}>
+        <div style={{ margin: '0 20px 28px', background: '#1A1A1A',
+          border: '1px solid rgba(255,255,255,0.06)', borderRadius: 16 }}>
           {[
-            { label: `Swap ${from.symbol}`, icon: <TokIcon t={from} size={22}/>, value: `= ${fromAmt}` },
-            { label: `Get ${to.symbol}`,    icon: <TokIcon t={to}   size={22}/>, value: `= ${toAmt}` },
-            { label: 'Est. Fee',             icon: <div style={{ width:22, height:22, borderRadius:'50%', background:'rgba(255,255,255,0.08)', display:'flex', alignItems:'center', justifyContent:'center' }}><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="rgba(255,255,255,0.3)" strokeWidth="1"/></svg></div>, value: '$1.20' },
-          ].map(({ label, icon, value }, i) => (
+            { label: `Swap ${from.symbol}`, icon: <TokIcon t={from} size={20}/>, value: `= ${fromAmt}`, grey: false },
+            { label: `Get ${to.symbol}`,    icon: <TokIcon t={to}   size={20}/>, value: `= ${toAmt}`,   grey: false },
+            { label: 'Est. Fee:',            icon: null, value: '$1.20', grey: true },
+          ].map(({ label, icon, value, grey }, i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               padding: '14px 16px', borderBottom: i < 2 ? '1px solid rgba(255,255,255,0.06)' : 'none' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                {icon}
-                <span style={{ fontSize: 14, color: 'rgba(255,255,255,0.55)', fontFamily: 'DM Sans,sans-serif' }}>{label}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ fontSize: 14, color: grey ? '#959595' : '#fff', fontFamily: 'DM Sans,sans-serif' }}>{label}</span>
+                {grey && (
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#959595" strokeWidth="1.1"/><path d="M7 6.2V9.5M7 4.2V4.6" stroke="#959595" strokeWidth="1.2" strokeLinecap="round"/></svg>
+                )}
               </div>
-              <span style={{ fontSize: 14, fontWeight: 600, color: '#fff', fontFamily: 'DM Sans,sans-serif' }}>{value}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                {icon}
+                <span style={{ fontSize: 14, fontWeight: 600, color: '#fff', fontFamily: 'DM Sans,sans-serif' }}>{value}</span>
+              </div>
             </div>
           ))}
         </div>
@@ -171,11 +176,10 @@ function SwapModal({ from, to, fromAmt, toAmt, onClose, onConfirm }) {
 }
 
 // ── Success screen ────────────────────────────────────────────────────────────
-function SwapSuccess({ from, to, fromAmt, toAmt, onDone }) {
+function SwapSuccess({ from, to, onDone }) {
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', background: '#101010',
-      alignItems: 'center', justifyContent: 'center', padding: '40px 28px',
-      position: 'relative', overflow: 'hidden' }}>
+      padding: '40px 28px 28px', position: 'relative', overflow: 'hidden' }}>
 
       {/* Logo top-left */}
       <div style={{ position: 'absolute', top: 20, left: 20 }}>
@@ -187,43 +191,48 @@ function SwapSuccess({ from, to, fromAmt, toAmt, onDone }) {
         background: 'radial-gradient(ellipse at 50% 110%, rgba(236,100,29,0.35) 0%, transparent 65%)',
         pointerEvents: 'none' }}/>
 
-      <div style={{ fontFamily: 'Syne,sans-serif', fontSize: 22, fontWeight: 800, color: '#fff',
-        marginBottom: 40, textAlign: 'center' }}>
-        Successful Swap Token
+      {/* Centred content */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ fontFamily: 'DM Sans,sans-serif', fontSize: 20, fontWeight: 700, color: '#fff',
+          marginBottom: 40, textAlign: 'center' }}>
+          Successful Swap Token
+        </div>
+
+        {/* Overlapping token icons */}
+        <div style={{ position: 'relative', width: 148, height: 80, marginBottom: 24 }}>
+          <div style={{ position: 'absolute', left: 0, top: 0 }}>
+            <TokIcon t={from} size={80}/>
+          </div>
+          <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', zIndex: 3,
+            width: 28, height: 28, borderRadius: '50%', background: '#000',
+            border: '2px solid #101010', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2 5H11M8.5 2L11.5 5L8.5 8" stroke="rgba(255,255,255,0.7)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M12 9H3M5.5 6L2.5 9L5.5 12" stroke="rgba(255,255,255,0.7)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+          <div style={{ position: 'absolute', right: 0, top: 0, zIndex: 2 }}>
+            <TokIcon t={to} size={80}/>
+          </div>
+        </div>
+
+        <div style={{ fontFamily: 'DM Sans,sans-serif', fontSize: 18, fontWeight: 700, color: '#fff', marginBottom: 10 }}>
+          {from.symbol}&nbsp; to &nbsp;{to.symbol}
+        </div>
+        <div style={{ fontSize: 13, color: '#959595', fontFamily: 'DM Sans,sans-serif' }}>
+          1 {from.symbol} ~ {(RATES[from.symbol] / RATES[to.symbol]).toFixed(3)} {to.symbol}
+        </div>
       </div>
 
-      {/* Overlapping token icons */}
-      <div style={{ position: 'relative', width: 148, height: 80, marginBottom: 24 }}>
-        <div style={{ position: 'absolute', left: 0, top: 0 }}>
-          <TokIcon t={from} size={80}/>
-        </div>
-        <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', zIndex: 3,
-          width: 28, height: 28, borderRadius: '50%', background: '#1e1e2c',
-          border: '2px solid #101010', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M2 7H12M8 3L12 7L8 11" stroke="rgba(255,255,255,0.7)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </div>
-        <div style={{ position: 'absolute', right: 0, top: 0, zIndex: 2 }}>
-          <TokIcon t={to} size={80}/>
-        </div>
-      </div>
-
-      <div style={{ fontFamily: 'Syne,sans-serif', fontSize: 24, fontWeight: 800, color: '#fff', marginBottom: 10 }}>
-        {from.symbol}&nbsp; to &nbsp;{to.symbol}
-      </div>
-      <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.4)', fontFamily: 'DM Sans,sans-serif', marginBottom: 56 }}>
-        {fromAmt} {from.symbol} ~ {toAmt} {to.symbol}
-      </div>
-
+      {/* Done — near bottom */}
       <button onClick={onDone} style={{
-        width: '100%', maxWidth: 320, height: 56, borderRadius: 30,
-        background: 'linear-gradient(135deg, #EC641D, #BD5017)',
+        width: '100%', height: 54, borderRadius: 30,
+        background: 'linear-gradient(135deg, #F0834A, #EC641D)',
         border: 'none', color: '#fff',
-        fontFamily: 'DM Sans,sans-serif', fontSize: 16, fontWeight: 700,
+        fontFamily: 'DM Sans,sans-serif', fontSize: 15, fontWeight: 700,
         cursor: 'pointer',
-        boxShadow: '0 0 40px rgba(236,100,29,0.5), 0 8px 24px rgba(236,100,29,0.35)',
-        position: 'relative', zIndex: 1,
+        boxShadow: '0 8px 24px rgba(236,100,29,0.35)',
+        position: 'relative', zIndex: 1, flexShrink: 0,
       }}>
         Done
       </button>
@@ -232,7 +241,7 @@ function SwapSuccess({ from, to, fromAmt, toAmt, onDone }) {
 }
 
 // ── Main SwapScreen ───────────────────────────────────────────────────────────
-export default function SwapScreen({ onBack }) {
+export default function SwapScreen({ onBack, onSuccessView }) {
   const [fromTok,   setFromTok]   = useState(TOKENS[0])
   const [toTok,     setToTok]     = useState(TOKENS[1])
   const [fromAmt,   setFromAmt]   = useState('')
@@ -241,6 +250,9 @@ export default function SwapScreen({ onBack }) {
   const [showModal, setShowModal] = useState(false)
   const [showPin,   setShowPin]   = useState(false)
   const [success,   setSuccess]   = useState(false)
+
+  // Success screen shows no bottom nav (Figma).
+  useEffect(() => { onSuccessView && onSuccessView(success) }, [success])
 
   const fromRate = RATES[fromTok.symbol] || 1
   const toRate   = RATES[toTok.symbol]   || 1
@@ -258,7 +270,6 @@ export default function SwapScreen({ onBack }) {
   if (success) return (
     <SwapSuccess
       from={fromTok} to={toTok}
-      fromAmt={fromAmt || '1'} toAmt={toAmt}
       onDone={() => { setSuccess(false); setFromAmt('') }}
     />
   )
@@ -269,14 +280,14 @@ export default function SwapScreen({ onBack }) {
       {/* ── TOP NAV ── */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '12px 16px 0', flexShrink: 0 }}>
-        <img src="/logo_nv_orange.png" alt="NV" style={{ width: 40, height: 26, objectFit: 'contain' }}/>
-        <div style={{ fontFamily: 'Syne,sans-serif', fontSize: 17, fontWeight: 700, color: '#fff' }}>Swap Tokens</div>
+        <img src="/logo_nv_orange.png" alt="NV" style={{ width: 36, height: 24, objectFit: 'contain' }}/>
+        <div style={{ fontFamily: 'DM Sans,sans-serif', fontSize: 15, fontWeight: 700, color: '#fff' }}>Swap Tokens</div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ opacity: 0.6, cursor: 'pointer' }}>
             <path d="M17 5C17 2.8 13.9 1 10 1C6.1 1 3 2.8 3 5C3 9 1 11 1 11H19C19 11 17 9 17 5Z" stroke="rgba(255,255,255,0.8)" strokeWidth="1.4" fill="none"/>
             <path d="M11.7 15C11.4 15.6 10.8 16 10 16C9.2 16 8.6 15.6 8.3 15" stroke="rgba(255,255,255,0.8)" strokeWidth="1.4" strokeLinecap="round"/>
           </svg>
-          <img src="/home/avatar.png" alt="" style={{ width: 34, height: 34, borderRadius: '50%', objectFit: 'cover', border: '2px solid rgba(236,100,29,0.45)' }}/>
+          <img src="/home/avatar.png" alt="" style={{ width: 36, height: 36, borderRadius: '50%', objectFit: 'cover', border: '2px solid rgba(236,100,29,0.45)' }}/>
         </div>
       </div>
 
@@ -284,11 +295,11 @@ export default function SwapScreen({ onBack }) {
       <div style={{ flex: 1, overflowY: 'auto', scrollbarWidth: 'none', padding: '22px 16px 0' }}>
 
         {/* ── PAY CARD ── */}
-        <div style={{ background: '#131320', border: '1px solid rgba(255,255,255,0.07)',
-          borderRadius: 18, padding: '16px 16px 18px', marginBottom: 2, position: 'relative' }}>
+        <div style={{ background: '#1A1A1A', border: '1px solid rgba(255,255,255,0.06)',
+          borderRadius: 16, padding: '16px 16px 18px', marginBottom: 2, position: 'relative' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-            <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', fontFamily: 'DM Sans,sans-serif', fontWeight: 500 }}>Pay</span>
-            <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', fontFamily: 'DM Sans,sans-serif' }}>Balance: {fromTok.balance}</span>
+            <span style={{ fontSize: 13, color: '#959595', fontFamily: 'DM Sans,sans-serif', fontWeight: 500 }}>Pay</span>
+            <span style={{ fontSize: 12, color: '#959595', fontFamily: 'DM Sans,sans-serif' }}>Balance: {fromTok.balance}</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
             <input
@@ -296,7 +307,7 @@ export default function SwapScreen({ onBack }) {
               onChange={e => setFromAmt(e.target.value.replace(/[^0-9.]/g, ''))}
               placeholder="0.0"
               style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none',
-                fontFamily: 'Syne,sans-serif', fontSize: 32, fontWeight: 700,
+                fontFamily: 'DM Sans,sans-serif', fontSize: 28, fontWeight: 700,
                 color: fromAmt ? '#fff' : 'rgba(255,255,255,0.25)',
                 minWidth: 0 }}
             />
@@ -309,7 +320,7 @@ export default function SwapScreen({ onBack }) {
           <div
             onClick={flipTokens}
             style={{ width: 40, height: 40, borderRadius: '50%',
-              background: 'linear-gradient(135deg, #EC641D, #BD5017)',
+              background: 'linear-gradient(135deg, #F0834A, #EC641D)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               cursor: 'pointer', boxShadow: '0 4px 16px rgba(236,100,29,0.45)',
               border: '3px solid #101010',
@@ -321,14 +332,14 @@ export default function SwapScreen({ onBack }) {
         </div>
 
         {/* ── RECEIVE CARD ── */}
-        <div style={{ background: '#131320', border: '1px solid rgba(255,255,255,0.07)',
-          borderRadius: 18, padding: '16px 16px 18px', marginTop: 2, marginBottom: 22 }}>
+        <div style={{ background: '#1A1A1A', border: '1px solid rgba(255,255,255,0.06)',
+          borderRadius: 16, padding: '16px 16px 18px', marginTop: 2, marginBottom: 22 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-            <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', fontFamily: 'DM Sans,sans-serif', fontWeight: 500 }}>Receive</span>
-            <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', fontFamily: 'DM Sans,sans-serif' }}>Est. Fee: $1.20</span>
+            <span style={{ fontSize: 13, color: '#959595', fontFamily: 'DM Sans,sans-serif', fontWeight: 500 }}>Receive</span>
+            <span style={{ fontSize: 12, color: '#959595', fontFamily: 'DM Sans,sans-serif' }}>Est. Fee: $1.20</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
-            <div style={{ flex: 1, fontFamily: 'Syne,sans-serif', fontSize: 32, fontWeight: 700,
+            <div style={{ flex: 1, fontFamily: 'DM Sans,sans-serif', fontSize: 28, fontWeight: 700,
               color: fromAmt ? '#fff' : 'rgba(255,255,255,0.25)', minWidth: 0 }}>
               {toAmt}
             </div>
@@ -338,25 +349,18 @@ export default function SwapScreen({ onBack }) {
 
         {/* ── RATE & PRICE IMPACT ── */}
         <div style={{ marginBottom: 24 }}>
-          {[
-            ['Rate', rateStr],
-            ['Price Impact', '< 0.01%'],
-          ].map(([label, value], i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '10px 4px', borderBottom: i === 0 ? '1px solid rgba(255,255,255,0.06)' : 'none' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-                <div style={{ width: 16, height: 16, borderRadius: '50%', background: 'rgba(255,255,255,0.07)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
-                    <circle cx="4" cy="4" r="3.5" stroke="rgba(255,255,255,0.3)" strokeWidth="1"/>
-                    <path d="M4 2.5V4.5M4 5.5V5.8" stroke="rgba(255,255,255,0.3)" strokeWidth="0.9" strokeLinecap="round"/>
-                  </svg>
-                </div>
-                <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', fontFamily: 'DM Sans,sans-serif' }}>{label}</span>
-              </div>
-              <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', fontFamily: 'DM Sans,sans-serif', fontWeight: 500 }}>{value}</span>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '10px 4px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+              <span style={{ fontSize: 13, color: '#959595', fontFamily: 'DM Sans,sans-serif' }}>Rate</span>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#959595" strokeWidth="1.1"/><path d="M7 6.2V9.5M7 4.2V4.6" stroke="#959595" strokeWidth="1.2" strokeLinecap="round"/></svg>
             </div>
-          ))}
+            <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', fontFamily: 'DM Sans,sans-serif', fontWeight: 500 }}>{rateStr}</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 4px' }}>
+            <span style={{ fontSize: 13, color: '#959595', fontFamily: 'DM Sans,sans-serif' }}>Price impact</span>
+            <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', fontFamily: 'DM Sans,sans-serif', fontWeight: 500 }}>{'< 0.01%'}</span>
+          </div>
         </div>
       </div>
 
@@ -367,14 +371,14 @@ export default function SwapScreen({ onBack }) {
           style={{
             width: '100%', height: 54, borderRadius: 30,
             background: canSwap
-              ? 'linear-gradient(135deg, #EC641D, #BD5017)'
-              : 'rgba(80,30,5,0.7)',
+              ? 'linear-gradient(135deg, #F0834A, #EC641D)'
+              : '#5E280C',
             border: 'none',
-            color: canSwap ? '#fff' : 'rgba(255,255,255,0.3)',
-            fontFamily: 'DM Sans,sans-serif', fontSize: 16, fontWeight: 700,
+            color: canSwap ? '#fff' : 'rgba(0,0,0,0.55)',
+            fontFamily: 'DM Sans,sans-serif', fontSize: 15, fontWeight: 700,
             cursor: canSwap ? 'pointer' : 'default',
             transition: 'all 0.2s',
-            boxShadow: canSwap ? '0 6px 24px rgba(236,100,29,0.4)' : 'none',
+            boxShadow: canSwap ? '0 8px 24px rgba(236,100,29,0.35)' : 'none',
           }}>
           Swap
         </button>

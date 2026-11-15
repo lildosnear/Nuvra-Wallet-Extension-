@@ -120,7 +120,7 @@ width: 375px;
 .nav-lbl {
   font-size: 10px;
   font-weight: 500;
-  color: rgba(255,255,255,0.3);
+  color: #959595;
   font-family: 'DM Sans', sans-serif;
   transition: color 0.2s;
 }
@@ -138,7 +138,7 @@ width: 375px;
 }
 .modal-sheet {
   width: 100%;
-  background: #13131f;
+  background: #101010;
   border-radius: 20px 20px 0 0;
   border: 1px solid rgba(255,255,255,0.08);
   border-bottom: none;
@@ -156,7 +156,7 @@ width: 375px;
 .btn-primary {
   width: 100%;
   height: 50px;
-  background: linear-gradient(135deg, #EC641D, #ff5500);
+  background: linear-gradient(135deg, #F0834A, #EC641D);
   border: none;
   border-radius: 14px;
   color: #fff;

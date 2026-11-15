@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "bradlc.vscode-tailwindcss",
+    "dsznajder.es7-react-js-snippets",
+    "eamodio.gitlens",
+    "github.vscode-pull-request-github",
+    "christian-kohler.path-intellisense",
+    "rangav.vscode-thunder-client",
+    "pkief.material-icon-theme"
+  ]
+}

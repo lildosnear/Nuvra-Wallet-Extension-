@@ -60,7 +60,7 @@ export default function SlideButton({ label = 'Slide to swap', onConfirm }) {
 
   // ── derived visuals ───────────────────────────────────────────
   const trackBg = phase === 'confirmed'
-    ? 'linear-gradient(90deg, #EC641D, #BD5017)'
+    ? 'linear-gradient(90deg, #F0834A, #EC641D)'
     : `linear-gradient(90deg, rgba(236,100,29,${Math.min(0.35, pct * 0.45)}) 0%, rgba(30,20,10,0.6) ${Math.max(50, pct * 100 + 10)}%)`
 
   const thumbGlow = (phase === 'release' || phase === 'confirmed')
@@ -77,7 +77,7 @@ export default function SlideButton({ label = 'Slide to swap', onConfirm }) {
         height: 60,
         borderRadius: 30,
         background: phase === 'confirmed'
-          ? 'linear-gradient(90deg, #EC641D, #BD5017)'
+          ? 'linear-gradient(90deg, #F0834A, #EC641D)'
           : 'rgba(255,255,255,0.06)',
         border: phase === 'confirmed'
           ? 'none'
@@ -127,7 +127,7 @@ export default function SlideButton({ label = 'Slide to swap', onConfirm }) {
           width: THUMB_W,
           height: THUMB_W,
           borderRadius: '50%',
-          background: 'linear-gradient(135deg, #ff9040, #e05000)',
+          background: 'linear-gradient(135deg, #F0834A, #EC641D)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           boxShadow: thumbGlow,
           cursor: phase === 'confirmed' ? 'default' : 'grab',

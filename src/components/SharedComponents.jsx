@@ -31,20 +31,26 @@ export function TokenModal({ selected, onSelect, onClose, exclude }) {
     <div style={{ position:'absolute',inset:0,background:'rgba(0,0,0,0.75)',zIndex:60,
       display:'flex',alignItems:'flex-end',backdropFilter:'blur(6px)' }}
       onClick={onClose}>
-      <div style={{ width:'100%',background:'#13131f',borderRadius:'28px 28px 0 0',
+      <div style={{ width:'100%',background:'#101010',borderRadius:'24px 24px 0 0',
         border:'1px solid rgba(255,255,255,0.08)',borderBottom:'none',
-        padding:'8px 0 40px',animation:'slideUp 0.35s cubic-bezier(0.4,0,0.2,1)' }}
+        padding:'0 0 40px',animation:'slideUp 0.35s cubic-bezier(0.4,0,0.2,1)' }}
         onClick={e=>e.stopPropagation()}>
-        <div style={{ width:40,height:4,background:'rgba(255,255,255,0.15)',
-          borderRadius:2,margin:'10px auto 18px' }}/>
-        <div style={{ fontFamily:'Syne,sans-serif',fontSize:17,fontWeight:700,
-          color:'#fff',textAlign:'center',marginBottom:14 }}>Select Token</div>
-        <div style={{ margin:'0 20px 12px',background:'rgba(255,255,255,0.05)',
-          border:'1px solid rgba(255,255,255,0.08)',borderRadius:12,
+        <div style={{ display:'flex',alignItems:'center',justifyContent:'space-between',padding:'20px 20px 14px' }}>
+          <div style={{ fontFamily:'DM Sans,sans-serif',fontSize:18,fontWeight:700,
+            color:'#fff' }}>Select Token</div>
+          <div onClick={onClose} style={{ width:36,height:36,borderRadius:'50%',background:'#fff',
+            display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',flexShrink:0 }}>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2 2L12 12M12 2L2 12" stroke="#000" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+          </div>
+        </div>
+        <div style={{ margin:'0 20px 12px',background:'#1F1F1F',
+          borderRadius:12,
           padding:'10px 14px',display:'flex',alignItems:'center',gap:8 }}>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <circle cx="7" cy="7" r="5" stroke="#55557a" strokeWidth="1.4"/>
-            <path d="M11 11L14 14" stroke="#55557a" strokeWidth="1.4" strokeLinecap="round"/>
+            <circle cx="7" cy="7" r="5" stroke="#959595" strokeWidth="1.4"/>
+            <path d="M11 11L14 14" stroke="#959595" strokeWidth="1.4" strokeLinecap="round"/>
           </svg>
           <input placeholder="Search…" value={q} onChange={e=>setQ(e.target.value)}
             style={{ flex:1,background:'transparent',border:'none',outline:'none',
@@ -60,16 +66,16 @@ export function TokenModal({ selected, onSelect, onClose, exclude }) {
               onMouseEnter={e=>{ if(selected?.symbol!==t.symbol) e.currentTarget.style.background='rgba(255,255,255,0.04)' }}
               onMouseLeave={e=>{ e.currentTarget.style.background=selected?.symbol===t.symbol?'rgba(236,100,29,0.08)':'transparent' }}
               onClick={()=>{ onSelect(t); onClose() }}>
-              <div style={{ width:42,height:42,borderRadius:14,background:t.bg,color:t.color,
+              <div style={{ width:40,height:40,borderRadius:'50%',background:t.bg,color:t.color,
                 display:'flex',alignItems:'center',justifyContent:'center',
-                fontSize:18,fontWeight:700,flexShrink:0 }}>{t.icon}</div>
+                fontSize:16,fontWeight:700,flexShrink:0 }}>{t.icon}</div>
               <div style={{ flex:1 }}>
-                <div style={{ fontSize:15,fontWeight:600,color:'#fff' }}>{t.symbol}</div>
-                <div style={{ fontSize:12,color:'rgba(255,255,255,0.35)' }}>{t.name}</div>
+                <div style={{ fontSize:14,fontWeight:700,color:'#fff',fontFamily:'DM Sans,sans-serif' }}>{t.symbol}</div>
+                <div style={{ fontSize:11,color:'#959595',fontFamily:'DM Sans,sans-serif' }}>{t.chainLabel || t.name}</div>
               </div>
               <div style={{ textAlign:'right' }}>
-                <div style={{ fontSize:14,fontWeight:600,color:'#fff' }}>{t.balance}</div>
-                <div style={{ fontSize:12,color:'rgba(255,255,255,0.35)' }}>{t.fiat}</div>
+                <div style={{ fontSize:14,fontWeight:700,color:'#fff',fontFamily:'DM Sans,sans-serif' }}>{t.balance}</div>
+                <div style={{ fontSize:11,color:'#959595',fontFamily:'DM Sans,sans-serif' }}>{t.fiat}</div>
               </div>
               {selected?.symbol===t.symbol&&(
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
