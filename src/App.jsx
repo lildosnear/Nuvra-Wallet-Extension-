@@ -5,6 +5,7 @@ import { WalletProvider } from './wallet/WalletContext'
 // Screens
 import OnboardingScreen from './screens/OnboardingScreen'
 import SignUpScreen     from './screens/SignUpScreen'
+import LoginScreen      from './screens/LoginScreen'
 import PinScreen        from './screens/PinScreen'
 import HomeScreen       from './screens/HomeScreen'
 import SendScreen       from './screens/SendScreen'
@@ -49,7 +50,10 @@ export default function App() {
         {/* Onboarding */}
         {page === 'onboarding' && (
           <div className="screen active" style={{ background: '#101010' }}>
-            <OnboardingScreen onDone={() => navigate('signup')}/>
+            <OnboardingScreen
+              onDone={() => navigate('signup')}
+              onHaveWallet={() => navigate('login')}
+            />
           </div>
         )}
 
@@ -59,6 +63,17 @@ export default function App() {
             <SignUpScreen
               onDone={() => navigate('pin')}
               onBack={() => navigate('onboarding')}
+              onLogin={() => navigate('login')}
+            />
+          </div>
+        )}
+
+        {/* Login */}
+        {page === 'login' && (
+          <div className="screen active" style={{ background: '#101010' }}>
+            <LoginScreen
+              onDone={() => navigate('pin')}
+              onCreateAccount={() => navigate('signup')}
             />
           </div>
         )}

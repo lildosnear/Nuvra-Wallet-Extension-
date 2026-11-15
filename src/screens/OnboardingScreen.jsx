@@ -179,7 +179,7 @@ const SLIDES = [
     sub: 'gateway to the Bitcoin ecosystem, on every BTC chain.' },
 ]
 
-export default function OnboardingScreen({ onDone }) {
+export default function OnboardingScreen({ onDone, onHaveWallet }) {
   const [slide,    setSlide]    = useState(0)
   const [animKey,  setAnimKey]  = useState(0)
 
@@ -278,7 +278,7 @@ export default function OnboardingScreen({ onDone }) {
             Get Started
           </button>
 
-          <button onClick={onDone}
+          <button onClick={onHaveWallet || onDone}
             style={{ width:'100%', height:54, background:'#000000',
               border:'1px solid rgba(255,255,255,0.08)', borderRadius:30,
               color:'#fff', fontFamily:'DM Sans,sans-serif',

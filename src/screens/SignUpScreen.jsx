@@ -317,7 +317,7 @@ function StepReferral({ onNext, onSkip }) {
 /* ════════════════════════════════════════════
    ROOT SignUpScreen
 ════════════════════════════════════════════ */
-export default function SignUpScreen({ onDone, onBack }) {
+export default function SignUpScreen({ onDone, onBack, onLogin }) {
   const [step, setStep] = useState(0) // 0 = create account, 1 = referral
 
   return (
@@ -336,7 +336,7 @@ export default function SignUpScreen({ onDone, onBack }) {
           style={{ background:'#101010' }}>
           <StepCreateAccount
             onNext={() => setStep(1)}
-            onAlreadyHave={onBack}
+            onAlreadyHave={onLogin || onBack}
           />
         </div>
 
