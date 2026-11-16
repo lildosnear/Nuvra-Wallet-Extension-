@@ -18,6 +18,13 @@ export const TOKENS = [
   { symbol: 'ETH',  name: 'Ethereum',      chain: 'bob',     chainLabel: 'BOB Mainnet', icon: 'Ξ', color: '#627eea', bg: 'rgba(98,126,234,0.18)',  balance: '0.5',   fiat: '$1,612', rate: 3142.5        },
   { symbol: 'USDC', name: 'USD Coin',      chain: 'bob',     chainLabel: 'BOB Mainnet', icon: '$', color: '#2775ca', bg: 'rgba(39,117,202,0.18)',  balance: '250',   fiat: '$250',   rate: 1             },
   { symbol: 'USDT', name: 'Tether USD',    chain: 'bob',     chainLabel: 'BOB Mainnet', icon: '$', color: '#2ca07f', bg: 'rgba(44,160,127,0.18)',  balance: '100',   fiat: '$100',   rate: 1             },
+  { symbol: 'WBTC', name: 'Wrapped BTC',   chain: 'bob-sepolia', chainLabel: 'BOB Sepolia', icon: '₿', color: '#f7931a', bg: 'rgba(247,147,26,0.18)',  balance: '0.010', fiat: '$676',   rate: 51814.766129 },
+  { symbol: 'ETH',  name: 'Ethereum',      chain: 'bob-sepolia', chainLabel: 'BOB Sepolia', icon: 'Ξ', color: '#627eea', bg: 'rgba(98,126,234,0.18)',  balance: '0.5',   fiat: '$1,612', rate: 3142.5        },
+  { symbol: 'USDC', name: 'USD Coin',      chain: 'bob-sepolia', chainLabel: 'BOB Sepolia', icon: '$', color: '#2775ca', bg: 'rgba(39,117,202,0.18)',  balance: '250',   fiat: '$250',   rate: 1             },
+  { symbol: 'USDT', name: 'Tether USD',    chain: 'bob-sepolia', chainLabel: 'BOB Sepolia', icon: '$', color: '#2ca07f', bg: 'rgba(44,160,127,0.18)',  balance: '100',   fiat: '$100',   rate: 1             },
+  { symbol: 'BOB',  name: 'BOB',           chain: 'bob-sepolia', chainLabel: 'BOB Sepolia', icon: 'B', color: '#ff6b00', bg: 'rgba(255,107,0,0.18)',   balance: '1,000', fiat: '$18',    rate: 0.018         },
+  { symbol: 'tBTC', name: 'Test Bitcoin',  chain: 'arch-testnet', chainLabel: 'Arch Testnet', icon: '₿', color: '#f7931a', bg: 'rgba(247,147,26,0.18)', balance: '0.042', fiat: '$2,841', rate: 51814.766129 },
+  { symbol: 'ARCH', name: 'Arch Network',  chain: 'arch-testnet', chainLabel: 'Arch Testnet', icon: '⬡', color: '#EC641D', bg: 'rgba(236,100,29,0.18)', balance: '1,250', fiat: '$1,850', rate: 1.48          },
 ]
 
 export const ASSETS = [
@@ -26,6 +33,12 @@ export const ASSETS = [
   { symbol: 'ETH',  name: 'Ethereum',     chain: 'bob',     chainLabel: 'BOB Mainnet', icon: 'Ξ', color: '#627eea', bg: 'rgba(98,126,234,0.15)', balance: '0.5 ETH',    fiat: '$1,612.50', change: '-1.2%',  up: false },
   { symbol: 'USDC', name: 'USD Coin',     chain: 'bob',     chainLabel: 'BOB Mainnet', icon: '$', color: '#2775ca', bg: 'rgba(39,117,202,0.15)', balance: '250 USDC',   fiat: '$250.00',   change: '0.0%',   up: true  },
   { symbol: 'USDT', name: 'Tether USD',   chain: 'bob',     chainLabel: 'BOB Mainnet', icon: '$', color: '#2ca07f', bg: 'rgba(44,160,127,0.15)', balance: '100 USDT',   fiat: '$100.00',   change: '0.0%',   up: true  },
+  { symbol: 'WBTC', name: 'Wrapped BTC',  chain: 'bob-sepolia', chainLabel: 'BOB Sepolia', icon: '₿', color: '#f7931a', bg: 'rgba(247,147,26,0.15)', balance: '0.010 WBTC', fiat: '$676.00',   change: '+2.4%',  up: true  },
+  { symbol: 'ETH',  name: 'Ethereum',     chain: 'bob-sepolia', chainLabel: 'BOB Sepolia', icon: 'Ξ', color: '#627eea', bg: 'rgba(98,126,234,0.15)', balance: '0.5 ETH',    fiat: '$1,612.50', change: '-1.2%',  up: false },
+  { symbol: 'USDC', name: 'USD Coin',     chain: 'bob-sepolia', chainLabel: 'BOB Sepolia', icon: '$', color: '#2775ca', bg: 'rgba(39,117,202,0.15)', balance: '250 USDC',   fiat: '$250.00',   change: '0.0%',   up: true  },
+  { symbol: 'BOB',  name: 'BOB',          chain: 'bob-sepolia', chainLabel: 'BOB Sepolia', icon: 'B', color: '#ff6b00', bg: 'rgba(255,107,0,0.15)',   balance: '1,000 BOB',  fiat: '$18.00',    change: '0.0%',   up: true  },
+  { symbol: 'tBTC', name: 'Test Bitcoin', chain: 'arch-testnet', chainLabel: 'Arch Testnet', icon: '₿', color: '#f7931a', bg: 'rgba(247,147,26,0.15)', balance: '0.042 tBTC', fiat: '$2,841.20', change: '+2.4%',  up: true  },
+  { symbol: 'ARCH', name: 'Arch Network', chain: 'arch-testnet', chainLabel: 'Arch Testnet', icon: '⬡', color: '#EC641D', bg: 'rgba(236,100,29,0.15)', balance: '1,250 ARCH', fiat: '$1,850.00', change: '+5.1%',  up: true  },
   // Arch rows: kept for the future Arch adapter, filtered out by default.
   { symbol: 'ARCH', name: 'Arch Network', chain: 'arch',    chainLabel: 'Arch — coming soon', icon: '⬡', color: '#EC641D', bg: 'rgba(236,100,29,0.15)', balance: '1,250 ARCH', fiat: '$1,850.00', change: '+5.1%',  up: true  },
 ]

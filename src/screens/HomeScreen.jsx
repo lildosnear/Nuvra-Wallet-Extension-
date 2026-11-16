@@ -127,7 +127,7 @@ export default function HomeScreen({ onNav }) {
 
   const selectorChains = [
     { id: 'all', shortName: 'All chains', status: 'live' },
-    ...CHAINS.filter(c => !c.testnet),
+    ...CHAINS,
   ]
 
   const actions = [

@@ -82,6 +82,27 @@ export const CHAINS = [
     confirmationLabel: 'Arch finality — not a Bitcoin confirmation',
     nativeSymbol: 'ARCH',
   },
+  {
+    id: 'arch-testnet',
+    name: 'Arch Testnet',
+    shortName: 'Arch Testnet',
+    type: 'archvm',
+    // Arch TESTNET is live for testing today (test tokens only, no
+    // real funds). This entry is usable so Nuvra can be built and
+    // tested against Arch now; it does NOT change the mainnet entry
+    // above, which stays 'coming-soon' until Arch mainnet is live.
+    status: 'live',
+    testnet: true,
+    chainId: null,
+    rpcUrl: null,
+    explorerUrl: 'https://explorer.arch.network',
+    addressFormat: 'arch',
+    addressFormatLabel: 'arch1…',
+    exampleAddress: 'arch1q3x7k9m2p8w4z6v5n0c9d8f7g6h5j4k3l2a1s9d7f6g5h',
+    feeUnit: 'ARCH',
+    confirmationLabel: 'Arch finality — not a Bitcoin confirmation',
+    nativeSymbol: 'ARCH',
+  },
 ]
 
 export const CHAIN_MAP = Object.fromEntries(CHAINS.map((c) => [c.id, c]))

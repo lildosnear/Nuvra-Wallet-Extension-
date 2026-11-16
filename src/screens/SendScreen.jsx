@@ -9,9 +9,11 @@ import { validateAddress, detectAddressFamily, familyLabel } from '../chains/ada
 const TOKEN_IMG = {
   BTC:  '/home/token_btc.png',
   WBTC: '/home/token_btc.png',
+  tBTC: '/home/token_btc.png',
   ETH:  '/home/token_eth.png',
   USDC: '/home/token_usdc.png',
   USDT: '/home/token_usdt.png',
+  ARCH: '/home/token_arch.png',
 }
 
 // Sendable tokens for a chain, derived from the chain-tagged assets.

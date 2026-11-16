@@ -19,7 +19,9 @@ import { getAdapter } from '../chains/adapter.js'
 // ═══════════════════════════════════════════════════════════════════
 
 const STORAGE_KEY = 'nuvra:selectedChainId'
-const DEFAULT_CHAIN_ID = 'bob'
+// Testnet-first: Nuvra starts on testnets (BOB Sepolia default)
+// until mainnet phases land.
+const DEFAULT_CHAIN_ID = 'bob-sepolia'
 
 const WalletContext = createContext(null)
 

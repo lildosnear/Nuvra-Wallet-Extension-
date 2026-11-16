@@ -116,9 +116,9 @@ export function createMockAdapter(chain) {
 
     async estimateFee() {
       if (isArch) notLive()
-      return chain.type === 'bitcoin'
-        ? { fee: '0.00012 BTC', unit: chain.feeUnit, mock: true }
-        : { fee: '0.00004 ETH', unit: chain.feeUnit, mock: true }
+      if (chain.type === 'bitcoin') return { fee: '0.00012 BTC', unit: chain.feeUnit, mock: true }
+      if (chain.type === 'archvm') return { fee: '0.001 ARCH', unit: chain.feeUnit, mock: true }
+      return { fee: '0.00004 ETH', unit: chain.feeUnit, mock: true }
     },
 
     explorerUrl(hash) {

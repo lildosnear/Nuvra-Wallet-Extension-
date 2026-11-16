@@ -135,3 +135,27 @@ test('mock send on live chains returns a clearly mocked hash', async () => {
   assert.equal(res.mock, true)
   assert.ok(res.hash.includes('demo'))
 })
+
+test('Arch Testnet is live, flagged testnet, and validates arch1 addresses', () => {
+  const t = getChain('arch-testnet')
+  assert.equal(t.status, 'live')
+  assert.equal(t.testnet, true)
+  assert.equal(isChainLive('arch-testnet'), true)
+  assert.equal(validateAddress('arch-testnet', ARCH), true)
+  // mainnet Arch stays coming-soon alongside it
+  assert.equal(getChain('arch').status, 'coming-soon')
+})
+
+test('arch-testnet adapter can mock-send (testnet testing is allowed)', async () => {
+  const res = await getAdapter('arch-testnet').send()
+  assert.equal(res.mock, true)
+  assert.ok(res.hash)
+})
+
+test('testnet balances carry the BOB and ARCH tokens', async () => {
+  const sep = await getAdapter('bob-sepolia').getBalances()
+  assert.ok(sep.some((a) => a.symbol === 'BOB'), 'BOB token missing on BOB Sepolia')
+  const archT = await getAdapter('arch-testnet').getBalances()
+  assert.ok(archT.some((a) => a.symbol === 'ARCH'), 'ARCH token missing on Arch Testnet')
+  assert.ok(archT.some((a) => a.symbol === 'tBTC'), 'tBTC missing on Arch Testnet')
+})
