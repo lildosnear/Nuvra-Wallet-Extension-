@@ -5,6 +5,7 @@ import assert from 'node:assert/strict'
 
 import { CHAINS, getChain, isChainLive, MOCK_ADDRESSES } from '../src/chains/registry.js'
 import { validateAddress, detectAddressFamily, getAdapter } from '../src/chains/adapter.js'
+import { TOKENS } from '../src/data/constants.js'
 
 const BTC_TAPROOT = 'bc1p5d7rjq7g6rdk2yhzks9smlaqtedr4dekq08ge8ztwac72sfr9rusxg3297'
 const BTC_SEGWIT = 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq'
@@ -150,6 +151,27 @@ test('arch-testnet adapter can mock-send (testnet testing is allowed)', async ()
   const res = await getAdapter('arch-testnet').send()
   assert.equal(res.mock, true)
   assert.ok(res.hash)
+})
+
+// ── Swap token sets (SwapScreen derives its pairs from these rows) ─────
+
+test('swap tokens exist per live chain, with a pair everywhere except Bitcoin', () => {
+  const byChain = (id) => TOKENS.filter((t) => t.chain === id).map((t) => t.symbol)
+  // Default chain: full testnet set including BOB
+  assert.deepEqual(byChain('bob-sepolia'), ['WBTC', 'ETH', 'USDC', 'USDT', 'BOB'])
+  assert.deepEqual(byChain('bob'), ['WBTC', 'ETH', 'USDC', 'USDT'])
+  assert.deepEqual(byChain('arch-testnet'), ['tBTC', 'ARCH'])
+  // Bitcoin holds BTC only, so Swap shows its no-pair note there
+  assert.deepEqual(byChain('bitcoin'), ['BTC'])
+  // No swap token is tagged to Arch mainnet while it is coming-soon
+  assert.equal(TOKENS.filter((t) => t.chain === 'arch').length, 0)
+})
+
+test('every swap token carries a positive demo rate and a balance', () => {
+  for (const t of TOKENS) {
+    assert.ok(typeof t.rate === 'number' && t.rate > 0, `${t.symbol} on ${t.chain} needs a positive rate`)
+    assert.ok(t.balance, `${t.symbol} on ${t.chain} needs a balance`)
+  }
 })
 
 test('testnet balances carry the BOB and ARCH tokens', async () => {

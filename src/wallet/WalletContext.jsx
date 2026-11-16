@@ -19,9 +19,12 @@ import { getAdapter } from '../chains/adapter.js'
 // ═══════════════════════════════════════════════════════════════════
 
 const STORAGE_KEY = 'nuvra:selectedChainId'
-// Testnet-first: Nuvra starts on testnets (BOB Sepolia default)
-// until mainnet phases land.
-const DEFAULT_CHAIN_ID = 'bob-sepolia'
+// Network switching is REMOVED for now (Desmond, 2026-11-16): the
+// wallet sits on the 'all' aggregate view, the dashboard shows every
+// token, and no screen offers a network switch. The chain registry,
+// adapters and per-chain data stay in place so switching can be
+// switched back on later without a rewrite.
+const DEFAULT_CHAIN_ID = 'all'
 
 const WalletContext = createContext(null)
 
@@ -46,21 +49,16 @@ function isSelectable(id) {
 }
 
 export function WalletProvider({ children }) {
-  const [selectedChainId, setSelectedChainId] = useState(() => {
-    const saved = typeof window !== 'undefined' ? readLocalStorage() : null
-    return saved && isSelectable(saved) ? saved : DEFAULT_CHAIN_ID
-  })
+  const [selectedChainId, setSelectedChainId] = useState(DEFAULT_CHAIN_ID)
 
-  // Prefer chrome.storage.local when running as an extension.
+  // Keep the stored value in step with the locked 'all' view, so a
+  // chain picked back when switching existed does not resurface.
   useEffect(() => {
+    writeLocalStorage(DEFAULT_CHAIN_ID)
     const chromeStorage = typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local
-    if (!chromeStorage) return
-    let cancelled = false
-    chromeStorage.get(STORAGE_KEY, (result) => {
-      const saved = result && result[STORAGE_KEY]
-      if (!cancelled && saved && isSelectable(saved)) setSelectedChainId(saved)
-    })
-    return () => { cancelled = true }
+    if (chromeStorage) {
+      try { chromeStorage.set({ [STORAGE_KEY]: DEFAULT_CHAIN_ID }) } catch { /* best effort */ }
+    }
   }, [])
 
   const setSelectedChain = useCallback((id) => {

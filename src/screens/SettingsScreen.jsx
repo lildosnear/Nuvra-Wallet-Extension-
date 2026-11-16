@@ -1,6 +1,4 @@
 import React, { useState } from 'react'
-import { useWallet } from '../wallet/WalletContext'
-import { CHAINS } from '../chains/registry'
 
 // Icon component — renders uploaded icon images. If an icon file has
 // not been supplied yet, it falls back to a letter disc instead of
@@ -35,13 +33,14 @@ function ChevronRight() {
   )
 }
 
-// Menu — ONE grouped card, in the Figma order:
-// Manage Account; Preferences; Active Networks; Connected Apps;
+// Menu — ONE grouped card:
+// Manage Account; Preferences; Connected Apps;
 // Recovery Phrase; About Nuvra; Log out
+// (Active Networks was here; network switching is removed for now,
+// Desmond 2026-11-16, so the row and its panel are gone.)
 const MENU_ITEMS = [
   { id: 'account',     label: 'Manage Account',  icon: '/settings_manage_account.png', danger: false },
   { id: 'preferences', label: 'Preferences',     icon: '/settings_preferences.png',    danger: false },
-  { id: 'networks',    label: 'Active Networks', icon: '/settings_networks.png',       danger: false },
   { id: 'apps',        label: 'Connected Apps',  icon: '/settings_apps.png',           danger: false },
   { id: 'recovery',    label: 'Recovery Phrase', icon: '/settings_recovery.png',       danger: false },
   { id: 'about',       label: 'About Nuvra',     icon: '/settings_about.png',          danger: false },
@@ -50,15 +49,10 @@ const MENU_ITEMS = [
 
 export default function SettingsScreen({ onClose }) {
   const [hovered, setHovered] = useState(null)
-  const [showNetworks, setShowNetworks] = useState(false)
-  const { selectedChainId, setSelectedChain } = useWallet()
 
   const handleItem = (id) => {
     if (id === 'logout') {
       onClose()
-    }
-    if (id === 'networks') {
-      setShowNetworks(v => !v)
     }
     // Add navigation for other items as needed
   }
@@ -202,45 +196,6 @@ export default function SettingsScreen({ onClose }) {
             </div>
           </div>
 
-          {/* Active Networks — driven by the chain registry */}
-          {showNetworks && (
-            <div style={{ padding: '12px 16px 0' }}>
-              <div style={{
-                background: '#1A1A1A',
-                border: '1px solid rgba(255,255,255,0.06)',
-                borderRadius: 16,
-                overflow: 'hidden',
-              }}>
-                {CHAINS.map((c, i) => {
-                  const soon = c.status === 'coming-soon'
-                  const active = selectedChainId === c.id
-                  return (
-                    <div key={c.id}
-                      onClick={() => { if (!soon) setSelectedChain(c.id) }}
-                      style={{
-                        display: 'flex', alignItems: 'center', gap: 12,
-                        padding: '13px 16px',
-                        borderBottom: i < CHAINS.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
-                        cursor: soon ? 'default' : 'pointer',
-                        opacity: soon ? 0.55 : 1,
-                      }}>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: 14, fontWeight: 600, color: '#fff', fontFamily: 'DM Sans, sans-serif' }}>{c.name}</div>
-                        <div style={{ fontSize: 11, color: '#959595', fontFamily: 'DM Sans, sans-serif' }}>
-                          {c.testnet ? 'Testnet' : 'Mainnet'} · {c.addressFormatLabel}
-                        </div>
-                      </div>
-                      {soon
-                        ? <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: 0.5, color: '#EC641D', background: 'rgba(236,100,29,0.12)', border: '1px solid rgba(236,100,29,0.3)', borderRadius: 6, padding: '2px 6px', fontFamily: 'DM Sans, sans-serif' }}>SOON</span>
-                        : active
-                          ? <span style={{ fontSize: 11, fontWeight: 700, color: '#1fd090', fontFamily: 'DM Sans, sans-serif' }}>Active</span>
-                          : <span style={{ fontSize: 11, color: '#959595', fontFamily: 'DM Sans, sans-serif' }}>Select</span>}
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-          )}
 
         </div>
       </div>

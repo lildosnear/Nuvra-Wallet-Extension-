@@ -1,18 +1,42 @@
 import React, { useState, useRef, useEffect } from 'react'
 import SlideButton from '../components/SlideButton'
 import PinModal from '../components/PinModal'
+import { useWallet } from '../wallet/WalletContext'
+import { TOKENS as CHAIN_TOKENS } from '../data/constants'
 
-// Swap pairs are chain-aware: BTC lives on Bitcoin L1, the rest on
-// BOB Mainnet. Default pair is BTC → USDC (on BOB, via Gateway later).
-const TOKENS = [
-  { symbol: 'BTC',  name: 'Bitcoin',     img: '/home/token_btc.png',  balance: '0.042 BTC',  fiat: '$2,698.51' },
-  { symbol: 'USDC', name: 'BOB Mainnet', img: '/home/token_usdc.png', balance: '250 USDC',   fiat: '$250.00'   },
-  { symbol: 'ETH',  name: 'BOB Mainnet', img: '/home/token_eth.png',  balance: '0.5 ETH',    fiat: '$1,725.06' },
-  { symbol: 'USDT', name: 'BOB Mainnet', img: '/home/token_usdt.png', balance: '100 USDT',   fiat: '$100.00'   },
-  { symbol: 'WBTC', name: 'BOB Mainnet', img: '/home/token_btc.png',  balance: '0.010 WBTC', fiat: '$676.00'   },
-]
+const TOKEN_IMG = {
+  BTC:  '/home/token_btc.png',
+  WBTC: '/home/token_btc.png',
+  tBTC: '/home/token_btc.png',
+  ETH:  '/home/token_eth.png',
+  USDC: '/home/token_usdc.png',
+  USDT: '/home/token_usdt.png',
+  ARCH: '/home/token_arch.png',
+  // BOB has no icon file supplied yet (same as SendScreen): img stays
+  // null and TokIcon falls back to a letter disc. Do not substitute.
+  BOB:  null,
+}
 
-const RATES = { BTC: 51814.766129, WBTC: 51814.766129, ETH: 3142.5, USDC: 1, USDT: 1 }
+// Swap pairs follow the selected chain, like Send and Home do: a pair
+// only ever mixes tokens from one chain, and rates come from the
+// chain-tagged token rows in constants.js (demo rates, demo balances).
+// Per chain today: bob-sepolia WBTC/ETH/USDC/USDT/BOB, bob
+// WBTC/ETH/USDC/USDT, arch-testnet tBTC/ARCH, bitcoin BTC only.
+// 'all' has no single chain to swap on, so it falls back to the wallet
+// default chain (bob-sepolia) instead of mixing chains in one pair.
+// Bitcoin holds BTC only, so there is no pair there yet: the screen
+// says so plainly rather than inventing a cross-chain Gateway route
+// (BTC → USDC via Gateway is a later phase, not this build).
+function tokensForChain(chainId) {
+  const id = chainId === 'all' ? 'bob-sepolia' : chainId
+  return CHAIN_TOKENS
+    .filter(t => t.chain === id)
+    .map(t => ({
+      symbol: t.symbol, name: t.name, chain: t.chain, chainLabel: t.chainLabel,
+      img: TOKEN_IMG[t.symbol] ?? null,
+      balance: `${t.balance} ${t.symbol}`, fiat: t.fiat, rate: t.rate,
+    }))
+}
 
 // ── Token icon ────────────────────────────────────────────────────────────────
 function TokIcon({ t, size = 36 }) {
@@ -21,9 +45,9 @@ function TokIcon({ t, size = 36 }) {
       style={{ width: size, height: size, borderRadius: '50%', objectFit: 'contain', flexShrink: 0, display:'block' }}/>
   )
   return (
-    <div style={{ width: size, height: size, borderRadius: '50%', background: 'rgba(39,117,202,0.28)',
+    <div style={{ width: size, height: size, borderRadius: '50%', background: 'rgba(236,100,29,0.2)',
       display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-      <span style={{ fontSize: size * 0.42, color: '#2775ca', fontWeight: 700, lineHeight:1 }}>$</span>
+      <span style={{ fontSize: size * 0.42, color: '#EC641D', fontWeight: 700, lineHeight:1 }}>{t?.symbol?.[0] || '?'}</span>
     </div>
   )
 }
@@ -50,7 +74,7 @@ function TokenPill({ t, onClick }) {
 }
 
 // ── Token selector modal ──────────────────────────────────────────────────────
-function TokenModal({ onSelect, onClose, exclude }) {
+function TokenModal({ tokens, onSelect, onClose, exclude }) {
   return (
     <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 90,
       display: 'flex', alignItems: 'flex-end', backdropFilter: 'blur(8px)' }} onClick={onClose}>
@@ -71,7 +95,7 @@ function TokenModal({ onSelect, onClose, exclude }) {
         </div>
 
         {/* Token list */}
-        {TOKENS.filter(t => t.symbol !== exclude?.symbol).map((t, i, arr) => (
+        {tokens.filter(t => t.symbol !== exclude?.symbol).map((t, i, arr) => (
           <div key={i} onClick={() => { onSelect(t); onClose() }}
             style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 20px',
               cursor: 'pointer', transition: 'background 0.15s',
@@ -139,7 +163,7 @@ function SwapModal({ from, to, fromAmt, toAmt, onClose, onConfirm }) {
           {from.symbol}&nbsp; to &nbsp;{to.symbol}
         </div>
         <div style={{ textAlign: 'center', fontSize: 13, color: '#959595', fontFamily: 'DM Sans,sans-serif', marginBottom: 24 }}>
-          1 {from.symbol} = {(RATES[from.symbol] / RATES[to.symbol]).toFixed(3)} {to.symbol}
+          1 {from.symbol} = {(from.rate / to.rate).toFixed(3)} {to.symbol}
         </div>
 
         {/* Detail rows */}
@@ -220,7 +244,7 @@ function SwapSuccess({ from, to, onDone }) {
           {from.symbol}&nbsp; to &nbsp;{to.symbol}
         </div>
         <div style={{ fontSize: 13, color: '#959595', fontFamily: 'DM Sans,sans-serif' }}>
-          1 {from.symbol} ~ {(RATES[from.symbol] / RATES[to.symbol]).toFixed(3)} {to.symbol}
+          1 {from.symbol} ~ {(from.rate / to.rate).toFixed(3)} {to.symbol}
         </div>
       </div>
 
@@ -242,8 +266,10 @@ function SwapSuccess({ from, to, onDone }) {
 
 // ── Main SwapScreen ───────────────────────────────────────────────────────────
 export default function SwapScreen({ onBack, onSuccessView }) {
+  const { selectedChainId } = useWallet()
+  const TOKENS = tokensForChain(selectedChainId)
   const [fromTok,   setFromTok]   = useState(TOKENS[0])
-  const [toTok,     setToTok]     = useState(TOKENS[1])
+  const [toTok,     setToTok]     = useState(TOKENS[1] || null)
   const [fromAmt,   setFromAmt]   = useState('')
   const [showFrom,  setShowFrom]  = useState(false)
   const [showTo,    setShowTo]    = useState(false)
@@ -254,18 +280,31 @@ export default function SwapScreen({ onBack, onSuccessView }) {
   // Success screen shows no bottom nav (Figma).
   useEffect(() => { onSuccessView && onSuccessView(success) }, [success])
 
-  const fromRate = RATES[fromTok.symbol] || 1
-  const toRate   = RATES[toTok.symbol]   || 1
-  const toAmt    = fromAmt
+  // A chain switch re-pairs the screen to that chain's own tokens.
+  // (Bitcoin has one token, so toTok stays null there until the user
+  // switches to a chain with a pair.)
+  useEffect(() => {
+    setFromTok(TOKENS[0])
+    setToTok(TOKENS[1] || null)
+    setFromAmt('')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedChainId])
+
+  const fromRate = fromTok?.rate || 1
+  const toRate   = toTok?.rate || 1
+  const toAmt    = fromAmt && toTok
     ? ((parseFloat(fromAmt) * fromRate) / toRate).toLocaleString(undefined, { maximumFractionDigits: 6 })
     : '0.0'
-  const rateStr  = `1 ${fromTok.symbol} = ${(fromRate / toRate).toLocaleString(undefined, { maximumFractionDigits: 2 })} ${toTok.symbol}`
+  const rateStr  = toTok
+    ? `1 ${fromTok.symbol} = ${(fromRate / toRate).toLocaleString(undefined, { maximumFractionDigits: 2 })} ${toTok.symbol}`
+    : ''
 
   const flipTokens = () => {
+    if (!toTok) return
     const tmp = fromTok; setFromTok(toTok); setToTok(tmp); setFromAmt('')
   }
 
-  const canSwap = fromAmt && parseFloat(fromAmt) > 0
+  const canSwap = !!toTok && fromAmt && parseFloat(fromAmt) > 0
 
   if (success) return (
     <SwapSuccess
@@ -275,7 +314,7 @@ export default function SwapScreen({ onBack, onSuccessView }) {
   )
 
   return (
-    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', background: '#101010', position: 'relative' }}>
+    <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', background: '#101010', position: 'relative' }}>
 
       {/* ── TOP NAV ── */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -292,7 +331,9 @@ export default function SwapScreen({ onBack, onSuccessView }) {
       </div>
 
       {/* ── SCROLLABLE BODY ── */}
-      <div style={{ flex: 1, overflowY: 'auto', scrollbarWidth: 'none', padding: '22px 16px 0' }}>
+      {/* minHeight 0 lets this shrink below its content so the Swap button
+          stays visible when the single-token note adds height. */}
+      <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', scrollbarWidth: 'none', padding: '22px 16px 0' }}>
 
         {/* ── PAY CARD ── */}
         <div style={{ background: '#1A1A1A', border: '1px solid rgba(255,255,255,0.06)',
@@ -346,9 +387,20 @@ export default function SwapScreen({ onBack, onSuccessView }) {
               color: fromAmt ? '#fff' : 'rgba(255,255,255,0.25)', minWidth: 0 }}>
               {toAmt}
             </div>
-            <TokenPill t={toTok} onClick={() => setShowTo(true)}/>
+            {toTok
+              ? <TokenPill t={toTok} onClick={() => setShowTo(true)}/>
+              : <span style={{ fontSize: 13, color: '#959595', fontFamily: 'DM Sans,sans-serif' }}>No token to receive</span>}
           </div>
         </div>
+
+        {/* Single-token chain: no pair exists here yet, say so plainly. */}
+        {TOKENS.length < 2 && (
+          <div style={{ fontSize: 13, color: '#959595', fontFamily: 'DM Sans,sans-serif',
+            lineHeight: 1.6, marginBottom: 22, padding: '0 4px' }}>
+            Only {TOKENS[0]?.symbol || 'one token'} lives on this chain in this build, so there is
+            nothing to swap it into here yet. Switch chains in Settings &gt; Active Networks to swap.
+          </div>
+        )}
 
         {/* ── RATE & PRICE IMPACT ── */}
         <div style={{ marginBottom: 24 }}>
@@ -388,8 +440,8 @@ export default function SwapScreen({ onBack, onSuccessView }) {
       </div>
 
       {/* ── MODALS ── */}
-      {showFrom && <TokenModal onSelect={t => setFromTok(t)} onClose={() => setShowFrom(false)} exclude={toTok}/>}
-      {showTo   && <TokenModal onSelect={t => setToTok(t)}   onClose={() => setShowTo(false)}   exclude={fromTok}/>}
+      {showFrom && <TokenModal tokens={TOKENS} onSelect={t => setFromTok(t)} onClose={() => setShowFrom(false)} exclude={toTok}/>}
+      {showTo   && toTok && <TokenModal tokens={TOKENS} onSelect={t => setToTok(t)}   onClose={() => setShowTo(false)}   exclude={fromTok}/>}
       {showModal && (
         <SwapModal
           from={fromTok} to={toTok}
