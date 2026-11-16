@@ -1,22 +1,45 @@
 import React, { useState } from 'react'
 
-// Icon component — renders uploaded icon images. If an icon file has
-// not been supplied yet, it falls back to a letter disc instead of
-// showing a broken image.
-function SettingIcon({ src, label = '', size = 20 }) {
+// Icon component — renders the row's icon in the Figma's style:
+// white stroke glyphs centred in the disc. Manage Account, Preferences
+// and Recovery Phrase use the supplied icon files; Connected Apps
+// (stacked layers) and Log out (exit door) are drawn as stroke glyphs
+// in the same style, from the Figma frame; the About row carries the
+// white NV mark, wide and flat as in the design. A missing file falls
+// back to a letter disc rather than a broken image.
+function SettingIcon({ item }) {
   const [failed, setFailed] = useState(false)
+  if (item.glyph === 'layers') {
+    return (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M12 3L22 8L12 13L2 8L12 3Z" stroke="#fff" strokeWidth="1.8" strokeLinejoin="round"/>
+        <path d="M2 12.5L12 17.5L22 12.5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M2 17L12 22L22 17" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    )
+  }
+  if (item.glyph === 'logout') {
+    return (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <path d="M9 21H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3" stroke="#FF5C5C" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M16 17l5-5-5-5" stroke="#FF5C5C" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M21 12H9" stroke="#FF5C5C" strokeWidth="1.8" strokeLinecap="round"/>
+      </svg>
+    )
+  }
+  const size = item.wide ? 27 : 20
   if (failed) {
     return (
       <div style={{ width: size, height: size, borderRadius: '50%', background: 'rgba(255,255,255,0.08)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         fontSize: size * 0.55, fontWeight: 700, color: '#959595', fontFamily: 'DM Sans,sans-serif' }}>
-        {label.charAt(0) || '?'}
+        {item.label.charAt(0) || '?'}
       </div>
     )
   }
   return (
     <img
-      src={src}
+      src={item.icon}
       alt=""
       onError={() => setFailed(true)}
       style={{ width: size, height: size, objectFit: 'contain' }}
@@ -41,11 +64,14 @@ function ChevronRight() {
 const MENU_ITEMS = [
   { id: 'account',     label: 'Manage Account',  icon: '/settings_manage_account.png', danger: false },
   { id: 'preferences', label: 'Preferences',     icon: '/settings_preferences.png',    danger: false },
-  { id: 'apps',        label: 'Connected Apps',  icon: '/settings_apps.png',           danger: false },
+  { id: 'apps',        label: 'Connected Apps',  glyph: 'layers',                        danger: false },
   { id: 'recovery',    label: 'Recovery Phrase', icon: '/settings_recovery.png',       danger: false },
-  { id: 'about',       label: 'About Nuvra',     icon: '/settings_about.png',          danger: false },
-  { id: 'logout',      label: 'Log out',         icon: '/settings_logout.png',         danger: true  },
+  { id: 'about',       label: 'About Nuvra',     icon: '/settings_about.png', wide: true, danger: false },
+  { id: 'logout',      label: 'Log out',         glyph: 'logout',                        danger: true  },
 ]
+
+// The Figma menu is TWO cards: account + preferences, then the rest.
+const MENU_GROUPS = [MENU_ITEMS.slice(0, 2), MENU_ITEMS.slice(2)]
 
 export default function SettingsScreen({ onClose }) {
   const [hovered, setHovered] = useState(null)
@@ -147,53 +173,56 @@ export default function SettingsScreen({ onClose }) {
             </div>
           </div>
 
-          {/* ONE grouped menu card */}
+          {/* Menu — TWO cards, as in the Figma, with a gap between them */}
           <div style={{ padding: '0 16px' }}>
-            <div style={{
-              background: '#1A1A1A',
-              border: '1px solid rgba(255,255,255,0.06)',
-              borderRadius: 20,
-              overflow: 'hidden',
-            }}>
-              {MENU_ITEMS.map((item, ii) => (
-                <div
-                  key={item.id}
-                  onClick={() => handleItem(item.id)}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: 14,
-                    padding: '6px 16px', minHeight: 56, boxSizing: 'border-box',
-                    borderBottom: ii < MENU_ITEMS.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
-                    cursor: 'pointer',
-                    background: hovered === item.id ? 'rgba(255,255,255,0.04)' : 'transparent',
-                    transition: 'background 0.15s',
-                  }}
-                  onMouseEnter={() => setHovered(item.id)}
-                  onMouseLeave={() => setHovered(null)}
-                >
-                  {/* Icon circle — black; dark red for Log out */}
-                  <div style={{
-                    width: 44, height: 44, borderRadius: '50%',
-                    background: item.danger ? 'rgba(200,40,0,0.18)' : '#000',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    flexShrink: 0,
-                  }}>
-                    <SettingIcon src={item.icon} label={item.label} size={20}/>
-                  </div>
+            {MENU_GROUPS.map((group, gi) => (
+              <div key={gi} style={{
+                background: '#1A1A1A',
+                border: '1px solid rgba(255,255,255,0.06)',
+                borderRadius: 20,
+                overflow: 'hidden',
+                marginTop: gi === 0 ? 0 : 14,
+              }}>
+                {group.map((item, ii) => (
+                  <div
+                    key={item.id}
+                    onClick={() => handleItem(item.id)}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 14,
+                      padding: '6px 16px', minHeight: 56, boxSizing: 'border-box',
+                      borderBottom: ii < group.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
+                      cursor: 'pointer',
+                      background: hovered === item.id ? 'rgba(255,255,255,0.04)' : 'transparent',
+                      transition: 'background 0.15s',
+                    }}
+                    onMouseEnter={() => setHovered(item.id)}
+                    onMouseLeave={() => setHovered(null)}
+                  >
+                    {/* Icon disc — black; solid dark maroon for Log out */}
+                    <div style={{
+                      width: 44, height: 44, borderRadius: '50%',
+                      background: item.danger ? '#3D130E' : '#000',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      flexShrink: 0,
+                    }}>
+                      <SettingIcon item={item}/>
+                    </div>
 
-                  {/* Label — white, including Log out */}
-                  <div style={{
-                    flex: 1,
-                    fontSize: 15, fontWeight: 500,
-                    color: '#fff',
-                    fontFamily: 'DM Sans, sans-serif',
-                  }}>
-                    {item.label}
-                  </div>
+                    {/* Label — white, including Log out */}
+                    <div style={{
+                      flex: 1,
+                      fontSize: 15, fontWeight: 500,
+                      color: '#fff',
+                      fontFamily: 'DM Sans, sans-serif',
+                    }}>
+                      {item.label}
+                    </div>
 
-                  <ChevronRight/>
-                </div>
-              ))}
-            </div>
+                    <ChevronRight/>
+                  </div>
+                ))}
+              </div>
+            ))}
           </div>
 
 
