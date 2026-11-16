@@ -256,12 +256,9 @@ export default function OnboardingScreen({ onDone, onHaveWallet }) {
         <div key={`text-${animKey}`}
           style={{ padding:'0 32px 20px', flexShrink:0, zIndex:2, position:'relative',
             animation:'ob_fade_slide 0.45s 0.07s ease both', textAlign:'center' }}>
-          <div style={{ fontFamily:'Syne,sans-serif', fontSize:18, fontWeight:700,
-            color:'#fff', marginBottom:8, lineHeight:1.3 }}>
-            {headline}
-          </div>
-          <div style={{ fontSize:13, color:'rgba(255,255,255,0.42)', lineHeight:1.65 }}>
-            {sub}
+          <div style={{ fontFamily:"Georgia,'Times New Roman',serif", fontSize:19, fontWeight:400, letterSpacing:0.2,
+            color:'#fff', lineHeight:1.35 }}>
+            {headline} {sub}
           </div>
         </div>
 

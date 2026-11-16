@@ -137,11 +137,11 @@ export default function HomeScreen({ onNav }) {
 
       {/* ── TOP BAR ── */}
       <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'14px 20px 0', flexShrink:0 }}>
-        <img src="/logo_nv_orange.png" alt="NV" style={{ width:40, height:26, objectFit:'contain' }}/>
-        <div style={{ display:'flex', alignItems:'center', gap:16 }}>
+        <img src="/logo_nv_orange.png" alt="NV" style={{ width:49, height:22, objectFit:'contain' }}/>
+        <div style={{ display:'flex', alignItems:'center', gap:20 }}>
           {/* QR scan icon — outline glyph in the receive-icon style, 22px per the design */}
           <div onClick={() => setShowReceive(true)} style={{ cursor:'pointer', opacity:0.8, display:'flex' }}>
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
               <rect x="2.5" y="2.5" width="7" height="7" rx="1.2" stroke="rgba(255,255,255,0.8)" strokeWidth="1.4"/>
               <rect x="12.5" y="2.5" width="7" height="7" rx="1.2" stroke="rgba(255,255,255,0.8)" strokeWidth="1.4"/>
               <rect x="2.5" y="12.5" width="7" height="7" rx="1.2" stroke="rgba(255,255,255,0.8)" strokeWidth="1.4"/>
@@ -157,7 +157,7 @@ export default function HomeScreen({ onNav }) {
           {/* Avatar */}
           <img src="/home/avatar.png" alt="Profile"
             onClick={() => setShowSettings(true)}
-            style={{ width:32, height:32, borderRadius:'50%', objectFit:'cover', border:'2px solid rgba(236,100,29,0.5)', cursor:'pointer' }}/>
+            style={{ width:36, height:36, borderRadius:'50%', objectFit:'cover', border:'2px solid rgba(236,100,29,0.5)', cursor:'pointer' }}/>
         </div>
       </div>
 
