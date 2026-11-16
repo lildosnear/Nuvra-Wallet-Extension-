@@ -170,7 +170,7 @@ function Slide3Illus() {
 const SLIDES = [
   { IllusComp: Slide1Illus,
     headline: 'Welcome to Nuvra',
-    sub: 'Access Layer for the Next Billion Bitcoin Users.' },
+    sub: 'Access Layer for the Next Billion Bitcoin Users.', split: true },
   { IllusComp: Slide2Illus,
     headline: 'The Bitcoin-aligned',
     sub: 'gateway to the Bitcoin ecosystem, on every BTC chain.' },
@@ -193,7 +193,7 @@ export default function OnboardingScreen({ onDone, onHaveWallet }) {
 
   const goTo = idx => { setSlide(idx); setAnimKey(k=>k+1) }
 
-  const { IllusComp, headline, sub } = SLIDES[slide]
+  const { IllusComp, headline, sub, split } = SLIDES[slide]
 
   return (
     <>
@@ -258,7 +258,10 @@ export default function OnboardingScreen({ onDone, onHaveWallet }) {
             animation:'ob_fade_slide 0.45s 0.07s ease both', textAlign:'center' }}>
           <div style={{ fontFamily:"Georgia,'Times New Roman',serif", fontSize:19, fontWeight:400, letterSpacing:0.2,
             color:'#fff', lineHeight:1.35 }}>
-            {headline} {sub}
+            {headline}
+            {split
+              ? <div style={{ fontSize:15, color:'rgba(255,255,255,0.8)', marginTop:6 }}>{sub}</div>
+              : <> {sub}</>}
           </div>
         </div>
 

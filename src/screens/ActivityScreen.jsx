@@ -1,4 +1,6 @@
 import React, { useState, useMemo } from 'react'
+import { TRANSACTIONS } from '../data/constants'
+import { useWallet } from '../wallet/WalletContext'
 
 const TOKEN_IMG = {
   BTC:  '/home/token_btc.png',
@@ -6,6 +8,8 @@ const TOKEN_IMG = {
   ETH:  '/home/token_eth.png',
   USDC: '/home/token_usdc.png',
   USDT: '/home/token_usdt.png',
+  WBTC: '/home/token_btc.png',
+  tBTC: '/home/token_btc.png',
 }
 
 const TYPE_NAV_ICON = {
@@ -15,16 +19,9 @@ const TYPE_NAV_ICON = {
   receive: '/home/icon_action_receive.png',
 }
 
-const TRANSACTIONS = [
-  { id:1,  type:'bridge',  label:'Bridge BTC',      token:'BTC',               amount:'-12223 BTC',    date:'2026-01-28 09:07', status:'completed' },
-  { id:2,  type:'swap',    label:'Swap BTC/USDC',   token:'BTC',  token2:'USDC', amount:'-100 USDC', date:'2026-01-28 09:07', status:'completed' },
-  { id:3,  type:'send',    label:'Send USDC',        token:'USDC',              amount:'-100 USDC',     date:'2026-01-28 09:07', status:'completed' },
-  { id:4,  type:'receive', label:'Receive BTC',      token:'BTC',               amount:'+0.01 BTC',     date:'2026-01-28 09:07', status:'pending'   },
-  { id:5,  type:'swap',    label:'Swap ETH',         token:'ETH',               amount:'-0.1 ETH',      date:'2026-01-28 09:07', status:'pending'   },
-  { id:6,  type:'bridge',  label:'Bridge BTC',       token:'BTC',               amount:'-12223 BTC',    date:'2026-01-28 09:07', status:'failed'    },
-]
 
 const STATUS = {
+  confirmed: { bg:'rgba(31,208,144,0.14)',  color:'#1fd090', label:'Completed' },
   completed: { bg:'rgba(31,208,144,0.14)',  color:'#1fd090', label:'Completed' },
   pending:   { bg:'rgba(255,193,7,0.12)',   color:'#ffc107', label:'Pending'   },
   failed:    { bg:'rgba(255,60,60,0.12)',   color:'#ff5c5c', label:'Failed'    },
@@ -40,19 +37,32 @@ const FILTERS = [
 export default function ActivityScreen() {
   const [filter, setFilter] = useState('All')
   const [search, setSearch] = useState('')
+  const { selectedChainId } = useWallet()
 
-  const filtered = useMemo(() => TRANSACTIONS.filter(tx => {
+  const rows = useMemo(() => TRANSACTIONS.map(tx => ({
+    ...tx,
+    label: `${tx.type.charAt(0).toUpperCase() + tx.type.slice(1)} ${tx.asset}`,
+    date: `${tx.date} ${tx.time}`,
+  })), [])
+
+  const filtered = useMemo(() => rows.filter(tx => {
+    // History follows the selected chain; testnets inherit their
+    // mainnet family's rows, and 'all' hides the not-yet-live Arch rows.
+    const family = { 'bob-sepolia': ['bob-sepolia', 'bob'], 'arch-testnet': ['arch-testnet', 'arch'] }
+    const mchain = selectedChainId === 'all'
+      ? tx.chain !== 'arch'
+      : (family[selectedChainId] || [selectedChainId]).includes(tx.chain)
     const mf = filter === 'All' || tx.type.toLowerCase() === filter.toLowerCase()
     const ms = !search || tx.label.toLowerCase().includes(search.toLowerCase())
-    return mf && ms
-  }), [filter, search])
+    return mchain && mf && ms
+  }), [filter, search, rows, selectedChainId])
 
   return (
     <div style={{ flex:1, display:'flex', flexDirection:'column', background:'#101010' }}>
 
       {/* TOP NAV */}
       <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'12px 16px 0', flexShrink:0 }}>
-        <img src="/logo_nv_orange.png" alt="NV" style={{ width:36, height:24, objectFit:'contain' }}/>
+        <img src="/logo_nv_orange.png" alt="NV" style={{ width:49, height:22, objectFit:'contain' }}/>
         <div style={{ fontFamily:'DM Sans,sans-serif', fontSize:15, fontWeight:700, color:'#fff' }}>Activity</div>
         <div style={{ display:'flex', alignItems:'center', gap:10 }}>
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ opacity:0.55 }}>
@@ -114,12 +124,6 @@ export default function ActivityScreen() {
               color: active ? '#fff' : '#959595',
               border:`1px solid ${active ? 'transparent' : 'rgba(255,255,255,0.1)'}`,
             }}>
-              {f.icon && (
-                <img src={f.icon} alt="" style={{
-                  width:13, height:13, objectFit:'contain',
-                  filter: active ? 'invert(1) brightness(2)' : 'invert(1) opacity(0.5)',
-                }}/>
-              )}
               {f.label}
             </div>
           )
@@ -130,7 +134,6 @@ export default function ActivityScreen() {
       <div className="scroll-body" style={{ padding:'10px 16px' }}>
         {filtered.map((tx, i) => {
           const st = STATUS[tx.status] || STATUS.completed
-          const typeIcon = TYPE_NAV_ICON[tx.type]
 
           return (
             <div key={tx.id} style={{
@@ -143,19 +146,15 @@ export default function ActivityScreen() {
               onMouseEnter={e => e.currentTarget.style.background='#1F1F1F'}
               onMouseLeave={e => e.currentTarget.style.background='#1A1A1A'}
             >
-              {/* Type icon — black circle with nav icon inside */}
+              {/* Asset icon — glyph disc, same treatment as Home asset rows */}
               <div style={{
                 width:40, height:40, borderRadius:'50%',
-                background:'#000',
+                background: tx.bg || 'rgba(255,255,255,0.08)',
                 display:'flex', alignItems:'center', justifyContent:'center',
                 flexShrink:0,
+                fontSize:17, color: tx.color || '#fff', fontFamily:'DM Sans,sans-serif', fontWeight:700,
               }}>
-                {typeIcon && (
-                  <img src={typeIcon} alt={tx.type} style={{
-                    width:18, height:18, objectFit:'contain',
-                    filter:'invert(1) opacity(0.75)',
-                  }}/>
-                )}
+                {tx.icon}
               </div>
 
               {/* Label + date */}
@@ -167,11 +166,8 @@ export default function ActivityScreen() {
               {/* Amount + status */}
               <div style={{ textAlign:'right', flexShrink:0 }}>
                 <div style={{ display:'flex', alignItems:'center', justifyContent:'flex-end', gap:4, marginBottom:5 }}>
-                  {TOKEN_IMG[tx.token] && (
-                    <img src={TOKEN_IMG[tx.token]} alt="" style={{ width:16, height:16, borderRadius:'50%' }}/>
-                  )}
-                  {tx.token2 && TOKEN_IMG[tx.token2] && (
-                    <img src={TOKEN_IMG[tx.token2]} alt="" style={{ width:16, height:16, borderRadius:'50%', marginLeft:-6 }}/>
+                  {TOKEN_IMG[tx.asset] && (
+                    <img src={TOKEN_IMG[tx.asset]} alt="" style={{ width:16, height:16, borderRadius:'50%' }}/>
                   )}
                   <span style={{ fontSize:12, fontWeight:700, color:'#fff', fontFamily:'DM Sans,sans-serif' }}>
                     {tx.amount}

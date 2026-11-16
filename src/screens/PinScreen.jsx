@@ -97,7 +97,7 @@ export default function PinScreen({ onDone }) {
           <img
             src="/logo_nv_orange.png"
             alt="NV"
-            style={{ width: 40, height: 26, objectFit: 'contain', flexShrink: 0 }}
+            style={{ width: 49, height: 22, objectFit: 'contain', flexShrink: 0 }}
           />
 
           {/* Back pill */}
@@ -130,7 +130,7 @@ export default function PinScreen({ onDone }) {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          paddingTop: 44,
+          paddingTop: 16,
           paddingBottom: 0,
           flexShrink: 0,
         }}>
@@ -138,7 +138,7 @@ export default function PinScreen({ onDone }) {
             src="/pin/lock.png"
             alt="Lock"
             style={{
-              width: 110,
+              width: 92,
               height: 'auto',
               objectFit: 'contain',
               filter: state === 'success'
@@ -222,7 +222,7 @@ export default function PinScreen({ onDone }) {
                     WebkitTapHighlightColor: 'transparent',
                     borderRadius: 10,
                     transition: 'background 0.1s',
-                    minHeight: 64,
+                    minHeight: 50,
                   }}
                   onMouseEnter={e => {
                     if (k !== '.') e.currentTarget.style.background = 'rgba(255,255,255,0.06)'

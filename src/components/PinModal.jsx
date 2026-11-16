@@ -79,7 +79,7 @@ export default function PinModal({ onSuccess, onCancel, title = 'Enter Pin code'
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '18px 20px 0', flexShrink: 0,
         }}>
-          <img src="/logo_nv_orange.png" alt="NV" style={{ width:40, height:26, objectFit:'contain', flexShrink:0 }}/>
+          <img src="/logo_nv_orange.png" alt="NV" style={{ width:49, height:22, objectFit:'contain', flexShrink:0 }}/>
           <div onClick={onCancel}
             style={{
               width: 64, height: 32,
@@ -98,9 +98,9 @@ export default function PinModal({ onSuccess, onCancel, title = 'Enter Pin code'
         </div>
 
         {/* Lock icon */}
-        <div style={{ display:'flex', justifyContent:'center', paddingTop:36, flexShrink:0 }}>
+        <div style={{ display:'flex', justifyContent:'center', paddingTop:16, flexShrink:0 }}>
           <img src="/pin/lock.png" alt="Lock" style={{
-            width: 104, height: 'auto', objectFit: 'contain',
+            width: 88, height: 'auto', objectFit: 'contain',
             filter: state === 'success'
               ? 'hue-rotate(90deg) saturate(1.3) drop-shadow(0 10px 24px rgba(31,208,144,0.4))'
               : state === 'error'
@@ -146,7 +146,7 @@ export default function PinModal({ onSuccess, onCancel, title = 'Enter Pin code'
                   display:'flex', alignItems:'center', justifyContent:'center',
                   cursor: k==='.' ? 'default' : 'pointer',
                   userSelect:'none', WebkitTapHighlightColor:'transparent',
-                  minHeight: 56,
+                  minHeight: 50,
                 }}>
                   {k === '←' ? (
                     <svg width="26" height="20" viewBox="0 0 26 20" fill="none">

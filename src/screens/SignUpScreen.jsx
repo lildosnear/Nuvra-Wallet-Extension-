@@ -258,7 +258,7 @@ function StepReferral({ onNext, onSkip }) {
           <input
             style={{
               ...S.input,
-              textTransform:'uppercase', letterSpacing:2,
+              textTransform:'uppercase', letterSpacing:1,
               ...(focused ? { borderColor:'#EC641D', background:'rgba(236,100,29,0.07)' } : {}),
             }}
             type="text"
@@ -280,6 +280,7 @@ function StepReferral({ onNext, onSkip }) {
               width: 200,
               height: 180,
               objectFit: 'contain',
+              mixBlendMode: 'screen',
               filter: 'drop-shadow(0 16px 32px rgba(236,100,29,0.25))',
               animation: 'ob_float 3.5s ease-in-out infinite',
             }}

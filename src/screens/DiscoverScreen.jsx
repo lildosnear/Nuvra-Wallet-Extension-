@@ -85,7 +85,7 @@ export default function DiscoverScreen() {
 
       {/* TOP BAR — mark, search pill with menu icon inside, count button. No bell, no avatar. */}
       <div style={{ display:'flex', alignItems:'center', padding:'16px 20px 0', flexShrink:0, position:'relative', zIndex:3 }}>
-        <img src="/logo_nv_orange.png" alt="NV" style={{ width:40, height:26, objectFit:'contain' }}/>
+        <img src="/logo_nv_orange.png" alt="NV" style={{ width:49, height:22, objectFit:'contain' }}/>
 
         {/* Search pill */}
         <div style={{ flex:1, margin:'0 12px', display:'flex', alignItems:'center', gap:8, background:'#1F1F1F', borderRadius:24, padding:'0 14px', height:44, boxSizing:'border-box' }}>

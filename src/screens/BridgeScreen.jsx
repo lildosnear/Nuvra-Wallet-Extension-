@@ -110,7 +110,7 @@ function BridgeSuccess({ from, to, amount, onDone }) {
   return (
     <div style={{ flex:1, display:'flex', flexDirection:'column', background:'#101010', padding:'40px 28px 28px', position:'relative', overflow:'hidden' }}>
       <div style={{ position:'absolute', top:20, left:20 }}>
-        <img src="/logo_nv_orange.png" alt="NV" style={{ width:40, height:26, objectFit:'contain' }}/>
+        <img src="/logo_nv_orange.png" alt="NV" style={{ width:49, height:22, objectFit:'contain' }}/>
       </div>
       <div style={{ position:'absolute', bottom:0, left:0, right:0, height:260, background:'radial-gradient(ellipse at 50% 110%, rgba(236,100,29,0.35) 0%, transparent 65%)', pointerEvents:'none' }}/>
 
@@ -177,7 +177,7 @@ export default function BridgeScreen({ onSuccessView }) {
 
       {/* TOP NAV */}
       <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'12px 16px 0', flexShrink:0 }}>
-        <img src="/logo_nv_orange.png" alt="NV" style={{ width:36, height:24, objectFit:'contain' }}/>
+        <img src="/logo_nv_orange.png" alt="NV" style={{ width:49, height:22, objectFit:'contain' }}/>
         <div style={{ fontFamily:'DM Sans,sans-serif', fontSize:15, fontWeight:700, color:'#fff' }}>Bridge Assets</div>
         <div style={{ display:'flex', alignItems:'center', gap:12 }}>
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ opacity:0.6 }}>

@@ -2,12 +2,25 @@ import React, { useState } from 'react'
 import { useWallet } from '../wallet/WalletContext'
 import { CHAINS } from '../chains/registry'
 
-// Icon component — renders uploaded icon images
-function SettingIcon({ src, size = 20 }) {
+// Icon component — renders uploaded icon images. If an icon file has
+// not been supplied yet, it falls back to a letter disc instead of
+// showing a broken image.
+function SettingIcon({ src, label = '', size = 20 }) {
+  const [failed, setFailed] = useState(false)
+  if (failed) {
+    return (
+      <div style={{ width: size, height: size, borderRadius: '50%', background: 'rgba(255,255,255,0.08)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontSize: size * 0.55, fontWeight: 700, color: '#959595', fontFamily: 'DM Sans,sans-serif' }}>
+        {label.charAt(0) || '?'}
+      </div>
+    )
+  }
   return (
     <img
       src={src}
       alt=""
+      onError={() => setFailed(true)}
       style={{ width: size, height: size, objectFit: 'contain' }}
     />
   )
@@ -170,7 +183,7 @@ export default function SettingsScreen({ onClose }) {
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     flexShrink: 0,
                   }}>
-                    <SettingIcon src={item.icon} size={20}/>
+                    <SettingIcon src={item.icon} label={item.label} size={20}/>
                   </div>
 
                   {/* Label — white, including Log out */}
