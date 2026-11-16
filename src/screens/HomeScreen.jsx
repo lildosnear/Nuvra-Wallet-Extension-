@@ -166,22 +166,46 @@ export default function HomeScreen({ onNav }) {
         </div>
       </div>
 
-      {/* ── CHAIN SELECTOR — small dark pills under the header ── */}
-      <div style={{ display:'flex', justifyContent:'center', gap:8, padding:'14px 20px 0', flexShrink:0, flexWrap:'wrap' }}>
+      {/* ── CHAIN SELECTOR — coin logos under the header ── */}
+      <div style={{ display:'flex', justifyContent:'center', gap:14, padding:'16px 20px 0', flexShrink:0 }}>
         {selectorChains.map(c => {
           const soon = c.status === 'coming-soon'
           const active = selectedChainId === c.id
+          const logoImg = c.id === 'bitcoin' ? '/home/token_btc.png'
+            : (c.id === 'arch' || c.id === 'arch-testnet') ? '/home/token_arch.png'
+            : null
+          const isBob = c.id === 'bob' || c.id === 'bob-sepolia'
           return (
-            <div key={c.id}
+            <div key={c.id} title={c.name || c.shortName}
               onClick={() => { if (!soon) setSelectedChain(c.id) }}
-              style={{ display:'flex', alignItems:'center', gap:5, padding:'6px 12px', borderRadius:20,
-                background: '#1A1A1A',
-                border:`1px solid ${active ? 'rgba(236,100,29,0.55)' : 'rgba(255,255,255,0.07)'}`,
-                color: active ? '#EC641D' : '#959595',
-                fontSize:12, fontWeight:600, fontFamily:'DM Sans,sans-serif',
-                cursor: soon ? 'default' : 'pointer', opacity: soon ? 0.5 : 1 }}>
-              {c.shortName}
-              {soon && <span style={{ fontSize:9, fontWeight:700, letterSpacing:0.5, background:'rgba(255,255,255,0.14)', borderRadius:6, padding:'1px 5px' }}>SOON</span>}
+              style={{ position:'relative', width:44, height:44, borderRadius:'50%', flexShrink:0,
+                background:'#1A1A1A',
+                border:`2px solid ${active ? '#EC641D' : 'rgba(255,255,255,0.08)'}`,
+                display:'flex', alignItems:'center', justifyContent:'center',
+                cursor: soon ? 'default' : 'pointer',
+                opacity: soon ? 0.45 : (active ? 1 : 0.55),
+                filter: soon ? 'grayscale(0.7)' : 'none' }}>
+              {logoImg
+                ? <img src={logoImg} alt={c.shortName} style={{ width:30, height:30, borderRadius:'50%', objectFit:'contain' }}/>
+                : isBob
+                  ? <span style={{ fontSize:19, fontWeight:800, color:'#ff6b00', fontFamily:'DM Sans,sans-serif' }}>B</span>
+                  : <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+                      <rect x="2.5" y="2.5" width="7" height="7" rx="1.5" stroke={active ? '#EC641D' : '#959595'} strokeWidth="1.6"/>
+                      <rect x="12.5" y="2.5" width="7" height="7" rx="1.5" stroke={active ? '#EC641D' : '#959595'} strokeWidth="1.6"/>
+                      <rect x="2.5" y="12.5" width="7" height="7" rx="1.5" stroke={active ? '#EC641D' : '#959595'} strokeWidth="1.6"/>
+                      <rect x="12.5" y="12.5" width="7" height="7" rx="1.5" stroke={active ? '#EC641D' : '#959595'} strokeWidth="1.6"/>
+                    </svg>}
+              {c.testnet && (
+                <span style={{ position:'absolute', right:-3, bottom:-3, width:15, height:15, borderRadius:'50%',
+                  background:'#EC641D', border:'2px solid #101010', color:'#fff',
+                  fontSize:8, fontWeight:800, fontFamily:'DM Sans,sans-serif',
+                  display:'flex', alignItems:'center', justifyContent:'center' }}>T</span>
+              )}
+              {soon && (
+                <span style={{ position:'absolute', left:'50%', bottom:-7, transform:'translateX(-50%)',
+                  fontSize:7, fontWeight:800, letterSpacing:0.5, color:'#fff', background:'#3a3a3a',
+                  borderRadius:5, padding:'1px 4px', fontFamily:'DM Sans,sans-serif' }}>SOON</span>
+              )}
             </div>
           )
         })}
