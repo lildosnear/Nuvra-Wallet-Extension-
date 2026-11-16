@@ -78,7 +78,8 @@ export default function DiscoverScreen() {
 
       {/* Background image — the design's city backdrop for this screen */}
       <img src="/discover/bg_buildings.png" alt=""
-        style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover', pointerEvents:'none', zIndex:0 }}/>
+        style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover', pointerEvents:'none', zIndex:0,
+          filter:'brightness(1.8) contrast(1.05) saturate(1.15)' }}/>
 
       {/* TOP BAR — mark, search pill with menu icon inside, count button. No bell, no avatar. */}
       <div style={{ display:'flex', alignItems:'center', padding:'16px 20px 0', flexShrink:0, position:'relative', zIndex:3 }}>
