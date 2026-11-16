@@ -3,7 +3,7 @@ import SettingsScreen from './SettingsScreen'
 import PromoBanner from '../components/PromoBanner'
 import { useWallet } from '../wallet/WalletContext'
 import { ASSETS } from '../data/constants'
-import { CHAINS, getChain, MOCK_ADDRESSES } from '../chains/registry'
+import { getChain, MOCK_ADDRESSES } from '../chains/registry'
 
 // ── Token icons ───────────────────────────────────────────────────────────────
 const TOKEN_IMG = {
@@ -125,11 +125,6 @@ export default function HomeScreen({ onNav }) {
     (sum, a) => sum + parseFloat(a.fiat.replace(/[$,]/g, '')), 0)
   const totalStr = '$' + totalFiat.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 
-  const selectorChains = [
-    { id: 'all', shortName: 'All chains', status: 'live' },
-    ...CHAINS,
-  ]
-
   const actions = [
     { label:'Send',    img:'/home/icon_action_send.png',    action: () => onNav('send') },
     { label:'Receive', img:'/home/icon_action_receive.png', action: () => setShowReceive(true) },
@@ -164,51 +159,6 @@ export default function HomeScreen({ onNav }) {
             onClick={() => setShowSettings(true)}
             style={{ width:36, height:36, borderRadius:'50%', objectFit:'cover', border:'2px solid rgba(236,100,29,0.5)', cursor:'pointer' }}/>
         </div>
-      </div>
-
-      {/* ── CHAIN SELECTOR — coin logos under the header ── */}
-      <div style={{ display:'flex', justifyContent:'center', gap:14, padding:'16px 20px 0', flexShrink:0 }}>
-        {selectorChains.map(c => {
-          const soon = c.status === 'coming-soon'
-          const active = selectedChainId === c.id
-          const logoImg = c.id === 'bitcoin' ? '/home/token_btc.png'
-            : (c.id === 'arch' || c.id === 'arch-testnet') ? '/home/token_arch.png'
-            : null
-          const isBob = c.id === 'bob' || c.id === 'bob-sepolia'
-          return (
-            <div key={c.id} title={c.name || c.shortName}
-              onClick={() => { if (!soon) setSelectedChain(c.id) }}
-              style={{ position:'relative', width:44, height:44, borderRadius:'50%', flexShrink:0,
-                background:'#1A1A1A',
-                border:`2px solid ${active ? '#EC641D' : 'rgba(255,255,255,0.08)'}`,
-                display:'flex', alignItems:'center', justifyContent:'center',
-                cursor: soon ? 'default' : 'pointer',
-                opacity: soon ? 0.45 : (active ? 1 : 0.55),
-                filter: soon ? 'grayscale(0.7)' : 'none' }}>
-              {logoImg
-                ? <img src={logoImg} alt={c.shortName} style={{ width:30, height:30, borderRadius:'50%', objectFit:'contain' }}/>
-                : isBob
-                  ? <span style={{ fontSize:19, fontWeight:800, color:'#ff6b00', fontFamily:'DM Sans,sans-serif' }}>B</span>
-                  : <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
-                      <rect x="2.5" y="2.5" width="7" height="7" rx="1.5" stroke={active ? '#EC641D' : '#959595'} strokeWidth="1.6"/>
-                      <rect x="12.5" y="2.5" width="7" height="7" rx="1.5" stroke={active ? '#EC641D' : '#959595'} strokeWidth="1.6"/>
-                      <rect x="2.5" y="12.5" width="7" height="7" rx="1.5" stroke={active ? '#EC641D' : '#959595'} strokeWidth="1.6"/>
-                      <rect x="12.5" y="12.5" width="7" height="7" rx="1.5" stroke={active ? '#EC641D' : '#959595'} strokeWidth="1.6"/>
-                    </svg>}
-              {c.testnet && (
-                <span style={{ position:'absolute', right:-3, bottom:-3, width:15, height:15, borderRadius:'50%',
-                  background:'#EC641D', border:'2px solid #101010', color:'#fff',
-                  fontSize:8, fontWeight:800, fontFamily:'DM Sans,sans-serif',
-                  display:'flex', alignItems:'center', justifyContent:'center' }}>T</span>
-              )}
-              {soon && (
-                <span style={{ position:'absolute', left:'50%', bottom:-7, transform:'translateX(-50%)',
-                  fontSize:7, fontWeight:800, letterSpacing:0.5, color:'#fff', background:'#3a3a3a',
-                  borderRadius:5, padding:'1px 4px', fontFamily:'DM Sans,sans-serif' }}>SOON</span>
-              )}
-            </div>
-          )
-        })}
       </div>
 
       {/* ── SCROLLABLE BODY ── */}
