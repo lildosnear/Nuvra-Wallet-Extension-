@@ -139,21 +139,13 @@ export default function HomeScreen({ onNav }) {
       <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'14px 20px 0', flexShrink:0 }}>
         <img src="/logo_nv_orange.png" alt="NV" style={{ width:40, height:26, objectFit:'contain' }}/>
         <div style={{ display:'flex', alignItems:'center', gap:16 }}>
-          {/* QR icon */}
-          <div onClick={() => setShowReceive(true)} style={{ cursor:'pointer', opacity:0.8 }}>
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-              <rect x="2.5" y="2.5" width="7" height="7" rx="1.2" stroke="rgba(255,255,255,0.8)" strokeWidth="1.4"/>
-              <rect x="12.5" y="2.5" width="7" height="7" rx="1.2" stroke="rgba(255,255,255,0.8)" strokeWidth="1.4"/>
-              <rect x="2.5" y="12.5" width="7" height="7" rx="1.2" stroke="rgba(255,255,255,0.8)" strokeWidth="1.4"/>
-              <rect x="14" y="14" width="2" height="2" fill="rgba(255,255,255,0.8)"/>
-              <path d="M18 12.5V18H12.5" stroke="rgba(255,255,255,0.8)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-          {/* Bell */}
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ cursor:'pointer', opacity:0.8 }}>
-            <path d="M16 6C16 3.8 13.3 2 10 2C6.7 2 4 3.8 4 6C4 10 2 11.5 2 11.5H18C18 11.5 16 10 16 6Z" stroke="rgba(255,255,255,0.8)" strokeWidth="1.4" fill="none"/>
-            <path d="M11.5 15C11.2 15.6 10.7 16 10 16C9.3 16 8.8 15.6 8.5 15" stroke="rgba(255,255,255,0.8)" strokeWidth="1.4" strokeLinecap="round"/>
-          </svg>
+          {/* QR receive icon — the design's own icon asset */}
+          <img src="/home/icon_grid.png" alt="Receive"
+            onClick={() => setShowReceive(true)}
+            style={{ width:22, height:22, objectFit:'contain', cursor:'pointer', opacity:0.9 }}/>
+          {/* Notification bell — the design's own icon asset */}
+          <img src="/home/icon_bell.png" alt="Notifications"
+            style={{ width:20, height:20, objectFit:'contain', cursor:'pointer', opacity:0.9 }}/>
           {/* Avatar */}
           <img src="/home/avatar.png" alt="Profile"
             onClick={() => setShowSettings(true)}

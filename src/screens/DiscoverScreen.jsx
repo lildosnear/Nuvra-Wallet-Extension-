@@ -61,7 +61,13 @@ export default function DiscoverScreen() {
 
   const filtered = useMemo(() => PROJECTS.filter(p => {
     // Projects follow the selected chain; 'all' shows live chains only.
-    const mchain = selectedChainId === 'all' ? p.chain !== 'arch' : p.chain === selectedChainId
+    // Testnets inherit their mainnet family's listings (same products,
+    // test deployments): BOB Sepolia shows the BOB entries, Arch
+    // Testnet shows the Arch entry.
+    const family = { 'bob-sepolia': ['bob-sepolia', 'bob'], 'arch-testnet': ['arch-testnet', 'arch'] }
+    const mchain = selectedChainId === 'all'
+      ? p.chain !== 'arch'
+      : (family[selectedChainId] || [selectedChainId]).includes(p.chain)
     const mc = cat === 'All' || p.tags.some(t => t.toLowerCase() === cat.toLowerCase())
     const ms = !search || p.name.toLowerCase().includes(search.toLowerCase())
     return mchain && mc && ms
@@ -69,6 +75,10 @@ export default function DiscoverScreen() {
 
   return (
     <div style={{ flex:1, display:'flex', flexDirection:'column', background:'#101010', position:'relative', overflow:'hidden' }}>
+
+      {/* Background image — the design's city backdrop for this screen */}
+      <img src="/discover/bg_buildings.png" alt=""
+        style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover', pointerEvents:'none', zIndex:0 }}/>
 
       {/* TOP BAR — mark, search pill with menu icon inside, count button. No bell, no avatar. */}
       <div style={{ display:'flex', alignItems:'center', padding:'16px 20px 0', flexShrink:0, position:'relative', zIndex:3 }}>
