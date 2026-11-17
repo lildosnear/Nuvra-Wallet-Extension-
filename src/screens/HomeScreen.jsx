@@ -12,6 +12,7 @@ const TOKEN_IMG = {
   ETH:  '/swap/token_eth.png',
   USDC: '/home/token_usdc.png',
   USDT: '/home/token_usdt.png',
+  BOB:  '/home/token_bob.png',
 }
 
 // ── QR Code SVG ──────────────────────────────────────────────────────────────

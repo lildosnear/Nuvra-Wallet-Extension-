@@ -75,6 +75,10 @@ function Slide3Illus() {
       <img src="/onboarding/figma_chip_arch.png" alt="Arch"
         style={{ position:'absolute', left:95, top:155, width:35, height:35, zIndex:4,
           animation:'ob_float_sm 5.2s 0.8s ease-in-out infinite' }}/>
+      {/* BOB chip, mid right at the design's empty chip slot */}
+      <img src="/onboarding/bob_chip.png" alt="BOB"
+        style={{ position:'absolute', left:252, top:92, width:33, height:33, zIndex:4,
+          animation:'ob_float_sm 4.6s 0.5s ease-in-out infinite' }}/>
     </div>
   )
 }
