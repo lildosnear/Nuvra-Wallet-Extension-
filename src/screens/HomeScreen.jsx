@@ -13,6 +13,7 @@ const TOKEN_IMG = {
   USDC: '/home/token_usdc.png',
   USDT: '/home/token_usdt.png',
   BOB:  '/home/token_bob.png',
+  ARCH: '/home/token_arch.png',
 }
 
 // ── QR Code SVG ──────────────────────────────────────────────────────────────

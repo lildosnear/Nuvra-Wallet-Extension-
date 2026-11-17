@@ -21,7 +21,7 @@ const TOKEN_IMG = {
 // only ever mixes tokens from one chain, and rates come from the
 // chain-tagged token rows in constants.js (demo rates, demo balances).
 // Per chain today: bob-sepolia WBTC/ETH/USDC/USDT/BOB, bob
-// WBTC/ETH/USDC/USDT, arch-testnet tBTC/ARCH, bitcoin BTC only.
+// WBTC/ETH/USDC/USDT, arch-testnet ARCH, bitcoin BTC only.
 // 'all' has no single chain to swap on, so it falls back to the wallet
 // default chain (bob-sepolia) instead of mixing chains in one pair.
 // Bitcoin holds BTC only, so there is no pair there yet: the screen

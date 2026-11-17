@@ -155,13 +155,13 @@ test('arch-testnet adapter can mock-send (testnet testing is allowed)', async ()
 
 // ── Swap token sets (SwapScreen derives its pairs from these rows) ─────
 
-test('swap tokens exist per live chain, with a pair everywhere except Bitcoin', () => {
+test('swap tokens exist per live chain, with pairs on the BOB chains', () => {
   const byChain = (id) => TOKENS.filter((t) => t.chain === id).map((t) => t.symbol)
   // Default chain: full testnet set including BOB
   assert.deepEqual(byChain('bob-sepolia'), ['WBTC', 'ETH', 'USDC', 'USDT', 'BOB'])
   assert.deepEqual(byChain('bob'), ['WBTC', 'ETH', 'USDC', 'USDT'])
-  assert.deepEqual(byChain('arch-testnet'), ['tBTC', 'ARCH'])
-  // Bitcoin holds BTC only, so Swap shows its no-pair note there
+  assert.deepEqual(byChain('arch-testnet'), ['ARCH'])
+  // Bitcoin and Arch Testnet hold a single token each, so Swap shows its no-pair note there
   assert.deepEqual(byChain('bitcoin'), ['BTC'])
   // No swap token is tagged to Arch mainnet while it is coming-soon
   assert.equal(TOKENS.filter((t) => t.chain === 'arch').length, 0)
@@ -179,5 +179,5 @@ test('testnet balances carry the BOB and ARCH tokens', async () => {
   assert.ok(sep.some((a) => a.symbol === 'BOB'), 'BOB token missing on BOB Sepolia')
   const archT = await getAdapter('arch-testnet').getBalances()
   assert.ok(archT.some((a) => a.symbol === 'ARCH'), 'ARCH token missing on Arch Testnet')
-  assert.ok(archT.some((a) => a.symbol === 'tBTC'), 'tBTC missing on Arch Testnet')
+  assert.ok(!archT.some((a) => a.symbol === 'tBTC'), 'tBTC should no longer be listed')
 })
