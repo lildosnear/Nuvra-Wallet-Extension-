@@ -14,167 +14,79 @@ const STYLES = `
     from { opacity: 0; transform: translateY(16px); }
     to   { opacity: 1; transform: translateY(0); }
   }
-  @keyframes ob_glow_pulse {
-    0%,100% { opacity: 0.55; transform: scale(1); }
-    50%      { opacity: 0.8;  transform: scale(1.06); }
-  }
 `
 
-/* ─── Slide 1: NUVRA coin with orbiting small coins ─────────────────────── */
+/* Built from the Figma file's own node data (frame 430x932, scaled x0.872
+   to the 375px popup). Colours, type and sizes are the design's values:
+   bg #0B0F14, headline Gascogne Serial 15px #959595, wordmark Geist
+   ExtraLight 36px, Get Started #EF5200, secondary border #EC641D.      */
+
+/* ─── Slide 1: NUVRA coin (design has no satellite coins, soft dots only) ── */
 function Slide1Illus() {
   return (
-    <div style={{ position:'relative', width:280, height:290,
-      display:'flex', alignItems:'center', justifyContent:'center' }}>
-
-      {/* soft orange glow behind coin */}
-      <div style={{ position:'absolute', width:200, height:200, borderRadius:'50%',
-        background:'radial-gradient(circle, rgba(236,100,29,0.35) 0%, rgba(236,100,29,0.08) 55%, transparent 75%)',
-        animation:'ob_glow_pulse 3s ease-in-out infinite',
-        pointerEvents:'none' }}/>
-
-      {/* Main NUVRA coin */}
+    <div style={{ position:'relative', width:339, height:300,
+      animation:'ob_float 3.8s ease-in-out infinite' }}>
       <img src="/onboarding/nuvra_coin.png" alt="NUVRA"
-        style={{ width:170, height:170, objectFit:'contain', position:'relative', zIndex:3,
-          animation:'ob_float 3.8s ease-in-out infinite',
-          filter:'drop-shadow(0 18px 36px rgba(236,100,29,0.5))' }}/>
-
-      {/* BTC — top right */}
-      <img src="/onboarding/btc.png" alt="BTC"
-        style={{ position:'absolute', width:42, height:42, top:16, right:28, zIndex:4,
-          animation:'ob_float_sm 4.2s 0.3s ease-in-out infinite',
-          filter:'drop-shadow(0 4px 8px rgba(0,0,0,0.4))' }}/>
-
-      {/* ARCH — top left */}
-      <img src="/onboarding/arch.png" alt="ARCH"
-        style={{ position:'absolute', width:36, height:36, top:54, left:20, zIndex:4,
-          animation:'ob_float_sm 5s 0.7s ease-in-out infinite',
-          filter:'drop-shadow(0 4px 8px rgba(0,0,0,0.4))' }}/>
-
-      {/* USDC — bottom right */}
-      <img src="/onboarding/usdc.png" alt="USDC"
-        style={{ position:'absolute', width:32, height:32, bottom:44, right:24, zIndex:4,
-          animation:'ob_float_sm 4.7s 1.1s ease-in-out infinite',
-          filter:'drop-shadow(0 4px 8px rgba(0,0,0,0.4))' }}/>
-
-      {/* small dot particle - top center */}
-      <div style={{ position:'absolute', width:7, height:7, borderRadius:'50%',
-        background:'rgba(255,180,100,0.5)', top:38, left:'52%', zIndex:2,
-        animation:'ob_float_sm 6s 0.2s ease-in-out infinite' }}/>
-      {/* small dot - left middle */}
-      <div style={{ position:'absolute', width:5, height:5, borderRadius:'50%',
-        background:'rgba(255,150,80,0.4)', top:'48%', left:6, zIndex:2,
-        animation:'ob_float_sm 5.5s 1.4s ease-in-out infinite' }}/>
-      {/* small dot - bottom left */}
-      <div style={{ position:'absolute', width:6, height:6, borderRadius:'50%',
-        background:'rgba(255,160,60,0.45)', bottom:32, left:44, zIndex:2,
-        animation:'ob_float_sm 4.8s 0.9s ease-in-out infinite' }}/>
+        style={{ position:'absolute', left:0, top:-20, width:339, display:'block' }}/>
+      {/* soft blurred dots, as in the design */}
+      <div style={{ position:'absolute', width:26, height:26, borderRadius:'50%',
+        background:'rgba(255,170,90,0.35)', filter:'blur(12px)', top:6, left:52 }}/>
+      <div style={{ position:'absolute', width:19, height:19, borderRadius:'50%',
+        background:'rgba(255,170,90,0.3)', filter:'blur(10px)', top:120, left:6 }}/>
+      <div style={{ position:'absolute', width:10, height:10, borderRadius:'50%',
+        background:'rgba(255,170,90,0.35)', filter:'blur(5px)', top:52, right:44 }}/>
+      <div style={{ position:'absolute', width:26, height:26, borderRadius:'50%',
+        background:'rgba(255,170,90,0.28)', filter:'blur(12px)', bottom:8, right:16 }}/>
     </div>
   )
 }
 
-/* ─── Slide 2: Box with floating coin icons ──────────────────────────────── */
+/* ─── Slide 2: gift box with the design's bursting coins layer above it ──── */
 function Slide2Illus() {
   return (
-    <div style={{ position:'relative', width:290, height:290,
-      display:'flex', alignItems:'center', justifyContent:'center' }}>
-
-      {/* Main box */}
+    <div style={{ position:'relative', width:273, height:231, marginTop:100,
+      animation:'ob_float 4s ease-in-out infinite' }}>
+      <img src="/onboarding/figma_coins.png" alt=""
+        style={{ position:'absolute', left:29, top:-80, width:214, display:'block', zIndex:2 }}/>
       <img src="/onboarding/box.png" alt="Box"
-        style={{ width:210, height:178, objectFit:'contain', position:'relative', zIndex:3,
-          marginTop:20,
-          animation:'ob_float 4s ease-in-out infinite',
-          filter:'drop-shadow(0 16px 32px rgba(236,100,29,0.3))' }}/>
-
-      {/* BTC flying top right */}
-      <img src="/onboarding/btc.png" alt="BTC"
-        style={{ position:'absolute', width:46, height:46, top:8, right:20, zIndex:5,
-          animation:'ob_float_sm 3.8s 0.2s ease-in-out infinite',
-          filter:'drop-shadow(0 4px 12px rgba(0,0,0,0.3))' }}/>
-
-      {/* ARCH — top left floating */}
-      <img src="/onboarding/arch.png" alt="ARCH"
-        style={{ position:'absolute', width:36, height:36, top:50, left:18, zIndex:5,
-          animation:'ob_float_sm 4.5s 0.6s ease-in-out infinite',
-          filter:'drop-shadow(0 4px 10px rgba(0,0,0,0.3))' }}/>
-
-      {/* USDC — left lower */}
-      <img src="/onboarding/usdc.png" alt="USDC"
-        style={{ position:'absolute', width:38, height:38, top:'42%', left:4, zIndex:5,
-          animation:'ob_float_sm 5s 1s ease-in-out infinite',
-          filter:'drop-shadow(0 4px 10px rgba(0,0,0,0.3))' }}/>
-
-      {/* small dots */}
-      <div style={{ position:'absolute', width:7, height:7, borderRadius:'50%',
-        background:'rgba(255,200,80,0.5)', top:24, left:'55%', zIndex:2,
-        animation:'ob_float_sm 6s 0.3s ease-in-out infinite' }}/>
-      <div style={{ position:'absolute', width:5, height:5, borderRadius:'50%',
-        background:'rgba(255,140,60,0.4)', bottom:40, right:30, zIndex:2,
-        animation:'ob_float_sm 5s 1.2s ease-in-out infinite' }}/>
-      <div style={{ position:'absolute', width:6, height:6, borderRadius:'50%',
-        background:'rgba(255,180,100,0.45)', bottom:20, left:60, zIndex:2,
-        animation:'ob_float_sm 4.5s 0.8s ease-in-out infinite' }}/>
+        style={{ position:'absolute', left:0, top:0, width:273, display:'block', zIndex:3 }}/>
     </div>
   )
 }
 
-/* ─── Slide 3: Lock with coin icons ─────────────────────────────────────── */
+/* ─── Slide 3: padlock with shadow rings and coin chips ──────────────────── */
 function Slide3Illus() {
   return (
-    <div style={{ position:'relative', width:290, height:290,
-      display:'flex', alignItems:'center', justifyContent:'center' }}>
-
-      {/* Main lock */}
+    <div style={{ position:'relative', width:363, height:224,
+      animation:'ob_float 3.6s ease-in-out infinite' }}>
+      {/* shadow rings under the lock */}
+      <div style={{ position:'absolute', left:44, top:43, width:275, height:135,
+        borderRadius:'50%', border:'10px solid rgba(0,0,0,0.22)',
+        transform:'rotate(-14deg)', zIndex:1 }}/>
+      <div style={{ position:'absolute', left:76, top:64, width:212, height:94,
+        borderRadius:'50%', border:'8px solid rgba(0,0,0,0.18)',
+        transform:'rotate(-14deg)', zIndex:1 }}/>
       <img src="/onboarding/lock.png" alt="Lock"
-        style={{ width:220, height:136, objectFit:'contain', position:'relative', zIndex:3,
-          animation:'ob_float 3.6s ease-in-out infinite',
-          filter:'drop-shadow(0 12px 28px rgba(236,100,29,0.28))' }}/>
-
-      {/* BTC — top right */}
-      <img src="/onboarding/btc.png" alt="BTC"
-        style={{ position:'absolute', width:40, height:40, top:18, right:22, zIndex:5,
-          animation:'ob_float_sm 4s 0.2s ease-in-out infinite',
-          filter:'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }}/>
-
-      {/* ARCH — right center */}
-      <img src="/onboarding/arch.png" alt="ARCH"
-        style={{ position:'absolute', width:32, height:32, top:'34%', right:10, zIndex:5,
-          animation:'ob_float_sm 5.2s 0.8s ease-in-out infinite',
-          filter:'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }}/>
-
-      {/* USDC — bottom right */}
-      <img src="/onboarding/usdc.png" alt="USDC"
-        style={{ position:'absolute', width:30, height:30, bottom:44, right:36, zIndex:5,
-          animation:'ob_float_sm 4.6s 1.3s ease-in-out infinite',
-          filter:'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }}/>
-
-      {/* ARCH small left */}
-      <img src="/onboarding/arch.png" alt="ARCH"
-        style={{ position:'absolute', width:26, height:26, bottom:56, left:28, zIndex:5,
-          animation:'ob_float_sm 4.8s 0.5s ease-in-out infinite',
-          filter:'drop-shadow(0 3px 6px rgba(0,0,0,0.3))' }}/>
-
-      {/* dots */}
-      <div style={{ position:'absolute', width:7, height:7, borderRadius:'50%',
-        background:'rgba(255,180,100,0.5)', top:30, left:'46%', zIndex:2,
-        animation:'ob_float_sm 5.8s 0.1s ease-in-out infinite' }}/>
-      <div style={{ position:'absolute', width:5, height:5, borderRadius:'50%',
-        background:'rgba(255,140,60,0.4)', top:'28%', left:14, zIndex:2,
-        animation:'ob_float_sm 5s 1.5s ease-in-out infinite' }}/>
-      <div style={{ position:'absolute', width:6, height:6, borderRadius:'50%',
-        background:'rgba(255,200,80,0.45)', bottom:24, left:'50%', zIndex:2,
-        animation:'ob_float_sm 4.2s 0.7s ease-in-out infinite' }}/>
+        style={{ position:'absolute', left:0, top:0, width:363, display:'block', zIndex:3 }}/>
+      {/* coin chips at the design's positions (BTC bottom left, Arch below centre) */}
+      <img src="/onboarding/figma_chip_btc.png" alt="BTC"
+        style={{ position:'absolute', left:46, top:140, width:30, height:30, zIndex:4,
+          animation:'ob_float_sm 4s 0.2s ease-in-out infinite' }}/>
+      <img src="/onboarding/figma_chip_arch.png" alt="Arch"
+        style={{ position:'absolute', left:95, top:155, width:35, height:35, zIndex:4,
+          animation:'ob_float_sm 5.2s 0.8s ease-in-out infinite' }}/>
     </div>
   )
 }
 
 const SLIDES = [
-  { IllusComp: Slide1Illus,
+  { IllusComp: Slide1Illus, textPadX: 48,
     headline: 'Welcome to Nuvra',
-    sub: 'Access Layer for the Next Billion Bitcoin Users.', split: true },
-  { IllusComp: Slide2Illus,
+    sub: 'Access Layer for the Next Billion Bitcoin Users.' },
+  { IllusComp: Slide2Illus, textPadX: 60,
     headline: 'The Bitcoin-aligned',
     sub: 'gateway to the Bitcoin ecosystem, on every BTC chain.' },
-  { IllusComp: Slide3Illus,
+  { IllusComp: Slide3Illus, textPadX: 60,
     headline: 'The Bitcoin-aligned',
     sub: 'gateway to the Bitcoin ecosystem, on every BTC chain.' },
 ]
@@ -193,54 +105,57 @@ export default function OnboardingScreen({ onDone, onHaveWallet }) {
 
   const goTo = idx => { setSlide(idx); setAnimKey(k=>k+1) }
 
-  const { IllusComp, headline, sub, split } = SLIDES[slide]
+  const { IllusComp, headline, sub, textPadX } = SLIDES[slide]
 
   return (
     <>
       <style>{STYLES}</style>
 
       <div style={{ flex:1, display:'flex', flexDirection:'column',
-        background:'#101010', position:'relative', overflow:'hidden' }}>
+        background:'#0B0F14', position:'relative', overflow:'hidden' }}>
 
-        {/* ── very subtle radial bg glow ── */}
-        <div style={{ position:'absolute', top:'8%', left:'50%', transform:'translateX(-50%)',
-          width:340, height:340, borderRadius:'50%', pointerEvents:'none', zIndex:0,
-          background:'radial-gradient(circle, rgba(255,95,0,0.13) 0%, rgba(255,95,0,0.04) 50%, transparent 72%)' }}/>
+        {/* ── background: particles + the design's two blurred glows ── */}
+        <img src="/onboarding/particles.png" alt=""
+          style={{ position:'absolute', top:0, left:'50%', transform:'translateX(-50%)',
+            width:388, opacity:0.5, pointerEvents:'none', zIndex:0 }}/>
+        <div style={{ position:'absolute', left:41, top:145, width:204, height:198,
+          borderRadius:'50%', background:'#EC641D', opacity:0.3, filter:'blur(55px)',
+          transform:'rotate(47deg)', pointerEvents:'none', zIndex:0 }}/>
+        <div style={{ position:'absolute', left:248, top:428, width:186, height:212,
+          borderRadius:'50%', background:'#000000', opacity:0.4, filter:'blur(45px)',
+          pointerEvents:'none', zIndex:0 }}/>
 
-        {/* ── TOP ROW: dots (left) + NEXT (right) ── */}
+        {/* ── TOP ROW: dots (left) + Next (right) ── */}
         <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between',
-          padding:'18px 20px 0', flexShrink:0, position:'relative', zIndex:5 }}>
-
-          {/* 3 progress dots */}
+          padding:'26px 21px 0', flexShrink:0, position:'relative', zIndex:5 }}>
           <div style={{ display:'flex', gap:6, alignItems:'center' }}>
             {SLIDES.map((_,i) => (
               <div key={i} onClick={() => goTo(i)}
                 style={{ cursor:'pointer', height:6, borderRadius:3,
-                  background: i===slide ? '#EC641D' : 'rgba(255,255,255,0.2)',
-                  width: i===slide ? 22 : 6,
+                  background: i===slide ? '#FF9D69' : '#FFFFFF',
+                  width: i===slide ? 25 : 10,
                   transition:'all 0.35s ease' }}/>
             ))}
           </div>
 
-          {/* Next button */}
           <button onClick={() => { const n=(slide+1)%SLIDES.length; goTo(n); if(slide===SLIDES.length-1) onDone() }}
-            style={{ background:'rgba(255,255,255,0.08)', border:'1px solid rgba(255,255,255,0.12)',
-              borderRadius:20, color:'rgba(255,255,255,0.8)', fontFamily:'DM Sans,sans-serif',
-              fontSize:13, fontWeight:600, padding:'6px 18px', cursor:'pointer',
-              transition:'background 0.2s' }}
-            onMouseEnter={e=>e.currentTarget.style.background='rgba(255,255,255,0.14)'}
-            onMouseLeave={e=>e.currentTarget.style.background='rgba(255,255,255,0.08)'}>
+            style={{ width:83, height:31, background:'#010101',
+              border:'1px solid #FFA750', borderRadius:28,
+              color:'#959595', fontFamily:"'Geist',sans-serif",
+              fontSize:11, fontWeight:400, cursor:'pointer' }}>
             Next
           </button>
         </div>
 
-        {/* ── NUVRA logo lockup — icon stacked above wordmark ── */}
+        {/* ── Logo lockup: NV mark over the NUVRA wordmark (Geist ExtraLight) ── */}
         <div style={{ display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center',
-          paddingTop:18, paddingBottom:0, flexShrink:0, position:'relative', zIndex:2, gap:5 }}>
+          marginTop:26, flexShrink:0, position:'relative', zIndex:2, gap:7 }}>
           <img src="/logo_nv_orange.png" alt="NV"
-            style={{ height:36, objectFit:'contain', display:'block' }}/>
-          <img src="/onboarding/nuvra_wordmark.png" alt="NUVRA"
-            style={{ height:16, objectFit:'contain', display:'block' }}/>
+            style={{ width:69, height:30, objectFit:'contain', display:'block' }}/>
+          <div style={{ fontFamily:"'Geist',sans-serif", fontWeight:200, fontSize:31,
+            lineHeight:'28px', letterSpacing:3, color:'#FFFFFF', textAlign:'center' }}>
+            <span style={{ color:'#EC641D' }}>N</span>U<span style={{ color:'#EC641D' }}>V</span>RA
+          </div>
         </div>
 
         {/* ── Illustration — fills remaining space ── */}
@@ -252,51 +167,45 @@ export default function OnboardingScreen({ onDone, onHaveWallet }) {
           </div>
         </div>
 
-        {/* ── Headline + sub ── */}
+        {/* ── Headline (the design's serif, 15px, #959595) ── */}
         <div key={`text-${animKey}`}
-          style={{ padding:'0 32px 20px', flexShrink:0, zIndex:2, position:'relative',
+          style={{ padding:`0 ${textPadX}px`, marginBottom:17, flexShrink:0, zIndex:2, position:'relative',
             animation:'ob_fade_slide 0.45s 0.07s ease both', textAlign:'center' }}>
-          <div style={{ fontFamily:"Georgia,'Times New Roman',serif", fontSize:19, fontWeight:400, letterSpacing:0.2,
-            color:'#fff', lineHeight:1.35 }}>
-            {headline}
-            {split
-              ? <div style={{ fontSize:15, color:'rgba(255,255,255,0.8)', marginTop:6 }}>{sub}</div>
-              : <> {sub}</>}
+          <div style={{ fontFamily:"'Gascogne Serial',Georgia,'Times New Roman',serif",
+            fontSize:13, fontWeight:400, color:'#959595', lineHeight:'17px' }}>
+            <div>{headline}</div>
+            <div>{sub}</div>
           </div>
         </div>
 
         {/* ── CTA buttons ── */}
-        <div style={{ padding:'0 24px 16px', flexShrink:0, position:'relative', zIndex:2 }}>
+        <div style={{ padding:'0 21px', flexShrink:0, position:'relative', zIndex:2 }}>
           <button onClick={onDone}
-            style={{ width:'100%', height:54, background:'linear-gradient(135deg,#EC641D,#BD5017)',
-              border:'none', borderRadius:30, color:'#fff', fontFamily:'DM Sans,sans-serif',
-              fontSize:16, fontWeight:700, cursor:'pointer', marginBottom:14,
-              letterSpacing:0.3, boxShadow:'0 8px 24px rgba(236,100,29,0.4)',
-              transition:'transform 0.15s, box-shadow 0.15s' }}
-            onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-1px)';e.currentTarget.style.boxShadow='0 12px 28px rgba(236,100,29,0.5)'}}
-            onMouseLeave={e=>{e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='0 8px 24px rgba(236,100,29,0.4)'}}>
-            Get Started
+            style={{ position:'relative', overflow:'hidden', width:'100%', height:44,
+              background:'#EF5200', border:'1px solid rgba(255,255,255,0.9)', borderRadius:28,
+              color:'#fff', fontFamily:"'Geist',sans-serif",
+              fontSize:13, fontWeight:600, cursor:'pointer', marginBottom:13,
+              boxShadow:'inset 0 1px 18px rgba(255,237,219,0.55), inset 0 1px 4px #FFEDDB, 0 9px 6px rgba(255,88,0,0.22)' }}>
+            <span style={{ position:'absolute', inset:0, borderRadius:'inherit', pointerEvents:'none',
+              background:'radial-gradient(120% 100% at 50% 0%, rgba(255,196,140,0.55) 0%, rgba(255,196,140,0) 55%)',
+              mixBlendMode:'plus-lighter' }}/>
+            <span style={{ position:'relative' }}>Get Started</span>
           </button>
 
           <button onClick={onHaveWallet || onDone}
-            style={{ width:'100%', height:54, background:'#000000',
-              border:'1px solid rgba(255,255,255,0.08)', borderRadius:30,
-              color:'#fff', fontFamily:'DM Sans,sans-serif',
-              fontSize:15, fontWeight:600, cursor:'pointer', textAlign:'center',
-              transition:'background 0.2s' }}
-            onMouseEnter={e=>e.currentTarget.style.background='#1F1F1F'}
-            onMouseLeave={e=>e.currentTarget.style.background='#000000'}>
+            style={{ width:'100%', height:44, background:'#010101',
+              border:'1px solid #EC641D', borderRadius:28,
+              color:'#fff', fontFamily:"'Geist',sans-serif",
+              fontSize:13, fontWeight:400, cursor:'pointer', textAlign:'center' }}>
             I already have wallet
           </button>
         </div>
 
-        {/* ── Terms ── */}
-        <div style={{ fontSize:10, color:'rgba(255,255,255,0.18)', textAlign:'center',
-          padding:'0 28px 28px', lineHeight:1.6, flexShrink:0, position:'relative', zIndex:2 }}>
-          By continuing, you agree to Nuvra's{' '}
-          <span style={{ color:'rgba(255,255,255,0.36)', cursor:'pointer' }}>Terms of Service</span>
-          {' '}and{' '}
-          <span style={{ color:'rgba(255,255,255,0.36)', cursor:'pointer' }}>Privacy Policy</span>
+        {/* ── Terms (Inter Light, #A9A9A9) ── */}
+        <div style={{ fontFamily:"'Inter',sans-serif", fontWeight:300, fontSize:9,
+          color:'#A9A9A9', textAlign:'center',
+          padding:'12px 39px 14px', lineHeight:'17px', flexShrink:0, position:'relative', zIndex:2 }}>
+          By continuing, you agree to Nuvra's Terms of Service and Privacy Policy.
         </div>
 
       </div>
