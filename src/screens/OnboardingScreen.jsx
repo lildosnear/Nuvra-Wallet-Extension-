@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
 /* ─── keyframe styles injected once ──────────────────────────────────────── */
 const STYLES = `
@@ -11,7 +11,7 @@ const STYLES = `
     50%      { transform: translateY(-8px) rotate(6deg); }
   }
   @keyframes ob_fade_slide {
-    from { opacity: 0; transform: translateY(16px); }
+    from { opacity: 0.35; transform: translateY(10px); }
     to   { opacity: 1; transform: translateY(0); }
   }
   @keyframes ob_glow_pulse {
@@ -34,7 +34,7 @@ function Slide1Illus() {
 
       {/* Main NUVRA coin */}
       <img src="/onboarding/nuvra_coin.png" alt="NUVRA"
-        style={{ width:170, height:170, objectFit:'contain', position:'relative', zIndex:3,
+        style={{ width:185, height:185, objectFit:'contain', position:'relative', zIndex:3,
           animation:'ob_float 3.8s ease-in-out infinite',
           filter:'drop-shadow(0 18px 36px rgba(236,100,29,0.5))' }}/>
 
@@ -80,7 +80,7 @@ function Slide2Illus() {
 
       {/* Main box */}
       <img src="/onboarding/box.png" alt="Box"
-        style={{ width:210, height:178, objectFit:'contain', position:'relative', zIndex:3,
+        style={{ width:225, height:190, objectFit:'contain', position:'relative', zIndex:3,
           marginTop:20,
           animation:'ob_float 4s ease-in-out infinite',
           filter:'drop-shadow(0 16px 32px rgba(236,100,29,0.3))' }}/>
@@ -125,7 +125,7 @@ function Slide3Illus() {
 
       {/* Main lock */}
       <img src="/onboarding/lock.png" alt="Lock"
-        style={{ width:220, height:136, objectFit:'contain', position:'relative', zIndex:3,
+        style={{ width:150, height:93, objectFit:'contain', position:'relative', zIndex:3,
           animation:'ob_float 3.6s ease-in-out infinite',
           filter:'drop-shadow(0 12px 28px rgba(236,100,29,0.28))' }}/>
 
@@ -170,7 +170,7 @@ function Slide3Illus() {
 const SLIDES = [
   { IllusComp: Slide1Illus,
     headline: 'Welcome to Nuvra',
-    sub: 'Access Layer for the Next Billion Bitcoin Users.', split: true },
+    sub: 'Access Layer for the Next Billion Bitcoin Users.' },
   { IllusComp: Slide2Illus,
     headline: 'The Bitcoin-aligned',
     sub: 'gateway to the Bitcoin ecosystem, on every BTC chain.' },
@@ -183,17 +183,9 @@ export default function OnboardingScreen({ onDone, onHaveWallet }) {
   const [slide,    setSlide]    = useState(0)
   const [animKey,  setAnimKey]  = useState(0)
 
-  /* auto-advance every 3 s */
-  useEffect(() => {
-    const t = setInterval(() => {
-      setSlide(s => { const n=(s+1)%SLIDES.length; setAnimKey(k=>k+1); return n })
-    }, 3000)
-    return () => clearInterval(t)
-  }, [])
-
   const goTo = idx => { setSlide(idx); setAnimKey(k=>k+1) }
 
-  const { IllusComp, headline, sub, split } = SLIDES[slide]
+  const { IllusComp, headline, sub } = SLIDES[slide]
 
   return (
     <>
@@ -216,14 +208,14 @@ export default function OnboardingScreen({ onDone, onHaveWallet }) {
             {SLIDES.map((_,i) => (
               <div key={i} onClick={() => goTo(i)}
                 style={{ cursor:'pointer', height:6, borderRadius:3,
-                  background: i===slide ? '#EC641D' : 'rgba(255,255,255,0.2)',
+                  background: i===slide ? '#EC641D' : 'rgba(255,255,255,0.35)',
                   width: i===slide ? 22 : 6,
                   transition:'all 0.35s ease' }}/>
             ))}
           </div>
 
           {/* Next button */}
-          <button onClick={() => { const n=(slide+1)%SLIDES.length; goTo(n); if(slide===SLIDES.length-1) onDone() }}
+          <button onClick={() => { if (slide === SLIDES.length - 1) { onDone() } else { goTo(slide + 1) } }}
             style={{ background:'rgba(255,255,255,0.08)', border:'1px solid rgba(255,255,255,0.12)',
               borderRadius:20, color:'rgba(255,255,255,0.8)', fontFamily:'DM Sans,sans-serif',
               fontSize:13, fontWeight:600, padding:'6px 18px', cursor:'pointer',
@@ -240,7 +232,7 @@ export default function OnboardingScreen({ onDone, onHaveWallet }) {
           <img src="/logo_nv_orange.png" alt="NV"
             style={{ height:36, objectFit:'contain', display:'block' }}/>
           <img src="/onboarding/nuvra_wordmark.png" alt="NUVRA"
-            style={{ height:16, objectFit:'contain', display:'block' }}/>
+            style={{ height:26, objectFit:'contain', display:'block' }}/>
         </div>
 
         {/* ── Illustration — fills remaining space ── */}
@@ -259,16 +251,14 @@ export default function OnboardingScreen({ onDone, onHaveWallet }) {
           <div style={{ fontFamily:"Georgia,'Times New Roman',serif", fontSize:19, fontWeight:400, letterSpacing:0.2,
             color:'#fff', lineHeight:1.35 }}>
             {headline}
-            {split
-              ? <div style={{ fontSize:15, color:'rgba(255,255,255,0.8)', marginTop:6 }}>{sub}</div>
-              : <> {sub}</>}
+            <div style={{ fontSize:17, marginTop:3 }}>{sub}</div>
           </div>
         </div>
 
         {/* ── CTA buttons ── */}
         <div style={{ padding:'0 24px 16px', flexShrink:0, position:'relative', zIndex:2 }}>
           <button onClick={onDone}
-            style={{ width:'100%', height:54, background:'linear-gradient(135deg,#EC641D,#BD5017)',
+            style={{ width:'100%', height:54, background:'linear-gradient(180deg,#F0834A,#EC641D)',
               border:'none', borderRadius:30, color:'#fff', fontFamily:'DM Sans,sans-serif',
               fontSize:16, fontWeight:700, cursor:'pointer', marginBottom:14,
               letterSpacing:0.3, boxShadow:'0 8px 24px rgba(236,100,29,0.4)',
@@ -279,24 +269,24 @@ export default function OnboardingScreen({ onDone, onHaveWallet }) {
           </button>
 
           <button onClick={onHaveWallet || onDone}
-            style={{ width:'100%', height:54, background:'#000000',
-              border:'1px solid rgba(255,255,255,0.08)', borderRadius:30,
+            style={{ width:'100%', height:54, background:'#1A1A1A',
+              border:'1px solid rgba(255,255,255,0.06)', borderRadius:30,
               color:'#fff', fontFamily:'DM Sans,sans-serif',
               fontSize:15, fontWeight:600, cursor:'pointer', textAlign:'center',
               transition:'background 0.2s' }}
-            onMouseEnter={e=>e.currentTarget.style.background='#1F1F1F'}
-            onMouseLeave={e=>e.currentTarget.style.background='#000000'}>
+            onMouseEnter={e=>e.currentTarget.style.background='#242424'}
+            onMouseLeave={e=>e.currentTarget.style.background='#1A1A1A'}>
             I already have wallet
           </button>
         </div>
 
         {/* ── Terms ── */}
-        <div style={{ fontSize:10, color:'rgba(255,255,255,0.18)', textAlign:'center',
+        <div style={{ fontSize:10, color:'rgba(255,255,255,0.45)', textAlign:'center',
           padding:'0 28px 28px', lineHeight:1.6, flexShrink:0, position:'relative', zIndex:2 }}>
           By continuing, you agree to Nuvra's{' '}
-          <span style={{ color:'rgba(255,255,255,0.36)', cursor:'pointer' }}>Terms of Service</span>
+          <span style={{ color:'rgba(255,255,255,0.75)', cursor:'pointer' }}>Terms of Service</span>
           {' '}and{' '}
-          <span style={{ color:'rgba(255,255,255,0.36)', cursor:'pointer' }}>Privacy Policy</span>
+          <span style={{ color:'rgba(255,255,255,0.75)', cursor:'pointer' }}>Privacy Policy</span>
         </div>
 
       </div>
