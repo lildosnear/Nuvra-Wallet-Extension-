@@ -166,9 +166,9 @@ export default function HomeScreen({ onNav }) {
       <div className="scroll-body">
 
         {/* ── BALANCE SECTION — no card, floats on bg ── */}
-        <div style={{ textAlign:'center', padding:'24px 20px 10px', position:'relative' }}>
-          {/* NV watermark behind balance */}
-          <img src="/home/card_watermark_nv.png" alt="" style={{ position:'absolute', left:'50%', top:'50%', transform:'translate(-50%,-50%)', width:'110%', height:'auto', objectFit:'contain', pointerEvents:'none', opacity:0.55 }}/>
+        <div style={{ textAlign:'center', padding:'24px 20px 10px', position:'relative', overflow:'hidden' }}>
+          {/* NV watermark behind balance — clipped to the section so it never spills past the screen edges */}
+          <img src="/home/card_watermark_nv.png" alt="" style={{ position:'absolute', left:'50%', top:'50%', transform:'translate(-50%,-50%)', width:'100%', height:'auto', objectFit:'contain', pointerEvents:'none', opacity:0.55 }}/>
 
           <div style={{ fontSize:12, color:'#959595', fontFamily:'DM Sans,sans-serif', marginBottom:8, letterSpacing:0.3, position:'relative', zIndex:1 }}>
             Total Balance
