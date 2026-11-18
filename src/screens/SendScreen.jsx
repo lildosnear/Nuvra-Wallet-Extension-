@@ -164,7 +164,7 @@ function SendSuccess({ token, amount, addr, onDone }) {
         {/* Done button */}
         <button onClick={onDone} style={{
           width:'100%', maxWidth:320, height:54, borderRadius:30,
-          background:'linear-gradient(135deg,#F0834A,#EC641D)',
+          background:'linear-gradient(135deg,#EF5200,#EC641D)',
           border:'none', color:'#fff',
           fontFamily:'DM Sans,sans-serif', fontSize:15, fontWeight:700,
           cursor:'pointer', marginBottom:28,
@@ -318,7 +318,7 @@ export default function SendScreen({ onBack, onSuccessView }) {
       {/* SEND BUTTON */}
       <div style={{ padding:'0 20px 20px', flexShrink:0 }}>
         <button onClick={() => setPhase('confirm')} disabled={!valid}
-          style={{ width:'100%', height:54, borderRadius:30, background: valid ? 'linear-gradient(135deg,#F0834A,#EC641D)' : '#5E280C', border:'none', color: valid ? '#fff' : 'rgba(0,0,0,0.55)', fontFamily:'DM Sans,sans-serif', fontSize:15, fontWeight:700, cursor: valid ? 'pointer' : 'default', transition:'all 0.2s', boxShadow: valid ? '0 8px 24px rgba(236,100,29,0.35)' : 'none' }}>
+          style={{ width:'100%', height:54, borderRadius:30, background: valid ? 'linear-gradient(135deg,#EF5200,#EC641D)' : '#5E280C', border:'none', color: valid ? '#fff' : 'rgba(0,0,0,0.55)', fontFamily:'DM Sans,sans-serif', fontSize:15, fontWeight:700, cursor: valid ? 'pointer' : 'default', transition:'all 0.2s', boxShadow: valid ? '0 8px 24px rgba(236,100,29,0.35)' : 'none' }}>
           Send
         </button>
       </div>

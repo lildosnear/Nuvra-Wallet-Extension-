@@ -79,7 +79,7 @@ export default function DiscoverScreen() {
       {/* Background image — the design's city backdrop for this screen */}
       <img src="/discover/bg_buildings.png" alt=""
         style={{ position:'absolute', left:0, right:0, bottom:0, width:'100%', height:'64%', objectFit:'cover', pointerEvents:'none', zIndex:0,
-          filter:'brightness(1.55) contrast(1.05) saturate(1.15)' }}/>
+          }}/>
       <div style={{ position:'absolute', inset:0, pointerEvents:'none', zIndex:1,
         background:'linear-gradient(180deg, #101010 26%, rgba(16,16,16,0.6) 52%, rgba(16,16,16,0) 75%)' }}/>
 
@@ -125,7 +125,7 @@ export default function DiscoverScreen() {
             if (c === 'All') {
               return active ? (
                 <div key={c} onClick={() => setCat(c)} style={{ padding:'7px 18px', borderRadius:20, fontSize:13, fontWeight:600, cursor:'pointer', whiteSpace:'nowrap', flexShrink:0,
-                  background:'linear-gradient(135deg,#F0834A,#EC641D)', color:'#fff', fontFamily:'DM Sans,sans-serif' }}>{c}</div>
+                  background:'linear-gradient(135deg,#EF5200,#EC641D)', color:'#fff', fontFamily:'DM Sans,sans-serif' }}>{c}</div>
               ) : (
                 <div key={c} onClick={() => setCat(c)} style={{ fontSize:13, fontWeight:600, cursor:'pointer', whiteSpace:'nowrap', flexShrink:0,
                   color:'#959595', fontFamily:'DM Sans,sans-serif' }}>{c}</div>
