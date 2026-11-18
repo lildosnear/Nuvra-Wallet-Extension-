@@ -131,7 +131,7 @@ export default function ActivityScreen() {
         {/* Filter button — orange gradient circle */}
         <div style={{
           width:48, height:48, borderRadius:'50%',
-          background:'linear-gradient(135deg,#EF5200,#EC641D)',
+          background:'linear-gradient(135deg,#F0834A,#EC641D)',
           display:'flex', alignItems:'center', justifyContent:'center',
           cursor:'pointer', flexShrink:0,
           boxShadow:'0 4px 14px rgba(236,100,29,0.4)',
@@ -157,7 +157,7 @@ export default function ActivityScreen() {
               padding: f.id === 'All' ? '7px 18px' : '7px 12px',
               borderRadius:12, fontSize:13, fontWeight:600,
               cursor:'pointer', whiteSpace:'nowrap', flexShrink:0, transition:'all 0.2s',
-              background: active ? 'linear-gradient(135deg,#EF5200,#EC641D)' : 'transparent',
+              background: active ? 'linear-gradient(135deg,#F0834A,#EC641D)' : 'transparent',
               color:'#fff',
             }}>
               {f.icon && <TypeGlyph type={f.icon} size={14}/>}

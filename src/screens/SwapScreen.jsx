@@ -250,7 +250,7 @@ function SwapSuccess({ from, to, onDone }) {
       {/* Done — near bottom */}
       <button onClick={onDone} style={{
         width: '100%', height: 54, borderRadius: 30,
-        background: 'linear-gradient(135deg, #EF5200, #EC641D)',
+        background: 'linear-gradient(135deg, #F0834A, #EC641D)',
         border: 'none', color: '#fff',
         fontFamily: 'DM Sans,sans-serif', fontSize: 15, fontWeight: 700,
         cursor: 'pointer',
@@ -360,7 +360,7 @@ export default function SwapScreen({ onBack, onSuccessView }) {
           <div
             onClick={flipTokens}
             style={{ width: 40, height: 40, borderRadius: '50%',
-              background: 'linear-gradient(135deg, #EF5200, #EC641D)',
+              background: 'linear-gradient(135deg, #F0834A, #EC641D)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               cursor: 'pointer', boxShadow: '0 4px 16px rgba(236,100,29,0.45)',
               border: '3px solid #101010',
@@ -425,7 +425,7 @@ export default function SwapScreen({ onBack, onSuccessView }) {
           style={{
             width: '100%', height: 54, borderRadius: 30,
             background: canSwap
-              ? 'linear-gradient(135deg, #EF5200, #EC641D)'
+              ? 'linear-gradient(135deg, #F0834A, #EC641D)'
               : '#5E280C',
             border: 'none',
             color: canSwap ? '#fff' : 'rgba(0,0,0,0.55)',

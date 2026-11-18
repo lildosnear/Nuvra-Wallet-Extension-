@@ -137,7 +137,7 @@ function BridgeSuccess({ from, to, amount, onDone }) {
       </div>
 
       {/* Done — near bottom */}
-      <button onClick={onDone} style={{ width:'100%', height:54, borderRadius:30, background:'linear-gradient(135deg,#EF5200,#EC641D)', border:'none', color:'#fff', fontFamily:'DM Sans,sans-serif', fontSize:15, fontWeight:700, cursor:'pointer', boxShadow:'0 8px 24px rgba(236,100,29,0.35)', position:'relative', zIndex:1, flexShrink:0 }}>
+      <button onClick={onDone} style={{ width:'100%', height:54, borderRadius:30, background:'linear-gradient(135deg,#F0834A,#EC641D)', border:'none', color:'#fff', fontFamily:'DM Sans,sans-serif', fontSize:15, fontWeight:700, cursor:'pointer', boxShadow:'0 8px 24px rgba(236,100,29,0.35)', position:'relative', zIndex:1, flexShrink:0 }}>
         Done
       </button>
     </div>
@@ -194,7 +194,7 @@ export default function BridgeScreen({ onSuccessView }) {
           <span style={{ fontSize:14, fontWeight:700, color:'#fff', fontFamily:'DM Sans,sans-serif' }}>{fromTok.symbol}</span>
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4L6 8L10 4" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5" strokeLinecap="round"/></svg>
         </div>
-        <div onClick={swap} style={{ width:40, height:40, borderRadius:'50%', background:'linear-gradient(135deg,#EF5200,#EC641D)', border:'3px solid #101010', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', boxShadow:'0 4px 14px rgba(236,100,29,0.45)', transition:'transform 0.2s', flexShrink:0 }}
+        <div onClick={swap} style={{ width:40, height:40, borderRadius:'50%', background:'linear-gradient(135deg,#F0834A,#EC641D)', border:'3px solid #101010', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', boxShadow:'0 4px 14px rgba(236,100,29,0.45)', transition:'transform 0.2s', flexShrink:0 }}
           onMouseEnter={e => e.currentTarget.style.transform='rotate(180deg)'}
           onMouseLeave={e => e.currentTarget.style.transform='rotate(0deg)'}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-label="flip">
@@ -265,7 +265,7 @@ export default function BridgeScreen({ onSuccessView }) {
       <div style={{ padding:'0 16px 14px', flexShrink:0 }}>
         <button onClick={() => canBridge && setShowModal(true)}
           style={{ width:'100%', height:54, borderRadius:30,
-            background: canBridge ? 'linear-gradient(135deg,#EF5200,#EC641D)' : '#5E280C',
+            background: canBridge ? 'linear-gradient(135deg,#F0834A,#EC641D)' : '#5E280C',
             border:'none', color: canBridge ? '#fff' : 'rgba(0,0,0,0.55)',
             fontFamily:'DM Sans,sans-serif', fontSize:15, fontWeight:700,
             cursor: canBridge ? 'pointer' : 'default', transition:'all 0.2s',

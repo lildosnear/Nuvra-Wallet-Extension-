@@ -125,7 +125,7 @@ export default function DiscoverScreen() {
             if (c === 'All') {
               return active ? (
                 <div key={c} onClick={() => setCat(c)} style={{ padding:'7px 18px', borderRadius:20, fontSize:13, fontWeight:600, cursor:'pointer', whiteSpace:'nowrap', flexShrink:0,
-                  background:'linear-gradient(135deg,#EF5200,#EC641D)', color:'#fff', fontFamily:'DM Sans,sans-serif' }}>{c}</div>
+                  background:'linear-gradient(135deg,#F0834A,#EC641D)', color:'#fff', fontFamily:'DM Sans,sans-serif' }}>{c}</div>
               ) : (
                 <div key={c} onClick={() => setCat(c)} style={{ fontSize:13, fontWeight:600, cursor:'pointer', whiteSpace:'nowrap', flexShrink:0,
                   color:'#959595', fontFamily:'DM Sans,sans-serif' }}>{c}</div>
