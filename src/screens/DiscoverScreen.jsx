@@ -39,7 +39,7 @@ function ProjectSheet({ p, onClose }) {
           <div style={{ flex:1, minWidth:0 }}>
             <div style={{ display:'flex', alignItems:'center', gap:6, marginBottom:4 }}>
               <div style={{ fontSize:16, fontWeight:700, color:'#fff', fontFamily:'DM Sans,sans-serif' }}>{p.name}</div>
-              {p.demo && <span style={{ fontSize:9, fontWeight:700, letterSpacing:0.5, color:'#EC641D', background:'rgba(236,100,29,0.12)', border:'1px solid rgba(236,100,29,0.3)', borderRadius:6, padding:'1px 5px', fontFamily:'DM Sans,sans-serif' }}>DEMO</span>}
+              
             </div>
             <div style={{ fontSize:12, color:'#959595', fontFamily:'DM Sans,sans-serif' }}>{p.tags.join(' · ')}</div>
           </div>
@@ -117,11 +117,6 @@ export default function DiscoverScreen() {
             Discover &gt;
           </div>
         )}
-        {!search && (
-          <div style={{ padding:'0 20px 10px', fontSize:11, color:'#959595', fontFamily:'DM Sans,sans-serif', position:'relative', zIndex:2 }}>
-            Demo entries for the selected chain — not live integrations.
-          </div>
-        )}
 
         {/* Category filter row — "All" is a gradient pill; the rest are plain text */}
         <div style={{ display:'flex', alignItems:'center', gap:22, padding: search ? '16px 20px 14px' : '2px 20px 14px', overflowX:'auto', scrollbarWidth:'none', flexShrink:0 }}>
@@ -165,7 +160,7 @@ export default function DiscoverScreen() {
                 <div style={{ display:'flex', alignItems:'center', gap:6, marginBottom:3 }}>
                   <div style={{ fontSize:14, fontWeight:700, color:'#fff', fontFamily:'DM Sans,sans-serif',
                     overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{p.name}</div>
-                  {p.demo && <span style={{ fontSize:9, fontWeight:700, letterSpacing:0.5, color:'#EC641D', background:'rgba(236,100,29,0.12)', border:'1px solid rgba(236,100,29,0.3)', borderRadius:6, padding:'1px 5px', fontFamily:'DM Sans,sans-serif', flexShrink:0 }}>DEMO</span>}
+                  
                 </div>
                 <div style={{ fontSize:11, color:'#959595', fontFamily:'DM Sans,sans-serif',
                   overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>

@@ -61,13 +61,13 @@ export const TRANSACTIONS = [
 // the BOB features Nuvra needs, added after the design's list.
 // Listings only — not live integrations in this build.
 export const PROJECTS = [
-  { id: 1, name: 'Autara',      chain: 'bitcoin', img: '/discover/icon_autara_dark.png', color: '#7a1f1f', icon: '✦', desc: 'The premier Bitcoin money market.',                              tags: ['DeFi'],   verified: false, demo: true },
-  { id: 2, name: 'Wasabi',      chain: 'bitcoin', img: '/discover/icon_wasabi.png',      color: '#222222', icon: '🌀', desc: 'Perps trading for runes, ordinals, and other UTXOs.',              tags: ['DeFi'],   verified: false, demo: true },
-  { id: 3, name: 'S1GNAL',      chain: 'bitcoin', img: '/discover/icon_s1gnal.png',      color: '#ff7a1a', icon: '✦', desc: 'The BTC growth engine.',                                           tags: ['Social'], verified: false, demo: true },
-  { id: 4, name: 'Pups.fun',    chain: 'bitcoin', img: '/discover/icon_pups.png',        color: '#2f7fe0', icon: '🐶', desc: 'The pups community hub. Risk it all by stacking.',                 tags: ['Social'], verified: false, demo: true },
-  { id: 5, name: 'Anchorage',   chain: 'bitcoin', img: '/discover/icon_anchorage.png',   color: '#111111', icon: '◆', desc: 'The trusted crypto platform for innovators and institutions.',     tags: ['Wallet'], verified: false, demo: true },
-  { id: 6, name: 'BOB Gateway', chain: 'bob',     img: '/discover/icon_bob.png',         color: '#EC641D', icon: '🌉', desc: 'Swap native BTC into BOB assets in one click.',                    tags: ['DeFi'],   verified: false, demo: true },
-  { id: 7, name: 'Pakt',        chain: 'bob',     img: '/discover/icon_pakt.png',        color: '#111111', icon: '🛡', desc: 'Trading guardrails by BOB. Set limits once, trade inside them.',   tags: ['DeFi'],   verified: false, demo: true },
+  { id: 1, name: 'Autara',      chain: 'bitcoin', img: '/discover/icon_autara_dark.png', color: '#7a1f1f', icon: '✦', desc: 'The premier Bitcoin money market.',                              tags: ['DeFi'],   verified: false },
+  { id: 2, name: 'Wasabi',      chain: 'bitcoin', img: '/discover/icon_wasabi.png',      color: '#222222', icon: '🌀', desc: 'Perps trading for runes, ordinals, and other UTXOs.',              tags: ['DeFi'],   verified: false },
+  { id: 3, name: 'S1GNAL',      chain: 'bitcoin', img: '/discover/icon_s1gnal.png',      color: '#ff7a1a', icon: '✦', desc: 'The BTC growth engine.',                                           tags: ['Social'], verified: false },
+  { id: 4, name: 'Pups.fun',    chain: 'bitcoin', img: '/discover/icon_pups.png',        color: '#2f7fe0', icon: '🐶', desc: 'The pups community hub. Risk it all by stacking.',                 tags: ['Social'], verified: false },
+  { id: 5, name: 'Anchorage',   chain: 'bitcoin', img: '/discover/icon_anchorage.png',   color: '#111111', icon: '◆', desc: 'The trusted crypto platform for innovators and institutions.',     tags: ['Wallet'], verified: false },
+  { id: 6, name: 'BOB Gateway', chain: 'bob',     img: '/discover/icon_bob.png',         color: '#EC641D', icon: '🌉', desc: 'Swap native BTC into BOB assets in one click.',                    tags: ['DeFi'],   verified: false },
+  { id: 7, name: 'Pakt',        chain: 'bob',     img: '/discover/icon_pakt.png',        color: '#111111', icon: '🛡', desc: 'Trading guardrails by BOB. Set limits once, trade inside them.',   tags: ['DeFi'],   verified: false },
 ]
 
 export const TRENDING = [
@@ -79,13 +79,13 @@ export const TRENDING = [
 ]
 
 export const ABOUT_TEXTS = {
-  'Autara':      'Listing from the Nuvra design. Autara is a Bitcoin money market for lending and borrowing. Not a live integration in this build.',
-  'Wasabi':      'Listing from the Nuvra design. Wasabi offers perps trading for runes, ordinals, and other UTXOs. Not a live integration in this build.',
-  'S1GNAL':      'Listing from the Nuvra design. S1GNAL is a BTC growth engine. Not a live integration in this build.',
-  'Pups.fun':    'Listing from the Nuvra design. Pups.fun is the community hub for the PUPS rune community. Not a live integration in this build.',
-  'Anchorage':   'Listing from the Nuvra design. Anchorage Digital is a custody and crypto platform for institutions. Not a live integration in this build.',
-  'BOB Gateway': "BOB Gateway is BOB's native BTC deposit and swap layer. It is Nuvra's bridge path in a later phase; not a live integration in this build.",
-  'Pakt':        "Pakt is BOB's agent trading guardrails product. Planned as Nuvra's guard layer for automated actions in a later phase; not a live integration in this build.",
+  'Autara':      'Listing from the Nuvra design. Autara is a Bitcoin money market for lending and borrowing.',
+  'Wasabi':      'Listing from the Nuvra design. Wasabi offers perps trading for runes, ordinals, and other UTXOs.',
+  'S1GNAL':      'Listing from the Nuvra design. S1GNAL is a BTC growth engine.',
+  'Pups.fun':    'Listing from the Nuvra design. Pups.fun is the community hub for the PUPS rune community.',
+  'Anchorage':   'Listing from the Nuvra design. Anchorage Digital is a custody and crypto platform for institutions.',
+  'BOB Gateway': "BOB Gateway is BOB's native BTC deposit and swap layer. It is Nuvra's bridge path in a later phase.",
+  'Pakt':        "Pakt is BOB's agent trading guardrails product. Planned as Nuvra's guard layer for automated actions in a later phase.",
 }
 
 export const TX_BADGE_COLORS = {

@@ -172,8 +172,7 @@ export default function HomeScreen({ onNav }) {
           <img src="/home/card_watermark_nv.png" alt="" style={{ position:'absolute', left:'50%', top:'50%', transform:'translate(-50%,-50%)', width:'110%', height:'auto', objectFit:'contain', pointerEvents:'none', opacity:0.55 }}/>
 
           <div style={{ fontSize:12, color:'#959595', fontFamily:'DM Sans,sans-serif', marginBottom:8, letterSpacing:0.3, position:'relative', zIndex:1 }}>
-            Total Balance{' '}
-            <span style={{ fontSize:9, fontWeight:700, letterSpacing:0.6, color:'#EC641D', background:'rgba(236,100,29,0.12)', border:'1px solid rgba(236,100,29,0.3)', borderRadius:8, padding:'2px 6px', verticalAlign:'middle' }}>DEMO DATA</span>
+            Total Balance
           </div>
           <div style={{ fontFamily:'DM Sans,sans-serif', fontSize:38, fontWeight:700, color:'#fff', letterSpacing:-0.5, lineHeight:1, position:'relative', zIndex:1 }}>
             {totalStr}
