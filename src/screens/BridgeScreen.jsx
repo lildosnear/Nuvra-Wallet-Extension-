@@ -7,7 +7,6 @@ const TOKENS = [
   { symbol:'WBTC', name:'BOB Mainnet',      img:'/home/token_btc.png',  balance:'0.010 WBTC', fiat:'$676.00'   },
   { symbol:'ETH',  name:'Ethereum Mainnet', img:'/home/token_eth.png',  balance:'0.5 ETH',    fiat:'$1,725.06' },
   { symbol:'USDC', name:'BOB Mainnet',      img:'/home/token_usdc.png', balance:'250 USDC',   fiat:'$250.00'   },
-  { symbol:'USDT', name:'BOB Mainnet',      img:'/home/token_usdt.png', balance:'100 USDT',   fiat:'$100.00'   },
 ]
 
 function TokIcon({ t, size=32 }) {

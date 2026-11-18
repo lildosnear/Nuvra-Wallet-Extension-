@@ -158,8 +158,8 @@ test('arch-testnet adapter can mock-send (testnet testing is allowed)', async ()
 test('swap tokens exist per live chain, with pairs on the BOB chains', () => {
   const byChain = (id) => TOKENS.filter((t) => t.chain === id).map((t) => t.symbol)
   // Default chain: full testnet set including BOB
-  assert.deepEqual(byChain('bob-sepolia'), ['WBTC', 'ETH', 'USDC', 'USDT', 'BOB'])
-  assert.deepEqual(byChain('bob'), ['WBTC', 'ETH', 'USDC', 'USDT'])
+  assert.deepEqual(byChain('bob-sepolia'), ['WBTC', 'ETH', 'USDC', 'BOB'])
+  assert.deepEqual(byChain('bob'), ['WBTC', 'ETH', 'USDC'])
   assert.deepEqual(byChain('arch-testnet'), ['ARCH'])
   // Bitcoin and Arch Testnet hold a single token each, so Swap shows its no-pair note there
   assert.deepEqual(byChain('bitcoin'), ['BTC'])

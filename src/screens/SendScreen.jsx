@@ -12,7 +12,6 @@ const TOKEN_IMG = {
   tBTC: '/home/token_btc.png',
   ETH:  '/home/token_eth.png',
   USDC: '/home/token_usdc.png',
-  USDT: '/home/token_usdt.png',
   ARCH: '/home/token_arch.png',
 }
 

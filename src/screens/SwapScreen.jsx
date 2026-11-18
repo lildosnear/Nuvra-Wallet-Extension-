@@ -10,7 +10,6 @@ const TOKEN_IMG = {
   tBTC: '/home/token_btc.png',
   ETH:  '/home/token_eth.png',
   USDC: '/home/token_usdc.png',
-  USDT: '/home/token_usdt.png',
   ARCH: '/home/token_arch.png',
   // BOB has no icon file supplied yet (same as SendScreen): img stays
   // null and TokIcon falls back to a letter disc. Do not substitute.
@@ -20,8 +19,8 @@ const TOKEN_IMG = {
 // Swap pairs follow the selected chain, like Send and Home do: a pair
 // only ever mixes tokens from one chain, and rates come from the
 // chain-tagged token rows in constants.js (demo rates, demo balances).
-// Per chain today: bob-sepolia WBTC/ETH/USDC/USDT/BOB, bob
-// WBTC/ETH/USDC/USDT, arch-testnet ARCH, bitcoin BTC only.
+// Per chain today: bob-sepolia WBTC/ETH/USDC/BOB, bob
+// WBTC/ETH/USDC, arch-testnet ARCH, bitcoin BTC only.
 // 'all' has no single chain to swap on, so it falls back to the wallet
 // default chain (bob-sepolia) instead of mixing chains in one pair.
 // Bitcoin holds BTC only, so there is no pair there yet: the screen

@@ -11,7 +11,6 @@ const TOKEN_IMG = {
   WBTC: '/bridge/token_btc.png',
   ETH:  '/swap/token_eth.png',
   USDC: '/home/token_usdc.png',
-  USDT: '/home/token_usdt.png',
   BOB:  '/home/token_bob.png',
   ARCH: '/home/token_arch.png',
 }

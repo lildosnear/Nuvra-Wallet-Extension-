@@ -7,7 +7,6 @@ const TOKEN_IMG = {
   ARCH: '/home/token_arch.png',
   ETH:  '/home/token_eth.png',
   USDC: '/home/token_usdc.png',
-  USDT: '/home/token_usdt.png',
   WBTC: '/home/token_btc.png',
   tBTC: '/home/token_btc.png',
 }
