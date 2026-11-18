@@ -19,14 +19,14 @@ const TYPE_NAV_ICON = {
 }
 
 
-// Status pills follow the design: bright fills with dark text.
-// (The design frame itself paints the one Failed pill green, a copy
-// slip; Failed keeps the same bright style in red so it reads right.)
+// Status pills exactly as the design paints them: bright fills with
+// dark text — Completed, Pending and Failed alike (the design's Failed
+// pill is the same bright green as Completed).
 const STATUS = {
   confirmed: { bg:'#1FD090',  color:'#06301F', label:'Completed' },
   completed: { bg:'#1FD090',  color:'#06301F', label:'Completed' },
   pending:   { bg:'#D8B26A',  color:'#3A2A08', label:'Pending'   },
-  failed:    { bg:'#FF5C5C',  color:'#3D0A0A', label:'Failed'    },
+  failed:    { bg:'#1FD090',  color:'#06301F', label:'Failed'    },
 }
 
 const FILTERS = [
@@ -202,9 +202,9 @@ export default function ActivityScreen() {
               {/* Amount + status */}
               <div style={{ textAlign:'right', flexShrink:0 }}>
                 <div style={{ display:'flex', alignItems:'center', justifyContent:'flex-end', gap:4, marginBottom:5 }}>
-                  {TOKEN_IMG[tx.asset] && (
-                    <img src={TOKEN_IMG[tx.asset]} alt="" style={{ width:16, height:16, borderRadius:'50%' }}/>
-                  )}
+                  {tx.asset.split('/').map((sym, k) => TOKEN_IMG[sym] && (
+                    <img key={sym} src={TOKEN_IMG[sym]} alt="" style={{ width:16, height:16, borderRadius:'50%', marginLeft: k > 0 ? -8 : 0, border:'1.5px solid #000', position:'relative', zIndex: 2 - k }}/>
+                  ))}
                   <span style={{ fontSize:12, fontWeight:700, color:'#fff', fontFamily:'DM Sans,sans-serif' }}>
                     {tx.amount}
                   </span>
