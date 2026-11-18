@@ -53,16 +53,21 @@ export const TRANSACTIONS = [
   { id: 7,  chain: 'arch',    type: 'send',    asset: 'ARCH', icon: '⬡', color: '#EC641D', bg: 'rgba(236,100,29,0.15)', amount: '-100 ARCH',   fiat: '$148',     date: '2026-01-18', time: '08:30', status: 'confirmed', to: 'arch1q3x...a1f2',     hash: '0x8b2c...1e4f', fee: '0.001 ARCH',  block: '#4,810,001', network: 'Arch Network' },
 ]
 
-// Discover entries are DEMO entries only — they are not live
-// integrations, carry no TVL, and make no claim about any protocol.
-// Real Discover listings arrive per chain in a later phase.
+// Discover listings. The first five are the projects on the Figma
+// design's Discover frame, in the design's order, with the design's
+// icons and descriptions (two descriptions are cut off in the frame
+// itself and are completed minimally: Wasabi "UTXOs", Pups.fun
+// "stacking", Anchorage "and institutions"). BOB Gateway and Pakt are
+// the BOB features Nuvra needs, added after the design's list.
+// Listings only — not live integrations in this build.
 export const PROJECTS = [
-  { id: 1, name: 'BOB Gateway (Demo)',    chain: 'bob',     img: null, color: '#EC641D', icon: '🌉', desc: 'Demo entry — native BTC deposits and swaps into BOB, in one click.', tags: ['DeFi'],           verified: false, demo: true },
-  { id: 2, name: 'BOB Swap (Demo)',       chain: 'bob',     img: null, color: '#6c5ce7', icon: '🔁', desc: 'Demo entry — swap BTC and stablecoins on BOB.',                        tags: ['DeFi'],           verified: false, demo: true },
-  { id: 3, name: 'BOB Earn (Demo)',       chain: 'bob',     img: null, color: '#1fd090', icon: '🌱', desc: 'Demo entry — put BTC to work on BOB. Not a live integration.',          tags: ['DeFi', 'Wallet'], verified: false, demo: true },
-  { id: 4, name: 'BTC Vault (Demo)',      chain: 'bitcoin', img: null, color: '#f7931a', icon: '🔐', desc: 'Demo entry — save and track native BTC. Not a live integration.',       tags: ['Wallet'],         verified: false, demo: true },
-  { id: 5, name: 'BTC Pay (Demo)',        chain: 'bitcoin', img: null, color: '#0984e3', icon: '⚡', desc: 'Demo entry — pay with native BTC. Not a live integration.',             tags: ['Social', 'Wallet'], verified: false, demo: true },
-  { id: 6, name: 'Arch App (Demo)',       chain: 'arch',    img: null, color: '#EC641D', icon: '⬡', desc: 'Demo entry — Arch is not live yet; this listing is a placeholder.',     tags: ['DeFi'],           verified: false, demo: true },
+  { id: 1, name: 'Autara',      chain: 'bitcoin', img: '/discover/icon_autara_dark.png', color: '#7a1f1f', icon: '✦', desc: 'The premier Bitcoin money market.',                              tags: ['DeFi'],   verified: false, demo: true },
+  { id: 2, name: 'Wasabi',      chain: 'bitcoin', img: '/discover/icon_wasabi.png',      color: '#222222', icon: '🌀', desc: 'Perps trading for runes, ordinals, and other UTXOs.',              tags: ['DeFi'],   verified: false, demo: true },
+  { id: 3, name: 'S1GNAL',      chain: 'bitcoin', img: '/discover/icon_s1gnal.png',      color: '#ff7a1a', icon: '✦', desc: 'The BTC growth engine.',                                           tags: ['Social'], verified: false, demo: true },
+  { id: 4, name: 'Pups.fun',    chain: 'bitcoin', img: '/discover/icon_pups.png',        color: '#2f7fe0', icon: '🐶', desc: 'The pups community hub. Risk it all by stacking.',                 tags: ['Social'], verified: false, demo: true },
+  { id: 5, name: 'Anchorage',   chain: 'bitcoin', img: '/discover/icon_anchorage.png',   color: '#111111', icon: '◆', desc: 'The trusted crypto platform for innovators and institutions.',     tags: ['Wallet'], verified: false, demo: true },
+  { id: 6, name: 'BOB Gateway', chain: 'bob',     img: '/discover/icon_bob.png',         color: '#EC641D', icon: '🌉', desc: 'Swap native BTC into BOB assets in one click.',                    tags: ['DeFi'],   verified: false, demo: true },
+  { id: 7, name: 'Pakt',        chain: 'bob',     img: '/discover/icon_pakt.png',        color: '#111111', icon: '🛡', desc: 'Trading guardrails by BOB. Set limits once, trade inside them.',   tags: ['DeFi'],   verified: false, demo: true },
 ]
 
 export const TRENDING = [
@@ -74,12 +79,13 @@ export const TRENDING = [
 ]
 
 export const ABOUT_TEXTS = {
-  'BOB Gateway (Demo)': 'Demo entry only. BOB Gateway is BOB\'s native BTC deposit and swap layer; Nuvra does not integrate it in this build.',
-  'BOB Swap (Demo)':    'Demo entry only. A placeholder for swapping BTC and stablecoins on BOB in a later phase.',
-  'BOB Earn (Demo)':    'Demo entry only. A placeholder for BTC yield products on BOB; nothing here is a live integration.',
-  'BTC Vault (Demo)':   'Demo entry only. A placeholder for native BTC savings on Bitcoin L1.',
-  'BTC Pay (Demo)':     'Demo entry only. A placeholder for paying with native BTC.',
-  'Arch App (Demo)':    'Demo entry only. Arch is not live yet, so this listing is a placeholder with no integration behind it.',
+  'Autara':      'Listing from the Nuvra design. Autara is a Bitcoin money market for lending and borrowing. Not a live integration in this build.',
+  'Wasabi':      'Listing from the Nuvra design. Wasabi offers perps trading for runes, ordinals, and other UTXOs. Not a live integration in this build.',
+  'S1GNAL':      'Listing from the Nuvra design. S1GNAL is a BTC growth engine. Not a live integration in this build.',
+  'Pups.fun':    'Listing from the Nuvra design. Pups.fun is the community hub for the PUPS rune community. Not a live integration in this build.',
+  'Anchorage':   'Listing from the Nuvra design. Anchorage Digital is a custody and crypto platform for institutions. Not a live integration in this build.',
+  'BOB Gateway': "BOB Gateway is BOB's native BTC deposit and swap layer. It is Nuvra's bridge path in a later phase; not a live integration in this build.",
+  'Pakt':        "Pakt is BOB's agent trading guardrails product. Planned as Nuvra's guard layer for automated actions in a later phase; not a live integration in this build.",
 }
 
 export const TX_BADGE_COLORS = {
