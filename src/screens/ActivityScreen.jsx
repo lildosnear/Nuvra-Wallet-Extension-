@@ -19,19 +19,55 @@ const TYPE_NAV_ICON = {
 }
 
 
+// Status pills follow the design: bright fills with dark text.
+// (The design frame itself paints the one Failed pill green, a copy
+// slip; Failed keeps the same bright style in red so it reads right.)
 const STATUS = {
-  confirmed: { bg:'rgba(31,208,144,0.14)',  color:'#1fd090', label:'Completed' },
-  completed: { bg:'rgba(31,208,144,0.14)',  color:'#1fd090', label:'Completed' },
-  pending:   { bg:'rgba(255,193,7,0.12)',   color:'#ffc107', label:'Pending'   },
-  failed:    { bg:'rgba(255,60,60,0.12)',   color:'#ff5c5c', label:'Failed'    },
+  confirmed: { bg:'#1FD090',  color:'#06301F', label:'Completed' },
+  completed: { bg:'#1FD090',  color:'#06301F', label:'Completed' },
+  pending:   { bg:'#D8B26A',  color:'#3A2A08', label:'Pending'   },
+  failed:    { bg:'#FF5C5C',  color:'#3D0A0A', label:'Failed'    },
 }
 
 const FILTERS = [
   { id:'All',     label:'All',     icon: null },
-  { id:'Bridge',  label:'Bridge',  icon:'/nav_bridge.png'               },
-  { id:'Swap',    label:'Swap',    icon:'/nav_swap.png'                  },
-  { id:'Send',    label:'Send',    icon:'/home/icon_action_send.png'     },
+  { id:'Bridge',  label:'Bridge',  icon:'bridge' },
+  { id:'Swap',    label:'Swap',    icon:'swap'   },
+  { id:'Send',    label:'Send',    icon:'send'   },
 ]
+
+// White outline type glyphs, the design's own icon set for this screen:
+// planet with a ring (bridge), double arrow (swap), up arrow (send),
+// QR grid (receive). Used in the filter chips and the row discs.
+function TypeGlyph({ type, size = 18 }) {
+  const common = { width:size, height:size, viewBox:'0 0 24 24', fill:'none', stroke:'#fff', strokeWidth:1.7, strokeLinecap:'round', strokeLinejoin:'round' }
+  if (type === 'bridge') return (
+    <svg {...common}>
+      <circle cx="12" cy="12" r="4.6"/>
+      <ellipse cx="12" cy="12" rx="9.6" ry="3.4" transform="rotate(-18 12 12)"/>
+    </svg>
+  )
+  if (type === 'swap') return (
+    <svg {...common}>
+      <path d="M4 7.5h12.5M13.5 3.8 17.2 7.5l-3.7 3.7"/>
+      <path d="M20 16.5H7.5M10.5 12.8l-3.7 3.7 3.7 3.7"/>
+    </svg>
+  )
+  if (type === 'send') return (
+    <svg {...common}>
+      <path d="M12 20V5.5M6.2 11 12 5.2 17.8 11"/>
+    </svg>
+  )
+  // receive — QR grid
+  return (
+    <svg {...common}>
+      <rect x="4" y="4" width="6.4" height="6.4" rx="1.6"/>
+      <rect x="13.6" y="4" width="6.4" height="6.4" rx="1.6"/>
+      <rect x="4" y="13.6" width="6.4" height="6.4" rx="1.6"/>
+      <path d="M13.6 13.6h2.8v2.8h-2.8zM17.2 17.2H20V20h-2.8z" fill="#fff" stroke="none"/>
+    </svg>
+  )
+}
 
 export default function ActivityScreen() {
   const [filter, setFilter] = useState('All')
@@ -109,20 +145,22 @@ export default function ActivityScreen() {
         </div>
       </div>
 
-      {/* FILTER TABS */}
-      <div style={{ display:'flex', gap:8, padding:'10px 16px 0', overflowX:'auto', scrollbarWidth:'none', flexShrink:0 }}>
+      {/* FILTER TABS — one black rounded container, as in the design:
+          All is the orange gradient pill; the rest are white icon + white
+          text on transparent, inside the same container. */}
+      <div style={{ margin:'12px 16px 0', background:'#000', borderRadius:16, padding:6, display:'flex', gap:4, overflowX:'auto', scrollbarWidth:'none', flexShrink:0 }}>
         {FILTERS.map(f => {
           const active = filter === f.id
           return (
             <div key={f.id} onClick={() => setFilter(f.id)} style={{
-              display:'flex', alignItems:'center', gap:5,
+              display:'flex', alignItems:'center', gap:6,
               padding: f.id === 'All' ? '7px 18px' : '7px 12px',
-              borderRadius:20, fontSize:13, fontWeight:600,
+              borderRadius:12, fontSize:13, fontWeight:600,
               cursor:'pointer', whiteSpace:'nowrap', flexShrink:0, transition:'all 0.2s',
-              background: active ? 'linear-gradient(135deg,#F0834A,#EC641D)' : '#000',
-              color: active ? '#fff' : '#959595',
-              border:`1px solid ${active ? 'transparent' : 'rgba(255,255,255,0.1)'}`,
+              background: active ? 'linear-gradient(135deg,#F0834A,#EC641D)' : 'transparent',
+              color:'#fff',
             }}>
+              {f.icon && <TypeGlyph type={f.icon} size={14}/>}
               {f.label}
             </div>
           )
@@ -137,23 +175,22 @@ export default function ActivityScreen() {
           return (
             <div key={tx.id} style={{
               display:'flex', alignItems:'center', gap:12, padding:'12px 14px',
-              background:'#1A1A1A', border:'1px solid rgba(255,255,255,0.05)',
+              background:'#000',
               borderRadius:16, marginBottom:8, minHeight:64, boxSizing:'border-box',
               cursor:'pointer', transition:'background 0.15s',
               animation:`fadeUp 0.22s ${i*0.04}s ease both`,
             }}
-              onMouseEnter={e => e.currentTarget.style.background='#1F1F1F'}
-              onMouseLeave={e => e.currentTarget.style.background='#1A1A1A'}
+              onMouseEnter={e => e.currentTarget.style.background='#0D0D0D'}
+              onMouseLeave={e => e.currentTarget.style.background='#000'}
             >
-              {/* Asset icon — glyph disc, same treatment as Home asset rows */}
+              {/* Type icon — white outline glyph in a dark disc, as in the design */}
               <div style={{
                 width:40, height:40, borderRadius:'50%',
-                background: tx.bg || 'rgba(255,255,255,0.08)',
+                background:'#262626',
                 display:'flex', alignItems:'center', justifyContent:'center',
                 flexShrink:0,
-                fontSize:17, color: tx.color || '#fff', fontFamily:'DM Sans,sans-serif', fontWeight:700,
               }}>
-                {tx.icon}
+                <TypeGlyph type={tx.type} size={19}/>
               </div>
 
               {/* Label + date */}
