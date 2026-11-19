@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { fetchBtcBalance, fetchEvmNativeBalance, fetchErc20Balance, loadWalletBalances } from '../src/wallet/balances.js'
+import { fetchBtcBalance, fetchEvmNativeBalance, fetchErc20Balance, fetchArchBalance, loadWalletBalances } from '../src/wallet/balances.js'
 
 // Stub fetch per test: routes by URL substring.
 function stubFetch(routes) {
@@ -57,10 +57,28 @@ test('loadWalletBalances: testnet only — mainnet endpoints are never read', as
     ['mempool.space', { chain_stats: { funded_txo_sum: 999999999, spent_txo_sum: 0 }, mempool_stats: { funded_txo_sum: 0, spent_txo_sum: 0 } }],
     ['bob-sepolia', { jsonrpc: '2.0', id: 1, result: '0x1bc16d674ec8000' }], // 0.125 ETH
     ['rpc.gobob.xyz', { jsonrpc: '2.0', id: 1, result: '0x7ce66c50e2840000' }], // 9 ETH trap
+    ['rpc.testnet.arch.network', { jsonrpc: '2.0', result: { lamports: 100000000000 } }],
   ])
-  const b = await loadWalletBalances({ bitcoin: 'bc1px', btcTestnet: 'tb1px', bob: ADDR })
+  const b = await loadWalletBalances({ bitcoin: 'bc1px', btcTestnet: 'tb1px', bob: ADDR, 'arch-testnet': '6jcrBGv1Nie81u3CoH3E2qYxrw7KCuAsdsyY5oitqou7' })
   assert.equal(b.btc, 0.00265092)
   assert.equal(b.btcTestnet, 0.00265092)
   assert.equal(b.eth, 0.125)
   assert.equal(b.ethBobSepolia, 0.125)
+  assert.equal(b.arch, 100)
+})
+
+test('fetchArchBalance: lamports convert at 1e9 per ARCH', async () => {
+  stubFetch([['rpc.testnet.arch.network', { jsonrpc: '2.0', result: { lamports: 250000000 } }]])
+  assert.equal(await fetchArchBalance('6jcrBGv1Nie81u3CoH3E2qYxrw7KCuAsdsyY5oitqou7'), 0.25)
+})
+
+test('fetchArchBalance: a wallet with no on-chain account reads as a true zero', async () => {
+  stubFetch([['rpc.testnet.arch.network', { jsonrpc: '2.0', error: { code: 404, message: 'account is not in database' } }]])
+  assert.equal(await fetchArchBalance('6jcrBGv1Nie81u3CoH3E2qYxrw7KCuAsdsyY5oitqou7'), 0)
+})
+
+test('fetchArchBalance: an unreachable RPC returns null, never a guess', async () => {
+  stubFetch([['rpc.testnet.arch.network', 'FAIL']])
+  assert.equal(await fetchArchBalance('6jcrBGv1Nie81u3CoH3E2qYxrw7KCuAsdsyY5oitqou7'), null)
+  assert.equal(await fetchArchBalance('not-an-address'), null)
 })

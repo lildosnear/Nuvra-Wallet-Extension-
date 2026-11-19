@@ -24,6 +24,7 @@
   "host_permissions": [
     "https://rpc.gobob.xyz/*",
     "https://bob-sepolia.rpc.gobob.xyz/*",
-    "https://mempool.space/*"
+    "https://mempool.space/*",
+    "https://rpc.testnet.arch.network/*"
   ]
 }

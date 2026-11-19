@@ -32,7 +32,9 @@ const BECH32_CHARS = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l'
 const RE_BITCOIN_TAPROOT = new RegExp(`^bc1p[${BECH32_CHARS}]{58}$`)
 const RE_BITCOIN_SEGWIT = new RegExp(`^bc1q[${BECH32_CHARS}]{38,58}$`)
 const RE_EVM = /^0x[0-9a-fA-F]{40}$/
-const RE_ARCH = /^arch1[a-z0-9]{20,60}$/
+// Arch account addresses are base58-encoded 32-byte secp256k1
+// pubkeys (Arch CLI reference: all user-facing identifiers are base58).
+const RE_ARCH = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/
 
 /**
  * Pure, unit-testable format check for one chain.

@@ -10,7 +10,10 @@ import { TOKENS } from '../src/data/constants.js'
 const BTC_TAPROOT = 'bc1p5d7rjq7g6rdk2yhzks9smlaqtedr4dekq08ge8ztwac72sfr9rusxg3297'
 const BTC_SEGWIT = 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq'
 const EVM = '0x742d35Cc6634C0532925a3b844Bc454e4438f44e'
-const ARCH = 'arch1q3x7k9m2p8w4z6v5n0c9d8f7g6h5j4k3l2a1s9d7f6g5h'
+// Real Arch format: base58-encoded 32-byte pubkey (this value is
+// the BIP-86 test vector's Arch address, verified live 2026-11-19).
+const ARCH = '6jcrBGv1Nie81u3CoH3E2qYxrw7KCuAsdsyY5oitqou7'
+const ARCH_FAKE = 'arch1q3x7k9m2p8w4z6v5n0c9d8f7g6h5j4k3l2a1s9d7f6g5h'
 
 // ── Registry invariants ─────────────────────────────────────────────
 
@@ -71,7 +74,7 @@ test('bob and bob-sepolia accept 0x EVM addresses', () => {
   assert.equal(validateAddress('bob-sepolia', EVM), true)
 })
 
-test('arch accepts arch1 addresses', () => {
+test('arch accepts base58 pubkey addresses and rejects the old arch1 fiction', () => {
   assert.equal(validateAddress('arch', ARCH), true)
 })
 
@@ -137,12 +140,13 @@ test('mock send on live chains returns a clearly mocked hash', async () => {
   assert.ok(res.hash.includes('demo'))
 })
 
-test('Arch Testnet is live, flagged testnet, and validates arch1 addresses', () => {
+test('Arch Testnet is live, flagged testnet, and validates base58 addresses', () => {
   const t = getChain('arch-testnet')
   assert.equal(t.status, 'live')
   assert.equal(t.testnet, true)
   assert.equal(isChainLive('arch-testnet'), true)
   assert.equal(validateAddress('arch-testnet', ARCH), true)
+  assert.equal(validateAddress('arch-testnet', ARCH_FAKE), false)
   // mainnet Arch stays coming-soon alongside it
   assert.equal(getChain('arch').status, 'coming-soon')
 })

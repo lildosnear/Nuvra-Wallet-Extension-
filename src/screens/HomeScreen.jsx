@@ -47,11 +47,13 @@ function QRCode({ size = 160 }) {
 }
 
 // ── Receive Modal ─────────────────────────────────────────────────────────────
-function ReceiveModal({ onClose }) {
+function ReceiveModal({ onClose, chainId }) {
   const [copied, setCopied] = useState(false)
   const wallet = useWallet()
-  // In the 'All chains' aggregate view, Receive defaults to BOB.
-  const chain = wallet.chain || getChain('bob')
+  // Opened from a token row, the sheet shows that token's chain;
+  // opened from the Receive button it defaults to BOB in the
+  // 'All chains' aggregate view.
+  const chain = (chainId && getChain(chainId)) || wallet.chain || getChain('bob')
   const address = wallet.addresses[chain.id] || MOCK_ADDRESSES[chain.id]
 
   const copyAddress = async () => {
@@ -114,6 +116,7 @@ function ReceiveModal({ onClose }) {
 // ── Main HomeScreen ───────────────────────────────────────────────────────────
 export default function HomeScreen({ onNav }) {
   const [showReceive,  setShowReceive]  = useState(false)
+  const [receiveChainId, setReceiveChainId] = useState(null)
   const [showSettings, setShowSettings] = useState(false)
   const { selectedChainId, setSelectedChain, liveBalances } = useWallet()
 
@@ -124,7 +127,7 @@ export default function HomeScreen({ onNav }) {
   // the row shows it (priced with the app's static price table —
   // a live price feed is still to come). Rows without a verified
   // read keep the design's figures.
-  const PRICES = { BTC: 67647.62, ETH: 3225 }
+  const PRICES = { BTC: 67647.62, ETH: 3225, ARCH: 1.48 }
   const fmtAmt = (n) => n.toLocaleString(undefined, {
     minimumFractionDigits: 0, maximumFractionDigits: n !== 0 && Math.abs(n) < 0.01 ? 6 : 4,
   })
@@ -137,6 +140,7 @@ export default function HomeScreen({ onNav }) {
     // never sits under a mainnet label.
     if (a.symbol === 'BTC' && a.chain === 'bitcoin') { n = liveBalances.btc; liveLabel = 'Bitcoin Testnet' }
     if (a.symbol === 'ETH' && a.chain === 'bob') { n = liveBalances.eth; liveLabel = 'BOB Sepolia' }
+    if (a.symbol === 'ARCH' && a.chain === 'arch-testnet') { n = liveBalances.arch; liveLabel = 'Arch Testnet' }
     if (n === null || n === undefined) return a
     return {
       ...a,
@@ -147,7 +151,7 @@ export default function HomeScreen({ onNav }) {
   }
   const effectiveAssets = shownAssets.map(liveRow)
   const assets = effectiveAssets.map(a => ({
-    symbol: a.symbol, name: a.symbol, sub: a.chainLabel, balance: a.balance, fiat: a.fiat,
+    symbol: a.symbol, name: a.symbol, sub: a.chainLabel, balance: a.balance, fiat: a.fiat, chain: a.chain,
   }))
   const totalFiat = effectiveAssets.reduce(
     (sum, a) => sum + parseFloat(a.fiat.replace(/[$,]/g, '')), 0)
@@ -155,7 +159,7 @@ export default function HomeScreen({ onNav }) {
 
   const actions = [
     { label:'Send',    img:'/home/icon_action_send.png',    action: () => onNav('send') },
-    { label:'Receive', img:'/home/icon_action_receive.png', action: () => setShowReceive(true) },
+    { label:'Receive', img:'/home/icon_action_receive.png', action: () => { setReceiveChainId(null); setShowReceive(true) } },
     { label:'Swap',    img:'/home/icon_action_swap.png',    action: () => onNav('swap') },
     { label:'Buy',     img:'/home/icon_action_buy.png',     action: null },
   ]
@@ -168,7 +172,7 @@ export default function HomeScreen({ onNav }) {
         <img src="/logo_nv_orange.png" alt="NV" style={{ width:49, height:22, objectFit:'contain' }}/>
         <div style={{ display:'flex', alignItems:'center', gap:20 }}>
           {/* QR scan icon — outline glyph in the receive-icon style, 22px per the design */}
-          <div onClick={() => setShowReceive(true)} style={{ cursor:'pointer', opacity:0.8, display:'flex' }}>
+          <div onClick={() => { setReceiveChainId(null); setShowReceive(true) }} style={{ cursor:'pointer', opacity:0.8, display:'flex' }}>
             <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
               <rect x="2.5" y="2.5" width="7" height="7" rx="1.2" stroke="rgba(255,255,255,0.8)" strokeWidth="1.4"/>
               <rect x="12.5" y="2.5" width="7" height="7" rx="1.2" stroke="rgba(255,255,255,0.8)" strokeWidth="1.4"/>
@@ -243,7 +247,7 @@ export default function HomeScreen({ onNav }) {
             </div>
           )}
           {assets.map((a, i) => (
-            <div key={i} style={{
+            <div key={i} onClick={() => { setReceiveChainId(a.chain); setShowReceive(true) }} style={{
               display:'flex', alignItems:'center', gap:14,
               background:'#1A1A1A', borderRadius:16,
               padding:'16px', minHeight:72, boxSizing:'border-box',
@@ -275,7 +279,7 @@ export default function HomeScreen({ onNav }) {
       </div>
 
       {/* ── Modals ── */}
-      {showReceive  && <ReceiveModal    onClose={() => setShowReceive(false)}/>}
+      {showReceive  && <ReceiveModal    chainId={receiveChainId} onClose={() => setShowReceive(false)}/>}
       {showSettings && <SettingsScreen onClose={() => setShowSettings(false)} onLogout={() => { lockVault(); setShowSettings(false) }}/>}
     </div>
   )

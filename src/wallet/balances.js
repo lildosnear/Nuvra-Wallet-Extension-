@@ -19,6 +19,7 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { getChain } from '../chains/registry.js'
+import { base58 } from '@scure/base'
 
 const MEMPOOL_MAINNET = 'https://mempool.space/api'
 const MEMPOOL_TESTNET = 'https://mempool.space/testnet4/api'
@@ -91,6 +92,40 @@ export async function fetchErc20Balance(rpcUrl, tokenAddress, address, decimals 
   return Number(BigInt(hex)) / 10 ** decimals
 }
 
+// ── Arch testnet (Arch JSON-RPC, read_account_info) ─────────────
+// An Arch account is a secp256k1 x-only pubkey, base58-encoded for
+// display; the RPC takes the raw 32 bytes as a JSON array and
+// answers with lamports (1 ARCH = 1e9 lamports, Arch's Solana-style
+// unit). A wallet that has never created its on-chain account gets
+// a definite 404 "account is not in database" — that is a true
+// zero, not a failed read. Creating the account needs a signed
+// transaction, which belongs to the signing step.
+export const ARCH_LAMPORTS_PER_ARCH = 1e9
+export async function fetchArchBalance(addressBase58) {
+  try {
+    const pubkey = base58.decode(addressBase58)
+    if (pubkey.length !== 32) return null
+    const res = await fetchWithTimeout(getChain('arch-testnet')?.rpcUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ jsonrpc: '2.0', id: 'curlycurl', method: 'read_account_info', params: [...pubkey] }),
+    })
+    if (!res) return null
+    const j = await res.json().catch(() => null)
+    if (j === null) return null
+    if (j.error) {
+      const msg = String(j.error.message || '')
+      if (j.error.code === 404 || msg.includes('account is not in database')) return 0
+      return null
+    }
+    const lamports = j.result?.lamports
+    if (typeof lamports !== 'number') return null
+    return lamports / ARCH_LAMPORTS_PER_ARCH
+  } catch {
+    return null
+  }
+}
+
 // ── Whole-wallet read ────────────────────────────────────────────
 // TESTNET ONLY this phase (Desmond, 2026-11-19: no mainnet now,
 // testnet first). The wallet reads Bitcoin testnet4 and BOB
@@ -102,14 +137,16 @@ export async function fetchErc20Balance(rpcUrl, tokenAddress, address, decimals 
 export async function loadWalletBalances(addresses) {
   const sepolia = getChain('bob-sepolia')
   const evm = addresses?.bob
-  const [btcTestnet, ethSepolia] = await Promise.all([
+  const [btcTestnet, ethSepolia, arch] = await Promise.all([
     fetchBtcBalance(addresses?.btcTestnet, { testnet: true }),
     fetchEvmNativeBalance(sepolia?.rpcUrl, evm),
+    fetchArchBalance(addresses?.['arch-testnet']),
   ])
   return {
-    // Dashboard-facing keys: both are testnet figures this phase.
+    // Dashboard-facing keys: all are testnet figures this phase.
     btc: btcTestnet,
     eth: ethSepolia,
+    arch,
     btcTestnet,
     ethBobSepolia: ethSepolia,
   }

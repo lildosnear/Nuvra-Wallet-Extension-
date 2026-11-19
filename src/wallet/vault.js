@@ -17,6 +17,7 @@ import { generateMnemonic, validateMnemonic, mnemonicToSeedSync } from '@scure/b
 import { wordlist } from '@scure/bip39/wordlists/english.js'
 import { HDKey } from '@scure/bip32'
 import { p2tr } from '@scure/btc-signer'
+import { base58 } from '@scure/base'
 import { NETWORK, TEST_NETWORK } from '@scure/btc-signer'
 import { base64 } from '@scure/base'
 import { argon2id } from 'hash-wasm'
@@ -116,8 +117,11 @@ export function deriveAddresses(seedBytes) {
     'bob-sepolia': evmAddress,
     btcTestnet: btcTestAddress,
     // Arch has no published derivation in this build; the registry
-    // mock stays for arch-testnet until Arch documents its scheme.
-    'arch-testnet': null,
+    // Arch testnet: an Arch account IS a secp256k1 x-only pubkey
+    // (the Arch SDK builds keypairs exactly this way), shown to
+    // users base58-encoded. It is the same key as the Bitcoin
+    // testnet child above, so one key controls both.
+    'arch-testnet': base58.encode(btcTestChild.publicKey.slice(1)),
     arch: null,
   }
 }
