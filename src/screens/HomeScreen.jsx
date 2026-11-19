@@ -115,15 +115,36 @@ function ReceiveModal({ onClose }) {
 export default function HomeScreen({ onNav }) {
   const [showReceive,  setShowReceive]  = useState(false)
   const [showSettings, setShowSettings] = useState(false)
-  const { selectedChainId, setSelectedChain } = useWallet()
+  const { selectedChainId, setSelectedChain, liveBalances } = useWallet()
 
   // 'all' aggregates every live chain (Arch rows stay hidden until live).
   const shownAssets = ASSETS.filter(a =>
     selectedChainId === 'all' ? a.chain !== 'arch' : a.chain === selectedChainId)
-  const assets = shownAssets.map(a => ({
+  // Step 2 live reads: where the vault's real balance has loaded,
+  // the row shows it (priced with the app's static price table —
+  // a live price feed is still to come). Rows without a verified
+  // read keep the design's figures.
+  const PRICES = { BTC: 67647.62, ETH: 3225 }
+  const fmtAmt = (n) => n.toLocaleString(undefined, {
+    minimumFractionDigits: 0, maximumFractionDigits: n !== 0 && Math.abs(n) < 0.01 ? 6 : 4,
+  })
+  const liveRow = (a) => {
+    if (!liveBalances) return a
+    let n = null
+    if (a.symbol === 'BTC' && a.chain === 'bitcoin') n = liveBalances.btc
+    if (a.symbol === 'ETH' && a.chain === 'bob') n = liveBalances.eth
+    if (n === null || n === undefined) return a
+    return {
+      ...a,
+      balance: `${fmtAmt(n)} ${a.symbol}`,
+      fiat: '$' + (n * PRICES[a.symbol]).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+    }
+  }
+  const effectiveAssets = shownAssets.map(liveRow)
+  const assets = effectiveAssets.map(a => ({
     symbol: a.symbol, name: a.symbol, sub: a.chainLabel, balance: a.balance, fiat: a.fiat,
   }))
-  const totalFiat = shownAssets.reduce(
+  const totalFiat = effectiveAssets.reduce(
     (sum, a) => sum + parseFloat(a.fiat.replace(/[$,]/g, '')), 0)
   const totalStr = '$' + totalFiat.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 

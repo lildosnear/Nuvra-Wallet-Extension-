@@ -20,5 +20,10 @@
   "version": "0.1.0",
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
-  }
+  },
+  "host_permissions": [
+    "https://rpc.gobob.xyz/*",
+    "https://bob-sepolia.rpc.gobob.xyz/*",
+    "https://mempool.space/*"
+  ]
 }

@@ -2,6 +2,7 @@ import React, { createContext, useCallback, useContext, useEffect, useMemo, useS
 import { CHAINS, getChain, isChainLive, MOCK_ADDRESSES } from '../chains/registry.js'
 import { getAdapter } from '../chains/adapter.js'
 import { getSession, vaultExists, lockVault } from '../wallet/vault.js'
+import { loadWalletBalances } from '../wallet/balances.js'
 
 // ═══════════════════════════════════════════════════════════════════
 //   NUVRA WALLET — WALLET CONTEXT (wallet core, UI-facing)
@@ -53,6 +54,16 @@ export function WalletProvider({ children }) {
   const [selectedChainId, setSelectedChainId] = useState(DEFAULT_CHAIN_ID)
   const [hasVault, setHasVault] = useState(false)
   const [session, setSession] = useState(() => getSession())
+  const [liveBalances, setLiveBalances] = useState(null)
+
+  // Step 2: real read-only balances for the unlocked wallet.
+  // Reloads whenever a new session starts; cleared on lock.
+  useEffect(() => {
+    if (!session) { setLiveBalances(null); return }
+    let live = true
+    loadWalletBalances(session.addresses).then((b) => { if (live) setLiveBalances(b) })
+    return () => { live = false }
+  }, [session])
 
   // Follow the vault: existence at boot, then every session change
   // (create, import, unlock, lock, auto-lock) re-syncs the context.
@@ -103,13 +114,14 @@ export function WalletProvider({ children }) {
       chain,
       hasVault,
       unlocked: session !== null,
+      liveBalances,
       lock: lockVault,
       addresses,
       address: chain ? addresses[chain.id] : null,
       adapter: chain ? getAdapter(chain.id) : null,
       getAdapterFor: (id) => getAdapter(id),
     }
-  }, [selectedChainId, setSelectedChain, hasVault, session])
+  }, [selectedChainId, setSelectedChain, hasVault, session, liveBalances])
 
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>
 }
