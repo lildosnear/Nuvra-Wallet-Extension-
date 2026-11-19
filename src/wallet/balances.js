@@ -12,6 +12,7 @@
 //     eth_call balanceOf for ERC-20s)
 //   - BOB token on BOB mainnet: 0xB0BD…60808 — the contract itself
 //     answers symbol() "BOB" and decimals() 18 on the mainnet RPC.
+//     Verified and kept ready; NOT read in the testnet phase.
 //
 //   A failed read returns null (never a made-up number); the UI
 //   keeps its previous value for that row when a read fails.
@@ -91,28 +92,25 @@ export async function fetchErc20Balance(rpcUrl, tokenAddress, address, decimals 
 }
 
 // ── Whole-wallet read ────────────────────────────────────────────
+// TESTNET ONLY this phase (Desmond, 2026-11-19: no mainnet now,
+// testnet first). The wallet reads Bitcoin testnet4 and BOB
+// Sepolia; no mainnet endpoint is called at all until Desmond
+// opens the mainnet phase. The mainnet helpers above stay in the
+// module for that phase, unused by this loader.
 // Returns plain numbers in whole units; null means that read
 // failed (or the address does not exist), never a guess.
 export async function loadWalletBalances(addresses) {
-  const bob = getChain('bob')
   const sepolia = getChain('bob-sepolia')
   const evm = addresses?.bob
-  const [btc, btcTestnet, ethMain, ethSepolia, bobToken] = await Promise.all([
-    fetchBtcBalance(addresses?.bitcoin),
+  const [btcTestnet, ethSepolia] = await Promise.all([
     fetchBtcBalance(addresses?.btcTestnet, { testnet: true }),
-    fetchEvmNativeBalance(bob?.rpcUrl, evm),
     fetchEvmNativeBalance(sepolia?.rpcUrl, evm),
-    fetchErc20Balance(bob?.rpcUrl, BOB_TOKEN_MAINNET.address, evm, BOB_TOKEN_MAINNET.decimals),
   ])
-  const ethParts = [ethMain, ethSepolia].filter((v) => v !== null)
   return {
-    btc,
+    // Dashboard-facing keys: both are testnet figures this phase.
+    btc: btcTestnet,
+    eth: ethSepolia,
     btcTestnet,
-    ethBobMainnet: ethMain,
     ethBobSepolia: ethSepolia,
-    // The dashboard's ETH row merges BOB mainnet + Sepolia, so the
-    // live figure is their sum (or whichever side answered).
-    eth: ethParts.length ? ethParts.reduce((a, b) => a + b, 0) : null,
-    bobMainnet: bobToken,
   }
 }

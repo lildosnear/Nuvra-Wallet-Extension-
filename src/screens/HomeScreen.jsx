@@ -131,11 +131,16 @@ export default function HomeScreen({ onNav }) {
   const liveRow = (a) => {
     if (!liveBalances) return a
     let n = null
-    if (a.symbol === 'BTC' && a.chain === 'bitcoin') n = liveBalances.btc
-    if (a.symbol === 'ETH' && a.chain === 'bob') n = liveBalances.eth
+    let liveLabel = null
+    // Testnet phase: the live figures are Bitcoin testnet and BOB
+    // Sepolia figures, and the row label says so — a testnet number
+    // never sits under a mainnet label.
+    if (a.symbol === 'BTC' && a.chain === 'bitcoin') { n = liveBalances.btc; liveLabel = 'Bitcoin Testnet' }
+    if (a.symbol === 'ETH' && a.chain === 'bob') { n = liveBalances.eth; liveLabel = 'BOB Sepolia' }
     if (n === null || n === undefined) return a
     return {
       ...a,
+      chainLabel: liveLabel,
       balance: `${fmtAmt(n)} ${a.symbol}`,
       fiat: '$' + (n * PRICES[a.symbol]).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
     }

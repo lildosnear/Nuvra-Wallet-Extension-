@@ -49,22 +49,18 @@ test('erc20 balanceOf: raw value scales by decimals', async () => {
   assert.equal(await fetchErc20Balance('https://rpc.example', '0xB0BD54846a92b214C04A63B26AD7Dc5e19A60808', ADDR, 18), 2500)
 })
 
-test('loadWalletBalances: ETH row sums mainnet and Sepolia, failures stay null', async () => {
+test('loadWalletBalances: testnet only — mainnet endpoints are never read', async () => {
   stubFetch([
-    ['testnet4', { chain_stats: { funded_txo_sum: 5000, spent_txo_sum: 0 }, mempool_stats: { funded_txo_sum: 0, spent_txo_sum: 0 } }],
-    ['mempool.space', { chain_stats: { funded_txo_sum: 100000, spent_txo_sum: 0 }, mempool_stats: { funded_txo_sum: 0, spent_txo_sum: 0 } }],
+    ['testnet4', { chain_stats: { funded_txo_sum: 265092, spent_txo_sum: 0 }, mempool_stats: { funded_txo_sum: 0, spent_txo_sum: 0 } }],
+    // Trap routes: if the loader touched mainnet, these distinctive
+    // values would leak into the result and fail the asserts below.
+    ['mempool.space', { chain_stats: { funded_txo_sum: 999999999, spent_txo_sum: 0 }, mempool_stats: { funded_txo_sum: 0, spent_txo_sum: 0 } }],
     ['bob-sepolia', { jsonrpc: '2.0', id: 1, result: '0x1bc16d674ec8000' }], // 0.125 ETH
-    ['rpc.gobob.xyz', (options) => {
-      const body = JSON.parse(options.body)
-      if (body.method === 'eth_getBalance') return { jsonrpc: '2.0', id: 1, result: '0x3782dace9d90000' } // 0.25 ETH
-      return { jsonrpc: '2.0', id: 1, result: '0x0' } // BOB token: 0
-    }],
+    ['rpc.gobob.xyz', { jsonrpc: '2.0', id: 1, result: '0x7ce66c50e2840000' }], // 9 ETH trap
   ])
   const b = await loadWalletBalances({ bitcoin: 'bc1px', btcTestnet: 'tb1px', bob: ADDR })
-  assert.equal(b.btc, 0.001)
-  assert.equal(b.btcTestnet, 0.00005)
-  assert.equal(b.ethBobMainnet, 0.25)
+  assert.equal(b.btc, 0.00265092)
+  assert.equal(b.btcTestnet, 0.00265092)
+  assert.equal(b.eth, 0.125)
   assert.equal(b.ethBobSepolia, 0.125)
-  assert.equal(b.eth, 0.375)
-  assert.equal(b.bobMainnet, 0)
 })
