@@ -73,12 +73,13 @@ const MENU_ITEMS = [
 // The Figma menu is TWO cards: account + preferences, then the rest.
 const MENU_GROUPS = [MENU_ITEMS.slice(0, 2), MENU_ITEMS.slice(2)]
 
-export default function SettingsScreen({ onClose }) {
+export default function SettingsScreen({ onClose, onLogout }) {
   const [hovered, setHovered] = useState(null)
 
   const handleItem = (id) => {
     if (id === 'logout') {
-      onClose()
+      if (onLogout) onLogout()
+      else onClose()
     }
     // Add navigation for other items as needed
   }

@@ -186,7 +186,7 @@ function StepCreateAccount({ onNext, onAlreadyHave }) {
       {/* Footer */}
       <div style={{ padding:'16px 22px 32px', flexShrink:0 }}>
         <button
-          onClick={onNext}
+          onClick={() => onNext({ email, pw })}
           disabled={!valid}
           style={{
             width:'100%', height:54, borderRadius:30,
@@ -331,7 +331,7 @@ function StepReferral({ onNext, onSkip }) {
 /* ════════════════════════════════════════════
    ROOT SignUpScreen
 ════════════════════════════════════════════ */
-export default function SignUpScreen({ onDone, onBack, onLogin }) {
+export default function SignUpScreen({ onDone, onBack, onLogin, onCredentials }) {
   const [step, setStep] = useState(0) // 0 = create account, 1 = referral
 
   return (
@@ -349,7 +349,7 @@ export default function SignUpScreen({ onDone, onBack, onLogin }) {
         <div className={`screen ${step === 0 ? 'active' : 'left'}`}
           style={{ background:'#101010' }}>
           <StepCreateAccount
-            onNext={() => setStep(1)}
+            onNext={(creds) => { if (onCredentials) onCredentials(creds); setStep(1) }}
             onAlreadyHave={onLogin || onBack}
           />
         </div>

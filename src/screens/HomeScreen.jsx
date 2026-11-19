@@ -4,6 +4,7 @@ import PromoBanner from '../components/PromoBanner'
 import { useWallet } from '../wallet/WalletContext'
 import { ASSETS } from '../data/constants'
 import { getChain, MOCK_ADDRESSES } from '../chains/registry'
+import { lockVault } from '../wallet/vault.js'
 
 // ── Token icons ───────────────────────────────────────────────────────────────
 const TOKEN_IMG = {
@@ -51,7 +52,7 @@ function ReceiveModal({ onClose }) {
   const wallet = useWallet()
   // In the 'All chains' aggregate view, Receive defaults to BOB.
   const chain = wallet.chain || getChain('bob')
-  const address = MOCK_ADDRESSES[chain.id]
+  const address = wallet.addresses[chain.id] || MOCK_ADDRESSES[chain.id]
 
   const copyAddress = async () => {
     try {
@@ -249,7 +250,7 @@ export default function HomeScreen({ onNav }) {
 
       {/* ── Modals ── */}
       {showReceive  && <ReceiveModal    onClose={() => setShowReceive(false)}/>}
-      {showSettings && <SettingsScreen  onClose={() => setShowSettings(false)}/>}
+      {showSettings && <SettingsScreen onClose={() => setShowSettings(false)} onLogout={() => { lockVault(); setShowSettings(false) }}/>}
     </div>
   )
 }

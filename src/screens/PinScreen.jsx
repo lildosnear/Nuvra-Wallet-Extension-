@@ -7,17 +7,18 @@ const KEYPAD_ROWS = [
   ['.', '0', '←'],
 ]
 
-export default function PinScreen({ onDone }) {
+export default function PinScreen({ onDone, mode = 'create', onComplete, onUnlock }) {
   const [pin,   setPin]   = useState('')
   const [state, setState] = useState('idle')   // idle | error | success
-  const [phase, setPhase] = useState('set')    // set  | confirm
+  const [phase, setPhase] = useState(mode === 'unlock' ? 'unlock' : 'set') // set | confirm | unlock
   const [first, setFirst] = useState('')
+  const [busy,  setBusy]  = useState(false)
   const wrapRef = useRef(null)
   const MAX = 4
 
   /* ── handle key press ── */
   const press = (k) => {
-    if (state === 'success') return
+    if (state === 'success' || busy) return
     if (k === '←') {
       setPin(p => p.slice(0, -1))
       if (state === 'error') setState('idle')
@@ -30,8 +31,30 @@ export default function PinScreen({ onDone }) {
     if (next.length === MAX) setTimeout(() => evaluate(next), 160)
   }
 
+  const shakeError = () => {
+    setState('error')
+    if (wrapRef.current) {
+      wrapRef.current.style.animation = 'pin_shake 0.45s ease'
+      setTimeout(() => { if (wrapRef.current) wrapRef.current.style.animation = '' }, 460)
+    }
+    setTimeout(() => { setPin(''); setState('idle') }, 900)
+  }
+
   /* ── evaluate completed PIN ── */
-  const evaluate = (entered) => {
+  const evaluate = async (entered) => {
+    if (phase === 'unlock') {
+      setBusy(true)
+      let ok = false
+      try { ok = onUnlock ? await onUnlock(entered) : true } catch { ok = false }
+      setBusy(false)
+      if (ok) {
+        setState('success')
+        setTimeout(onDone, 900)
+      } else {
+        shakeError()
+      }
+      return
+    }
     if (phase === 'set') {
       setFirst(entered)
       setPin('')
@@ -40,14 +63,14 @@ export default function PinScreen({ onDone }) {
     } else {
       if (entered === first) {
         setState('success')
+        if (onComplete) {
+          setBusy(true)
+          try { await onComplete(entered) } catch { /* vault errors surface on the seed step */ }
+          setBusy(false)
+        }
         setTimeout(onDone, 900)
       } else {
-        setState('error')
-        if (wrapRef.current) {
-          wrapRef.current.style.animation = 'pin_shake 0.45s ease'
-          setTimeout(() => { if (wrapRef.current) wrapRef.current.style.animation = '' }, 460)
-        }
-        setTimeout(() => { setPin(''); setState('idle') }, 900)
+        shakeError()
       }
     }
   }
@@ -100,7 +123,8 @@ export default function PinScreen({ onDone }) {
             style={{ width: 49, height: 22, objectFit: 'contain', flexShrink: 0 }}
           />
 
-          {/* Back pill */}
+          {/* Back pill (create flow only) */}
+          {mode !== 'unlock' && (
           <div
             onClick={() => { setPin(''); setState('idle'); setPhase('set'); setFirst('') }}
             style={{
@@ -123,6 +147,8 @@ export default function PinScreen({ onDone }) {
           >
             Back
           </div>
+          )}
+          {mode === 'unlock' && <div style={{ width: 64 }} />}
         </div>
 
         {/* ── LOCK ILLUSTRATION ── */}
@@ -162,7 +188,7 @@ export default function PinScreen({ onDone }) {
           marginBottom: 18,
           flexShrink: 0,
         }}>
-          {phase === 'set' ? 'Enter Pin code' : 'Confirm Pin code'}
+          {phase === 'confirm' ? 'Confirm Pin code' : 'Enter Pin code'}
         </div>
 
         {/* ── 4 DOTS ── */}

@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { CHAINS, getChain, isChainLive, MOCK_ADDRESSES } from '../chains/registry.js'
 import { getAdapter } from '../chains/adapter.js'
+import { getSession, vaultExists, lockVault } from '../wallet/vault.js'
 
 // ═══════════════════════════════════════════════════════════════════
 //   NUVRA WALLET — WALLET CONTEXT (wallet core, UI-facing)
@@ -50,6 +51,18 @@ function isSelectable(id) {
 
 export function WalletProvider({ children }) {
   const [selectedChainId, setSelectedChainId] = useState(DEFAULT_CHAIN_ID)
+  const [hasVault, setHasVault] = useState(false)
+  const [session, setSession] = useState(() => getSession())
+
+  // Follow the vault: existence at boot, then every session change
+  // (create, import, unlock, lock, auto-lock) re-syncs the context.
+  useEffect(() => {
+    let live = true
+    vaultExists().then((v) => { if (live) setHasVault(v) })
+    const sync = () => { setSession(getSession()); vaultExists().then(setHasVault) }
+    window.addEventListener('nuvra:session-changed', sync)
+    return () => { live = false; window.removeEventListener('nuvra:session-changed', sync) }
+  }, [])
 
   // Keep the stored value in step with the locked 'all' view, so a
   // chain picked back when switching existed does not resurface.
@@ -73,19 +86,30 @@ export function WalletProvider({ children }) {
 
   const value = useMemo(() => {
     const chain = selectedChainId === 'all' ? null : getChain(selectedChainId)
+    // Real vault addresses win wherever the vault derives them;
+    // chains without a derivation yet (Arch testnet) keep the
+    // registry example address until their scheme is wired.
+    const addresses = { ...MOCK_ADDRESSES }
+    if (session) {
+      for (const [id, addr] of Object.entries(session.addresses)) {
+        if (addr) addresses[id] = addr
+      }
+    }
     return {
       chains: CHAINS,
       selectedChainId,
       setSelectedChain,
       // null in the 'all' aggregate view
       chain,
-      // Mock per-chain accounts (example addresses — no real keys)
-      addresses: MOCK_ADDRESSES,
-      address: chain ? MOCK_ADDRESSES[chain.id] : null,
+      hasVault,
+      unlocked: session !== null,
+      lock: lockVault,
+      addresses,
+      address: chain ? addresses[chain.id] : null,
       adapter: chain ? getAdapter(chain.id) : null,
       getAdapterFor: (id) => getAdapter(id),
     }
-  }, [selectedChainId, setSelectedChain])
+  }, [selectedChainId, setSelectedChain, hasVault, session])
 
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>
 }

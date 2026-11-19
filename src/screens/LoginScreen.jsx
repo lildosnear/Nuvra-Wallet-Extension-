@@ -90,10 +90,22 @@ function TopLogo() {
    Login — same design as Create an Account,
    email + password only
 ════════════════════════════════════════════ */
-export default function LoginScreen({ onDone, onCreateAccount }) {
+export default function LoginScreen({ onDone, onCreateAccount, onLogin, onImport }) {
   const [email,  setEmail]  = useState('')
   const [pw,     setPw]     = useState('')
   const [focusF, setFocusF] = useState(null)
+  const [error,  setError]  = useState('')
+  const [busy,   setBusy]   = useState(false)
+
+  const attempt = async () => {
+    if (!valid || busy) return
+    if (!onLogin) { onDone(); return }
+    setBusy(true); setError('')
+    const res = await onLogin(email, pw)
+    setBusy(false)
+    if (res && res.ok) onDone()
+    else setError((res && res.error) || 'That email or password is not correct.')
+  }
 
   const valid = email.includes('@') && pw.length >= 6
 
@@ -149,13 +161,18 @@ export default function LoginScreen({ onDone, onCreateAccount }) {
           />
         </div>
 
+        {error && (
+          <div style={{ marginTop:14, fontSize:12.5, lineHeight:1.5, color:'#FF8A5C',
+            fontFamily:'DM Sans,sans-serif' }}>{error}</div>
+        )}
+
       </div>
 
       {/* Footer */}
       <div style={{ padding:'16px 22px 32px', flexShrink:0 }}>
         <button
-          onClick={onDone}
-          disabled={!valid}
+          onClick={attempt}
+          disabled={!valid || busy}
           style={{
             width:'100%', height:54, borderRadius:30,
             background: valid
@@ -186,6 +203,14 @@ export default function LoginScreen({ onDone, onCreateAccount }) {
           onMouseLeave={e => e.currentTarget.style.background='#000'}>
           Create an account
         </button>
+
+        {onImport && (
+          <div onClick={onImport}
+            style={{ textAlign:'center', fontSize:13, color:'#EC641D',
+              fontFamily:'DM Sans,sans-serif', cursor:'pointer', marginBottom:14 }}>
+            Import with seed phrase
+          </div>
+        )}
 
         <div style={{ textAlign:'center', fontSize:11,
           color:'rgba(255,255,255,0.3)',

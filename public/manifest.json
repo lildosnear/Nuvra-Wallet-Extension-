@@ -1,1 +1,24 @@
-{"action":{"default_popup":"index.html","default_title":"Nuvra Wallet"},"background":{"service_worker":"background.js"},"description":"Nuvra — the Bitcoin wallet for every BTC chain. BOB mainnet first, Arch when it goes live.","icons":{"128":"logo_nv_orange.png","16":"logo_nv_orange.png","48":"logo_nv_orange.png"},"manifest_version":3,"name":"Nuvra Wallet","permissions":["storage"],"version":"0.1.0"}
+{
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Nuvra Wallet"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "description": "Nuvra \u2014 the Bitcoin wallet for every BTC chain. BOB mainnet first, Arch when it goes live.",
+  "icons": {
+    "128": "logo_nv_orange.png",
+    "16": "logo_nv_orange.png",
+    "48": "logo_nv_orange.png"
+  },
+  "manifest_version": 3,
+  "name": "Nuvra Wallet",
+  "permissions": [
+    "storage"
+  ],
+  "version": "0.1.0",
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  }
+}
