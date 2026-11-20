@@ -239,6 +239,21 @@ export async function verifyLogin(email, password) {
   return true
 }
 
+// PIN check for transaction confirmation: tries the PIN wrapping
+// without touching the live session. True only if the PIN decrypts
+// the seed.
+export async function verifyPin(pin) {
+  const blob = await storage.get(VAULT_KEY)
+  if (!blob) return false
+  try {
+    const pinKey = await deriveCredentialKey(pin, dec(blob.saltPin), blob.kdf)
+    await aesDecrypt(pinKey, blob.seedByPin)
+    return true
+  } catch {
+    return false
+  }
+}
+
 export async function unlockWithPin(pin) {
   const blob = await storage.get(VAULT_KEY)
   if (!blob) throw fail('NO_VAULT', 'No wallet exists on this device yet.')

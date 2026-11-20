@@ -5,6 +5,17 @@ import { useWallet } from '../wallet/WalletContext'
 import { ASSETS } from '../data/constants'
 import { getChain } from '../chains/registry'
 import { validateAddress, detectAddressFamily, familyLabel } from '../chains/adapter'
+import { getSendRoute, validateSendAddress, estimateSend, sendToken } from '../wallet/send'
+import { verifyPin } from '../wallet/vault'
+
+// Indicative prices, the same static table the dashboard uses.
+const FIAT_USD = { BTC: 67647.62, ETH: 3225, ARCH: 1.48 }
+const fiatOf = (symbol, amount) => {
+  const p = FIAT_USD[symbol]
+  const n = parseFloat(amount)
+  if (!p || !n) return null
+  return '$' + (n * p).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+}
 
 const TOKEN_IMG = {
   BTC:  '/home/token_btc.png',
@@ -27,7 +38,7 @@ function TokIcon({ t, size=32 }) {
   return <div style={{ width:size, height:size, borderRadius:'50%', background:'rgba(236,100,29,0.2)', display:'flex', alignItems:'center', justifyContent:'center' }}><span style={{ fontSize:size*0.4, color:'#EC641D', fontWeight:700 }}>{t?.symbol?.[0] || '?'}</span></div>
 }
 
-function ConfirmModal({ token, amount, addr, onClose, onConfirm }) {
+function ConfirmModal({ token, amount, addr, fiatText, feeText, networkLabel, unsupported, onClose, onConfirm }) {
   return (
     <div style={{ position:'absolute', inset:0, background:'rgba(0,0,0,0.82)', zIndex:80, display:'flex', alignItems:'flex-end', backdropFilter:'blur(8px)' }} onClick={onClose}>
       <div style={{ width:'100%', background:'#101010', borderRadius:'24px 24px 0 0', border:'1px solid rgba(255,255,255,0.1)', borderBottom:'none', padding:'0 0 40px', animation:'slideUp 0.3s cubic-bezier(0.4,0,0.2,1)' }} onClick={e => e.stopPropagation()}>
@@ -43,7 +54,7 @@ function ConfirmModal({ token, amount, addr, onClose, onConfirm }) {
           <TokIcon t={token} size={56}/>
         </div>
         <div style={{ textAlign:'center', fontFamily:'DM Sans,sans-serif', fontSize:20, fontWeight:700, color:'#fff', marginBottom:4 }}>{token.symbol}</div>
-        <div style={{ textAlign:'center', fontSize:13, color:'#959595', fontFamily:'DM Sans,sans-serif', marginBottom:14 }}>{amount} {token.symbol} ~ 120 USDC</div>
+        <div style={{ textAlign:'center', fontSize:13, color:'#959595', fontFamily:'DM Sans,sans-serif', marginBottom:14 }}>{amount} {token.symbol}{fiatText ? ` ~ ${fiatText}` : ''}</div>
 
         {/* Address */}
         <div style={{ margin:'0 20px 18px', background:'#1A1A1A', border:'1px solid rgba(255,255,255,0.06)', borderRadius:24, padding:'10px 14px', display:'flex', alignItems:'center', gap:8 }}>
@@ -60,18 +71,30 @@ function ConfirmModal({ token, amount, addr, onClose, onConfirm }) {
               <span style={{ fontSize:14, fontWeight:600, color:'#fff', fontFamily:'DM Sans,sans-serif' }}>= {amount}</span>
             </div>
           </div>
+          {networkLabel && (
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'13px 16px', borderBottom:'1px solid rgba(255,255,255,0.06)' }}>
+              <span style={{ fontSize:14, color:'#959595', fontFamily:'DM Sans,sans-serif' }}>Network:</span>
+              <span style={{ fontSize:14, fontWeight:600, color:'#fff', fontFamily:'DM Sans,sans-serif' }}>{networkLabel}</span>
+            </div>
+          )}
           <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'13px 16px' }}>
             <div style={{ display:'flex', alignItems:'center', gap:6 }}>
               <span style={{ fontSize:14, color:'#959595', fontFamily:'DM Sans,sans-serif' }}>Est. Fee:</span>
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#959595" strokeWidth="1.1"/><path d="M7 6.2V9.5M7 4.2V4.6" stroke="#959595" strokeWidth="1.2" strokeLinecap="round"/></svg>
             </div>
-            <span style={{ fontSize:14, fontWeight:600, color:'#fff', fontFamily:'DM Sans,sans-serif' }}>$1.20</span>
+            <span style={{ fontSize:14, fontWeight:600, color:'#fff', fontFamily:'DM Sans,sans-serif' }}>{feeText || '—'}</span>
           </div>
         </div>
 
-        <div style={{ display:'flex', justifyContent:'center', paddingBottom:4 }}>
-          <SlideButton label="Slide to send" onConfirm={onConfirm}/>
-        </div>
+        {unsupported ? (
+          <div style={{ margin:'0 20px', fontSize:13, color:'#ff8a5c', fontFamily:'DM Sans,sans-serif', lineHeight:1.6, textAlign:'center' }}>
+            Sending {token.symbol} is not available in this testnet build yet. BTC on Bitcoin Testnet and ETH on BOB Sepolia are live.
+          </div>
+        ) : (
+          <div style={{ display:'flex', justifyContent:'center', paddingBottom:4 }}>
+            <SlideButton label="Slide to send" onConfirm={onConfirm}/>
+          </div>
+        )}
       </div>
     </div>
   )
@@ -95,7 +118,7 @@ function Processing() {
 }
 
 // Success screen
-function SendSuccess({ token, amount, addr, onDone }) {
+function SendSuccess({ token, amount, addr, fiatText, explorerUrl, onDone }) {
   const displayAddr = addr
     ? addr.length > 26 ? addr.slice(0, 14) + '...' + addr.slice(-8) : addr
     : 'recipient'
@@ -137,7 +160,7 @@ function SendSuccess({ token, amount, addr, onDone }) {
         {/* Amount line */}
         <div style={{ fontSize:13, color:'#959595',
           fontFamily:'DM Sans,sans-serif', marginBottom:4 }}>
-          {amount} {token.symbol} ~ 120 USDC
+          {amount} {token.symbol}{fiatText ? ` ~ ${fiatText}` : ''}
         </div>
 
         {/* "to" label */}
@@ -193,7 +216,7 @@ function SendSuccess({ token, amount, addr, onDone }) {
               </svg>
             )},
           ].map(({ label, icon }) => (
-            <div key={label} style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:8, cursor:'pointer' }}>
+            <div key={label} onClick={() => { if (label === 'View Transaction' && explorerUrl) window.open(explorerUrl, '_blank') }} style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:8, cursor:'pointer' }}>
               <div style={{ width:48, height:48, borderRadius:'50%',
                 background:'#000', border:'1px solid rgba(255,255,255,0.1)',
                 display:'flex', alignItems:'center', justifyContent:'center' }}>
@@ -210,7 +233,7 @@ function SendSuccess({ token, amount, addr, onDone }) {
 }
 
 export default function SendScreen({ onBack, onSuccessView }) {
-  const { selectedChainId } = useWallet()
+  const { selectedChainId, liveBalances, refreshBalances } = useWallet()
   const TOKENS = tokensForChain(selectedChainId)
   const [tokenSymbol, setTokenSymbol] = useState(null)
   const token = TOKENS.find(t => t.symbol === tokenSymbol) || TOKENS[0]
@@ -220,28 +243,71 @@ export default function SendScreen({ onBack, onSuccessView }) {
   const [showTok, setShowTok] = useState(false)
   const [phase,   setPhase]   = useState('form') // form | confirm | pin | processing | success
   const [showPin, setShowPin] = useState(false)
+  const [estimating, setEstimating] = useState(false)
+  const [sendError, setSendError] = useState(null)
+  const [feeInfo, setFeeInfo] = useState(null)
+  const [result, setResult] = useState(null)
 
   // Success screen shows no bottom nav (Figma).
   useEffect(() => { onSuccessView && onSuccessView(phase === 'success') }, [phase])
 
-  // Validate the recipient against the token's chain (which follows the
-  // selected chain). A wrong-chain paste gets a specific explanation.
+  // Validate the recipient against the network this build actually
+  // sends on. BTC sends run on Bitcoin Testnet in this phase, so a
+  // mainnet bc1 address is rejected with that explanation.
+  const route = token ? getSendRoute(token) : null
   const sendChain = token ? getChain(token.chain) : null
   const addrTrimmed = addr.trim()
-  const addrValid = !!token && validateAddress(token.chain, addrTrimmed)
+  const addrValid = !!token && (route
+    ? validateSendAddress(route, addrTrimmed)
+    : validateAddress(token.chain, addrTrimmed))
   const addrFamily = addrTrimmed && !addrValid ? detectAddressFamily(addrTrimmed) : null
   const addrError = !addrTrimmed || addrValid ? null
-    : addrFamily && sendChain && addrFamily !== sendChain.addressFormat && !(addrFamily === 'evm' && sendChain.type === 'evm')
-      ? `This looks like a ${familyLabel(addrFamily)} address. You are sending on ${sendChain.name} — paste a ${sendChain.addressFormatLabel} address, or switch chains.`
-      : `Enter a valid ${sendChain ? sendChain.name : ''} address (${sendChain ? sendChain.addressFormatLabel : ''}).`
+    : route?.kind === 'btc-testnet'
+      ? addrTrimmed.startsWith('bc1')
+        ? 'This looks like a Bitcoin mainnet address. This build sends on Bitcoin Testnet only, so paste a tb1 address.'
+        : 'Enter a valid Bitcoin Testnet address (tb1…).'
+      : addrFamily && sendChain && addrFamily !== sendChain.addressFormat && !(addrFamily === 'evm' && sendChain.type === 'evm')
+        ? `This looks like a ${familyLabel(addrFamily)} address. You are sending on ${sendChain.name} — paste a ${sendChain.addressFormatLabel} address, or switch chains.`
+        : `Enter a valid ${sendChain ? sendChain.name : ''} address (${sendChain ? sendChain.addressFormatLabel : ''}).`
 
   const valid = addrValid && parseFloat(amount) > 0
 
-  if (phase === 'processing') {
-    setTimeout(() => setPhase('success'), 1800)
-    return <Processing/>
+  // The real send: build, sign and broadcast while the processing
+  // ring shows. Success carries the real transaction id; any failure
+  // returns to the form with the reason in plain language.
+  useEffect(() => {
+    if (phase !== 'processing') return
+    let live = true
+    sendToken({ token, to: addrTrimmed, amountText: amount })
+      .then((r) => { if (!live) return; setResult(r); setPhase('success'); refreshBalances() })
+      .catch((e) => { if (!live) return; setSendError(e.message); setPhase('form') })
+    return () => { live = false }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase])
+
+  const pressSend = async () => {
+    setSendError(null)
+    if (!route) { setFeeInfo(null); setPhase('confirm'); return }
+    setEstimating(true)
+    try {
+      const info = await estimateSend({ token, to: addrTrimmed, amountText: amount })
+      setFeeInfo(info)
+      setPhase('confirm')
+    } catch (e) {
+      setSendError(e.message)
+    } finally {
+      setEstimating(false)
+    }
   }
-  if (phase === 'success') return <SendSuccess token={token} amount={amount} addr={addr} onDone={() => { setPhase('form'); setAmount(''); setAddr('') }}/>
+
+  const displayBalance = route?.kind === 'btc-testnet' && liveBalances
+    ? `${liveBalances.btc ?? '—'} BTC`
+    : route?.kind === 'evm-sepolia' && liveBalances
+      ? `${liveBalances.eth ?? '—'} ETH`
+      : token.balance
+
+  if (phase === 'processing') return <Processing/>
+  if (phase === 'success') return <SendSuccess token={token} amount={amount} addr={addr} fiatText={fiatOf(token.symbol, amount)} explorerUrl={result?.explorerUrl} onDone={() => { setPhase('form'); setAmount(''); setAddr(''); setResult(null) }}/>
 
   return (
     <div style={{ flex:1, display:'flex', flexDirection:'column', background:'#101010', position:'relative' }}>
@@ -299,7 +365,7 @@ export default function SendScreen({ onBack, onSuccessView }) {
         <div style={{ background:'#1F1F1F', borderRadius:16, padding:'16px', minHeight:110, boxSizing:'border-box', marginBottom:24, display:'flex', flexDirection:'column' }}>
           <div style={{ display:'flex', justifyContent:'space-between', marginBottom:10 }}>
             <span style={{ fontSize:12, color:'#959595', fontFamily:'DM Sans,sans-serif' }}>Enter Amount</span>
-            <span style={{ fontSize:12, color:'#959595', fontFamily:'DM Sans,sans-serif' }}>Balance: {token.balance}</span>
+            <span style={{ fontSize:12, color:'#959595', fontFamily:'DM Sans,sans-serif' }}>Balance: {displayBalance}</span>
           </div>
           <div style={{ flex:1 }}>
             <input value={amount} onChange={e => setAmount(e.target.value.replace(/[^0-9.]/g,''))} placeholder="0.00"
@@ -317,7 +383,12 @@ export default function SendScreen({ onBack, onSuccessView }) {
 
       {/* SEND BUTTON */}
       <div style={{ padding:'0 20px 20px', flexShrink:0 }}>
-        <button onClick={() => setPhase('confirm')} disabled={!valid}
+        {sendError && (
+          <div style={{ fontSize:12, color:'#ff8a5c', fontFamily:'DM Sans,sans-serif', lineHeight:1.5, marginBottom:12 }}>
+            {sendError}
+          </div>
+        )}
+        <button onClick={pressSend} disabled={!valid || estimating}
           style={{ width:'100%', height:54, borderRadius:30, background: valid ? 'linear-gradient(135deg,#F0834A,#EC641D)' : '#5E280C', border:'none', color: valid ? '#fff' : 'rgba(0,0,0,0.55)', fontFamily:'DM Sans,sans-serif', fontSize:15, fontWeight:700, cursor: valid ? 'pointer' : 'default', transition:'all 0.2s', boxShadow: valid ? '0 8px 24px rgba(236,100,29,0.35)' : 'none' }}>
           Send
         </button>
@@ -353,6 +424,10 @@ export default function SendScreen({ onBack, onSuccessView }) {
       {/* Confirm modal */}
       {phase === 'confirm' && (
         <ConfirmModal token={token} amount={amount} addr={addr}
+          fiatText={fiatOf(token.symbol, amount)}
+          feeText={feeInfo?.feeText}
+          networkLabel={route?.networkLabel}
+          unsupported={!route}
           onClose={() => setPhase('form')}
           onConfirm={() => { setShowPin(true) }}/>
       )}
@@ -361,6 +436,7 @@ export default function SendScreen({ onBack, onSuccessView }) {
       {showPin && (
         <PinModal
           title="Confirm Transaction"
+          verify={verifyPin}
           onSuccess={() => { setShowPin(false); setPhase('processing') }}
           onCancel={() => { setShowPin(false) }}
         />

@@ -10,7 +10,7 @@ const SAVED_PIN = '1234' // In production this would come from secure storage
  * onSuccess() is called when the correct PIN is entered.
  * onCancel() is called when the user dismisses (Back pill).
  */
-export default function PinModal({ onSuccess, onCancel, title = 'Enter Pin code' }) {
+export default function PinModal({ onSuccess, onCancel, title = 'Enter Pin code', verify }) {
   const [pin,   setPin]   = useState('')
   const [state, setState] = useState('idle') // idle | error | success
   const wrapRef = useRef(null)
@@ -26,8 +26,11 @@ export default function PinModal({ onSuccess, onCancel, title = 'Enter Pin code'
     if (next.length === MAX) setTimeout(() => evaluate(next), 160)
   }
 
-  const evaluate = (entered) => {
-    if (entered === SAVED_PIN) {
+  const evaluate = async (entered) => {
+    // When a verify function is supplied (the real vault PIN check),
+    // it decides; otherwise the legacy demo PIN applies.
+    const ok = verify ? await verify(entered).catch(() => false) : entered === SAVED_PIN
+    if (ok) {
       setState('success')
       setTimeout(onSuccess, 700)
     } else {

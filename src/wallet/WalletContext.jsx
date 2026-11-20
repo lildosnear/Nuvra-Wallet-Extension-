@@ -65,6 +65,11 @@ export function WalletProvider({ children }) {
     return () => { live = false }
   }, [session])
 
+  const refreshBalances = useCallback(() => {
+    const s = getSession()
+    if (s) loadWalletBalances(s.addresses).then(setLiveBalances)
+  }, [])
+
   // Follow the vault: existence at boot, then every session change
   // (create, import, unlock, lock, auto-lock) re-syncs the context.
   useEffect(() => {
@@ -98,8 +103,8 @@ export function WalletProvider({ children }) {
   const value = useMemo(() => {
     const chain = selectedChainId === 'all' ? null : getChain(selectedChainId)
     // Real vault addresses win wherever the vault derives them;
-    // chains without a derivation yet (Arch testnet) keep the
-    // registry example address until their scheme is wired.
+    // anything the vault does not derive keeps the registry
+    // example address.
     const addresses = { ...MOCK_ADDRESSES }
     if (session) {
       for (const [id, addr] of Object.entries(session.addresses)) {
@@ -115,13 +120,14 @@ export function WalletProvider({ children }) {
       hasVault,
       unlocked: session !== null,
       liveBalances,
+      refreshBalances,
       lock: lockVault,
       addresses,
       address: chain ? addresses[chain.id] : null,
       adapter: chain ? getAdapter(chain.id) : null,
       getAdapterFor: (id) => getAdapter(id),
     }
-  }, [selectedChainId, setSelectedChain, hasVault, session, liveBalances])
+  }, [selectedChainId, setSelectedChain, hasVault, session, liveBalances, refreshBalances])
 
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>
 }
