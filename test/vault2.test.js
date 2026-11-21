@@ -4,10 +4,10 @@
 // and the Settings seed phrase reveal.
 import { test, before, after } from 'node:test'
 import assert from 'node:assert/strict'
-import { createApp } from '../../nuvra-backend/src/app.js'
-import { createStore } from '../../nuvra-backend/src/store.js'
-import { createDevMailer } from '../../nuvra-backend/src/mailer.js'
-import { createAuthenticator } from '../../nuvra-backend/test/webauthn-helper.js'
+import { createApp } from '../backend/src/app.js'
+import { createStore } from '../backend/src/store.js'
+import { createDevMailer } from '../backend/src/mailer.js'
+import { createAuthenticator } from '../backend/test/webauthn-helper.js'
 import {
   createApi, createSplitWallet, hasSplitWallet, wipeSplitWalletLocal,
   unlockSplitWithPin, unlockSplitWithPassword, recoverSplitWallet, revealMnemonic,
