@@ -28,12 +28,12 @@ const AUTO_LOCK_MS = 5 * 60 * 1000 // session auto-lock after 5 minutes
 
 // Argon2id parameters for credential keys (stored in the blob, so
 // they can be raised later without breaking existing vaults).
-const KDF = { memoryKiB: 65536, iterations: 3, parallelism: 1, hashLength: 32 }
+export const KDF = { memoryKiB: 65536, iterations: 3, parallelism: 1, hashLength: 32 }
 
 // ── Storage adapter: chrome.storage.local in the extension,
 //    localStorage in a plain browser, memory in tests. ────────────
 const memStore = new Map()
-const storage = {
+export const storage = {
   async get(key) {
     if (typeof chrome !== 'undefined' && chrome.storage?.local) {
       const out = await chrome.storage.local.get(key)
@@ -62,8 +62,8 @@ const storage = {
 }
 
 // ── Small helpers ────────────────────────────────────────────────
-const enc = (bytes) => base64.encode(bytes)
-const dec = (str) => base64.decode(str)
+export const enc = (bytes) => base64.encode(bytes)
+export const dec = (str) => base64.decode(str)
 const randomBytes = (n) => crypto.getRandomValues(new Uint8Array(n))
 
 function fail(code, message) {
@@ -72,7 +72,7 @@ function fail(code, message) {
   return e
 }
 
-async function deriveCredentialKey(secret, salt, kdf) {
+export async function deriveCredentialKey(secret, salt, kdf) {
   return argon2id({
     password: secret,
     salt,
@@ -84,14 +84,14 @@ async function deriveCredentialKey(secret, salt, kdf) {
   })
 }
 
-async function aesEncrypt(keyBytes, plaintext) {
+export async function aesEncrypt(keyBytes, plaintext) {
   const key = await crypto.subtle.importKey('raw', keyBytes, 'AES-GCM', false, ['encrypt'])
   const iv = randomBytes(12)
   const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, plaintext)
   return { iv: enc(iv), ct: enc(new Uint8Array(ct)) }
 }
 
-async function aesDecrypt(keyBytes, blob) {
+export async function aesDecrypt(keyBytes, blob) {
   const key = await crypto.subtle.importKey('raw', keyBytes, 'AES-GCM', false, ['decrypt'])
   const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: dec(blob.iv) }, key, dec(blob.ct))
   return new Uint8Array(pt)
@@ -156,6 +156,13 @@ function startSession(seedBytes, mnemonic) {
 }
 
 export function getSession() { return session }
+
+// Start a session from an already reconstructed seed. Used by the
+// split seed vault (vault2), where the seed is assembled from
+// shares rather than unwrapped from a single stored blob.
+export function startSessionWith(seedBytes, mnemonic) {
+  return startSession(seedBytes, mnemonic)
+}
 export function isUnlocked() { return session !== null }
 
 export function lockVault() {
